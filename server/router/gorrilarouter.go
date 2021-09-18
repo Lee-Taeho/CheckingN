@@ -21,10 +21,9 @@ type GorillaRouter struct {
 	srv     *http.Server
 }
 
-func NewGorillaRouter(logPath string) *GorillaRouter {
+func NewGorillaRouter() *GorillaRouter {
 	gr := new(GorillaRouter)
 	gr.router = mux.NewRouter()
-	gr.logPath = logPath
 	return gr
 }
 
@@ -48,10 +47,10 @@ func (gr *GorillaRouter) Serve(hostAndIpBinding string) error {
 	// a go routine (the thing with go keyword) creates a "lightweight" thread to run a function in parallel
 	// to serve to a client ip, we create a go routine (with the anonymous function)
 	go func() {
-		log.Println("Starting HTTP service: %s", hostAndIpBinding)
+		log.Println("INFO [router/gorrilarouter.go] Starting HTTP service:", hostAndIpBinding)
 		err := gr.srv.ListenAndServe()
 		if err != nil {
-			log.Println("GorillaRouter:Serve() - Fail to start HTTP(S) service, err %s", err.Error())
+			log.Println("ERROR [router/gorrilarouter.go] Fail to start HTTP(S) service:", err.Error())
 		}
 	}()
 	return nil

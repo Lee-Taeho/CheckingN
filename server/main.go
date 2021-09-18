@@ -3,43 +3,61 @@ package main
 import (
 	"net/http"
 	"os"
+	"os/signal"
+	"server/database"
+	"server/handlers"
+	"server/middleware/interfaces"
 	"server/router"
+	"syscall"
 )
 
-const (
-	ROUTER_LOG_PATH   = "/server/logs/router.txt"
-	DATABASE_LOG_PATH = "/server/logs/database.txt"
-)
-
-type Engine struct {
+type EngineWrapper struct {
 	// TODO: add db
-	router        router.Router
+	db            interfaces.MongoInterface
+	router        interfaces.Router
 	hostIpBinding string
 	frontEndPath  string
 }
 
-func NewEngine() *Engine {
+func NewEngine() *EngineWrapper {
 	landingRepo := os.Getenv("LANDING_REPO")
-	engine := new(Engine)
-	engine.router = router.NewGorillaRouter(landingRepo + ROUTER_LOG_PATH)
+	engine := new(EngineWrapper)
+
+	engine.router = router.NewGorillaRouter()
 	engine.hostIpBinding = os.Getenv("HOST_IP_BINDING")
 	engine.frontEndPath = landingRepo + os.Getenv("FRONT_END_PATH")
+
+	mongoInfo := new(database.MongoInfo)
+	mongoInfo.Uri = os.Getenv("DB_URI")
+	engine.db = database.NewMongo(mongoInfo)
+
 	return engine
 }
 
-func (e *Engine) Start() {
+func (e *EngineWrapper) Start() {
+	e.db.Connect()
+
 	fileServer := http.FileServer(http.Dir(e.frontEndPath))
 	e.router.GetRouter().PathPrefix("/").Handler(fileServer)
+
+	handlers.NewEngine(e.router)
+
 	e.router.Serve(e.hostIpBinding)
 }
 
-func (e *Engine) Stop() {
+func (e *EngineWrapper) Stop() {
 	// TODO: add db
 	e.router.Stop()
+	e.db.Stop()
 }
 
 func main() {
 	engine := NewEngine()
 	engine.Start()
-	// TODO: implement a "wait for ctrl c" and then call defer engine.Stop()
+	defer engine.Stop()
+
+	c := make(chan os.Signal)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	<-c
+	os.Exit(0)
 }
