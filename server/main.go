@@ -12,7 +12,6 @@ import (
 )
 
 type EngineWrapper struct {
-	// TODO: add db
 	db            interfaces.MongoInterface
 	router        interfaces.Router
 	hostIpBinding string
@@ -38,15 +37,13 @@ func (e *EngineWrapper) Start() {
 	e.db.Connect()
 
 	fileServer := http.FileServer(http.Dir(e.frontEndPath))
-	e.router.GetRouter().PathPrefix("/").Handler(fileServer)
-
+	e.router.GetRouter().Path("/").Handler(fileServer)
 	handlers.NewEngine(e.router)
 
 	e.router.Serve(e.hostIpBinding)
 }
 
 func (e *EngineWrapper) Stop() {
-	// TODO: add db
 	e.router.Stop()
 	e.db.Stop()
 }
