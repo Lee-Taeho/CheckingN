@@ -19,12 +19,11 @@ type EngineWrapper struct {
 }
 
 func NewEngine() *EngineWrapper {
-	landingRepo := os.Getenv("LANDING_REPO")
 	engine := new(EngineWrapper)
 
 	engine.router = router.NewGorillaRouter()
 	engine.hostIpBinding = os.Getenv("HOST_IP_BINDING")
-	engine.frontEndPath = landingRepo + os.Getenv("FRONT_END_PATH")
+	engine.frontEndPath = os.Getenv("FRONT_END_PATH")
 
 	mongoInfo := new(database.MongoInfo)
 	mongoInfo.Uri = os.Getenv("DB_URI")
