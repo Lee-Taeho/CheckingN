@@ -11,46 +11,46 @@ import (
 	"syscall"
 )
 
-type EngineWrapper struct {
+type HandlersWrapper struct {
 	db            interfaces.MongoInterface
 	router        interfaces.Router
 	hostIpBinding string
 	frontEndPath  string
 }
 
-func NewEngine() *EngineWrapper {
-	engine := new(EngineWrapper)
+func NewApp() *HandlersWrapper {
+	app := new(HandlersWrapper)
 
-	engine.router = router.NewGorillaRouter()
-	engine.hostIpBinding = os.Getenv("HOST_IP_BINDING")
-	engine.frontEndPath = os.Getenv("FRONT_END_PATH")
+	app.router = router.NewGorillaRouter()
+	app.hostIpBinding = os.Getenv("HOST_IP_BINDING")
+	app.frontEndPath = os.Getenv("FRONT_END_PATH")
 
-	mongoInfo := new(database.MongoInfo)
+	mongoInfo := new(database.MongoDBLogin)
 	mongoInfo.Uri = os.Getenv("DB_URI")
-	engine.db = database.NewMongo(mongoInfo)
+	app.db = database.NewMongoDB(mongoInfo)
 
-	return engine
+	return app
 }
 
-func (e *EngineWrapper) Start() {
-	e.db.Connect()
+func (h *HandlersWrapper) Start() {
+	h.db.Connect()
 
-	fileServer := http.FileServer(http.Dir(e.frontEndPath))
-	e.router.GetRouter().Path("/").Handler(fileServer)
-	handlers.NewEngine(e.router)
+	fileServer := http.FileServer(http.Dir(h.frontEndPath))
+	h.router.GetRouter().Path("/").Handler(fileServer)
+	handlers.NewHandlers(h.router)
 
-	e.router.Serve(e.hostIpBinding)
+	h.router.Serve(h.hostIpBinding)
 }
 
-func (e *EngineWrapper) Stop() {
-	e.router.Stop()
-	e.db.Stop()
+func (h *HandlersWrapper) Stop() {
+	h.router.Stop()
+	h.db.Stop()
 }
 
 func main() {
-	engine := NewEngine()
-	engine.Start()
-	defer engine.Stop()
+	app := NewApp()
+	app.Start()
+	defer app.Stop()
 
 	c := make(chan os.Signal)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)

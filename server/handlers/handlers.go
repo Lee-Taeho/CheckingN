@@ -5,12 +5,12 @@ import (
 	"server/middleware/interfaces"
 )
 
-type HandlersEngine struct {
+type Handlers struct {
 	// add db
 }
 
-func NewEngine(gr interfaces.Router) {
-	engine := new(HandlersEngine)
+func NewHandlers(gr interfaces.Router) {
+	engine := new(Handlers)
 	gr.AddRoute("/api/save_new_user", http.MethodPost, engine.SaveNewUser)
 	gr.AddRoute("/api/login_request", http.MethodGet, engine.LoginRequest)
 }
