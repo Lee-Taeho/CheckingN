@@ -25,9 +25,9 @@ func NewApp() *HandlersWrapper {
 	app.hostIpBinding = os.Getenv("HOST_IP_BINDING")
 	app.frontEndPath = os.Getenv("FRONT_END_PATH")
 
-	mongoInfo := new(database.MongoDBLogin)
-	mongoInfo.Uri = os.Getenv("DB_URI")
-	app.db = database.NewMongoDB(mongoInfo)
+	login := new(database.MongoDBLogin)
+	login.Uri = os.Getenv("DB_URI")
+	app.db = database.NewMongoDB(login)
 
 	return app
 }
