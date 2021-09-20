@@ -1,4 +1,9 @@
-:root {
+body {
+  background-color: red;
+  font-size: 50px;
+}
+
+/* :root {
   --mainColor: #eaeaea;
   --secondaryColor: #fff;
 
@@ -30,6 +35,11 @@
   line-height: 2.7em;
 }
 
+#login-form textarea {
+  min-height: 100px;
+  font-size: 14px;
+}
+
 .input-field {
   width: 100%;
   padding-top: 10px;
@@ -48,4 +58,4 @@
   color: #fff;
   background-color: var(--buttonColor);
   border: none;
-}
+} */
