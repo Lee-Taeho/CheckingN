@@ -50,7 +50,7 @@ func (gr *GorillaRouter) Serve(hostAndIpBinding string) error {
 		log.Println("INFO [router/gorrilarouter.go] Starting HTTP service:", hostAndIpBinding)
 		err := gr.srv.ListenAndServe()
 		if err != nil {
-			log.Println("ERROR [router/gorrilarouter.go] Fail to start HTTP(S) service:", err.Error())
+			log.Println("INFO [router/gorillarouter.go]", err.Error())
 		}
 	}()
 	return nil
