@@ -1,4 +1,4 @@
-package interfaces
+package middleware
 
 // bson tag will tell golang to extract that specific field from mongodb into the variable
 // json tag will be the way it is called from front end
@@ -10,7 +10,13 @@ type Tutor struct {
 }
 
 type Student struct {
-	Name string `bson:"name" json:"name"`
+	Name      string     `bson:"name" json:"name"`
+	LoginInfo *LoginInfo `bson:"name" json:"name"`
+}
+
+type LoginInfo struct {
+	username string
+	password string
 }
 
 type Course struct {
