@@ -3,7 +3,7 @@ body {
   font-size: 50px;
 }
 
-/* :root {
+ :root {
   --mainColor: #eaeaea;
   --secondaryColor: #fff;
 
@@ -58,4 +58,4 @@ body {
   color: #fff;
   background-color: var(--buttonColor);
   border: none;
-} */
+} 
