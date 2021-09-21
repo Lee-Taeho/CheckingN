@@ -1,9 +1,4 @@
-body {
-  background-color: red;
-  font-size: 50px;
-}
-
-/* :root {
+:root {
   --mainColor: #eaeaea;
   --secondaryColor: #fff;
 
@@ -20,6 +15,12 @@ body {
   --buttonColor: black;
 }
 
+body {
+  padding: 0;
+  margin: 0;
+  scroll-behavior: smooth;
+}
+
 #login-form {
   display: block;
   max-width: 600px;
@@ -27,7 +28,7 @@ body {
   border: 1px solid var(--borderColor);
   padding: 15px;
   border-radius: 5px;
-  background-color: var(--previewShadow);
+  background-color: var(--mainColor);
   margin-bottom: 50px;
 }
 
@@ -58,4 +59,4 @@ body {
   color: #fff;
   background-color: var(--buttonColor);
   border: none;
-} */
+}
