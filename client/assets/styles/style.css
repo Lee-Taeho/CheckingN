@@ -1,9 +1,12 @@
 body {
-  background-color: red;
-  font-size: 50px;
+  height: 100vh;
+  background-color: #7ec8fc;
+  background-image: linear-gradient(19deg, #7ec8fc 0%, #ebebeb 100%);
+  overflow: hidden;
+  font-family: "Gill Sans Extrabold", sans-serif;
 }
 
- :root {
+:root {
   --mainColor: #eaeaea;
   --secondaryColor: #fff;
 
@@ -15,20 +18,36 @@ body {
   --themeDotBorder: #24292e;
 
   --previewBg: rgb(251, 249, 243, 0.8);
-  --previewShadow: #f0ead6;
+  --previewShadow: #f5f0e4;
 
-  --buttonColor: black;
+  --buttonColor: #5599c9;
+}
+
+h1 {
+  margin: 0;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  text-align: center;
+  font-weight: 800;
+  border-bottom: 1px solid var(--borderColor);
+}
+
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--previewShadow);
+  border-radius: 15px;
 }
 
 #login-form {
   display: block;
-  max-width: 600px;
+  max-width: 500px;
   margin: 0 auto;
-  border: 1px solid var(--borderColor);
-  padding: 15px;
-  border-radius: 5px;
+  padding: 20px;
   background-color: var(--previewShadow);
-  margin-bottom: 50px;
+  margin-right: 20px;
 }
 
 #login-form label {
@@ -42,20 +61,24 @@ body {
 
 .input-field {
   width: 100%;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 15px;
   background-color: var(--secondaryColor);
   border-radius: 5px;
   border: 1px solid var(--borderColor);
   font-size: 14px;
+  margin-bottom: 20px;
 }
 
 #submit-btn {
-  margin-top: 10px;
+  margin-top: 15px;
   width: 100%;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 15px;
+  padding-bottom: 15px;
   color: #fff;
   background-color: var(--buttonColor);
-  border: none;
-} 
+  border-radius: 25px;
+  margin-bottom: 20px;
+  margin-left: 10px;
+}
