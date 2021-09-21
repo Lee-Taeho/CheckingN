@@ -37,6 +37,8 @@ func (a *App) Start() {
 
 	fileServer := http.FileServer(http.Dir(a.frontEndPath))
 	a.router.GetRouter().Path("/").Handler(fileServer)
+	a.router.GetRouter().PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir(a.frontEndPath+"/assets/"))))
+
 	handlers.NewHandlers(a.router)
 
 	a.router.Serve(a.hostIpBinding)
