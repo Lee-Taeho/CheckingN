@@ -10,7 +10,10 @@ import (
 )
 
 const (
-	CONNECT_TIMEOUT = 1 * time.Minute
+	CONNECT_TIMEOUT     = 1 * time.Minute
+	USER_DATABASE       = "users"
+	STUDENTS_COLLECTION = "students"
+	TUTORS_COLLECTION   = "tutors"
 )
 
 type MongoDBLogin struct {
