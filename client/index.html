@@ -10,8 +10,9 @@
 
   <body>
     <h1>CheckingN</h1>
-    <form id="login-form">
-      <h3>Sign In</h3>
+
+    <form class="form" id="login-form">
+      <h2 class="form-title">Sign In</h2>
       <label>Email</label>
       <input
         class="input-field"
@@ -28,8 +29,36 @@
         placeholder="Password"
       />
 
-      <input id="submit-btn" type="submit" value="Sign in" />
-      <a href="signup">Create a new account</a>
+      <input class="form-btn" id="login-btn" type="submit" value="Sign in" />
+      <a href="./" id="linkCreateAccount">New to CheckingN? Sign up</a>
+    </form>
+
+    <form class="form form-hidden" id="signup-form">
+      <h2 class="form-title">Create Your Account</h2>
+      <label>First name</label>
+      <input class="input-field" type="text" name="First-name" />
+
+      <label>Last name</label>
+      <input class="input-field" type="text" name="Last-name" />
+
+      <label>Email</label>
+      <input
+        class="input-field"
+        type="text"
+        name="Email"
+        placeholder="Email address"
+      />
+
+      <label>Password</label>
+      <input
+        class="input-field"
+        type="password"
+        name="Password"
+        placeholder="Password"
+      />
+
+      <input class="form-btn" id="submit-btn" type="submit" value="Create" />
+      <a href="./" id="linkLogin">Already on CheckingN? Sign in</a>
     </form>
   </body>
 </html>
