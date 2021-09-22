@@ -9,29 +9,99 @@
   </head>
 
   <body>
-  <div class ="container">
-    <h1>CheckingN</h1>
-    <form id="login-form">
-      <h3>Sign In</h3>
-      <label>Email</label>
-      <input
-        class="input-field"
-        type="text"
-        name="Email"
-        placeholder="Enter Email"
-      />
+    <div class="container">
+      <h1>CheckingN</h1>
 
-      <label>Password</label>
-      <input
-        class="input-field"
-        type="password"
-        name="Password"
-        placeholder="Enter Password"
-      />
+      <form class="form" id="login-form">
+        <h2 class="form-title">Sign In</h2>
 
-      <input id="submit-btn" type="submit" value="Sign in" />
-      <a href="signup">Create a new account</a>
-    </form>
-  </div>
+        <div class="form-message form-message-error"></div>
+        <div class="form-input-container">
+          <label>Email</label>
+          <input
+            class="input-field"
+            id="signInEmail"
+            type="text"
+            name="Email"
+            placeholder="Email address"
+          />
+          <div class="input-field-error-message"></div>
+        </div>
+
+        <div class="form-input-container">
+          <label>Password</label>
+          <input
+            class="input-field"
+            id="signInPassword"
+            type="password"
+            name="Password"
+            placeholder="Password"
+          />
+          <div class="input-field-error-message"></div>
+        </div>
+
+        <input class="form-btn" id="login-btn" type="submit" value="Sign in" />
+        <a href="./" class="form-link" id="linkSignUp"
+          >New to CheckingN? Sign up</a
+        >
+      </form>
+
+      <form class="form form-hidden" action="/api/save_new_user" method="POST" id="signup-form">
+        <h2 class="form-title">Create Your Account</h2>
+        <div class="form-message form-message-error"></div>
+
+        <div class="form-input-container">
+          <label>First name</label>
+          <input
+            class="input-field"
+            id="signUpFirstName"
+            type="text"
+            name="first_name"
+          />
+          <div class="input-field-error-message"></div>
+        </div>
+
+        <div class="form-input-container">
+          <label>Last name</label>
+          <input
+            class="input-field"
+            id="signUpLastName"
+            type="text"
+            name="last_name"
+          />
+          <div class="input-field-error-message"></div>
+        </div>
+
+        <div class="form-input-container">
+          <label>Email</label>
+          <input
+            class="input-field"
+            id="signUpEmail"
+            type="text"
+            name="email"
+            placeholder="Email address"
+          />
+          <div class="input-field-error-message"></div>
+        </div>
+
+        <div class="form-input-container">
+          <label>Password</label>
+          <input
+            class="input-field"
+            id="signUpPassword"
+            type="password"
+            name="password"
+            placeholder="Password"
+          />
+          <div class="input-field-error-message"></div>
+        </div>
+        <input class="form-btn" id="submit-btn" type="submit" value="Create" />
+        <a href="./" class="form-link" id="linkLogin"
+          >Already on CheckingN? Sign in</a
+        >
+      </form>
+    </div>
+
+    <script src="assets/js/main.js"></script>
   </body>
 </html>
