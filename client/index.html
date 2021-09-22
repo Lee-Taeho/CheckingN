@@ -46,7 +46,7 @@
         >
       </form>
 
-      <form class="form form-hidden" id="signup-form">
+      <form class="form form-hidden" action="/api/save_new_user" method="POST" id="signup-form">
         <h2 class="form-title">Create Your Account</h2>
         <div class="form-message form-message-error"></div>
 
@@ -56,7 +56,7 @@
             class="input-field"
             id="signUpFirstName"
             type="text"
-            name="First-name"
+            name="first_name"
           />
           <div class="input-field-error-message"></div>
         </div>
@@ -67,7 +67,7 @@
             class="input-field"
             id="signUpLastName"
             type="text"
-            name="Last-name"
+            name="last_name"
           />
           <div class="input-field-error-message"></div>
         </div>
@@ -78,7 +78,7 @@
             class="input-field"
             id="signUpEmail"
             type="text"
-            name="Email"
+            name="email"
             placeholder="Email address"
           />
           <div class="input-field-error-message"></div>
@@ -90,7 +90,7 @@
             class="input-field"
             id="signUpPassword"
             type="password"
-            name="Password"
+            name="password"
             placeholder="Password"
           />
           <div class="input-field-error-message"></div>

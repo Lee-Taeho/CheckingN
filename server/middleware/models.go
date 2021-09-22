@@ -10,12 +10,13 @@ type Tutor struct {
 }
 
 type Student struct {
-	FirstName string     `bson:"first_name" json:"first_name"`
-	LastName  string     `bson:"last_name" json:"last_name"`
-	LoginInfo *LoginInfo `bson:"login_info" json:"login_info"`
+	FirstName string `bson:"first_name" json:"first_name"`
+	LastName  string `bson:"last_name" json:"last_name"`
+	Email     string `bson:"email" json:"email"`
+	Password  string `bson:"password" json:"password"`
 }
 
-type LoginInfo struct {
+type LoginRequest struct {
 	Email    string `bson:"email" json:"email"`
 	Password string `bson:"password" json:"password"`
 }

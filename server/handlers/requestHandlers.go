@@ -6,8 +6,6 @@ import (
 	"net/http"
 	"server/middleware"
 	"server/utils"
-
-	"github.com/gorilla/mux"
 )
 
 func (h *Handlers) ExampleJsonReponse(w http.ResponseWriter, r *http.Request) {
@@ -28,19 +26,20 @@ func (h *Handlers) ExampleJsonReponse(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handlers) SaveNewUser(w http.ResponseWriter, r *http.Request) {
 	log.Println("INFO [handlers/requestHandlers.go] Request to Save New User")
-	student := new(middleware.Student)
-	student.FirstName = mux.Vars(r)["firstName"]
-	student.LastName = mux.Vars(r)["lastName"]
-	student.LoginInfo = &middleware.LoginInfo{
-		Email:    mux.Vars(r)["email"],
-		Password: mux.Vars(r)["password"],
+	r.ParseForm()
+	student := &middleware.Student{
+		FirstName: r.PostForm.Get("first_name"),
+		LastName:  r.PostForm.Get("last_name"),
+		Email:     r.PostForm.Get("email"),
+		Password:  r.PostForm.Get("password"),
 	}
+
 	if err := h.db.CreateNewStudent(*student); err != nil {
 		log.Printf("ERROR [handlers/requestHandlers.go] Couldn't Save New User: %s\n", err.Error())
 		return
 	}
 	log.Println("INFO [handlers/requestHandlers.go] Successfully Saved New User")
-	fmt.Fprint(w, "hello")
+	fmt.Fprint(w, "Thanks For signing up for CheckingN!")
 }
 
 func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {

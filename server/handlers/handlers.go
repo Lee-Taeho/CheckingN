@@ -16,6 +16,6 @@ func NewHandlers(gr interfaces.Router, db interfaces.MongoInterface) {
 
 	gr.AddRoute("/api/example_json_response", http.MethodGet, handlers.ExampleJsonReponse)
 	// TODO: make the method of the next api POST
-	gr.AddRoute("/api/save_new_user/{firstName}/{lastName}/{email}/{password}", http.MethodGet, handlers.SaveNewUser)
+	gr.AddRoute("/api/save_new_user", http.MethodPost, handlers.SaveNewUser)
 	gr.AddRoute("/api/login_request", http.MethodGet, handlers.LoginRequest)
 }
