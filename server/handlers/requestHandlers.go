@@ -36,10 +36,12 @@ func (h *Handlers) SaveNewUser(w http.ResponseWriter, r *http.Request) {
 
 	if err := h.db.CreateNewStudent(*student); err != nil {
 		log.Printf("ERROR [handlers/requestHandlers.go] Couldn't Save New User: %s\n", err.Error())
+		http.Error(w, "Couldn't Save New User", http.StatusInternalServerError)
 		return
 	}
 	log.Println("INFO [handlers/requestHandlers.go] Successfully Saved New User")
-	fmt.Fprint(w, "Thanks For signing up for CheckingN!")
+	// fmt.Fprint(w, "Thanks For signing up for CheckingN!")
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
