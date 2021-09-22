@@ -45,5 +45,23 @@ func (h *Handlers) SaveNewUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
+	
+	r.ParseForm()
+	login := &middleware.LoginRequest{
+		Email: r.PostForm.Get("Email"),
+		Password: r.PostForm.Get("Password"),
+	}
 
+	if found := h.db.FindStudent(*login); found == false {
+		log.Println("INFO [handlers/requestHandlers.go] Failed Log In")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	log.Println("INFO [handlers/requestHandlers.go] Successful Log In")
+	http.Redirect(w, r, "/api/login_request_success", http.StatusSeeOther)
+}
+
+func (h *Handlers) LoginRequestSuccess(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "<h1>Successful Login!<h1>")
 }

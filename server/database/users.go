@@ -11,3 +11,11 @@ func (m *MongoDB) CreateNewStudent(student middleware.Student) error {
 	_, err := collection.InsertOne(ctx, student)
 	return err
 }
+
+func (m *MongoDB) FindStudent(login middleware.LoginRequest) bool {
+	ctx := context.TODO()
+	collection := m.mongo.Database(USER_DATABASE).Collection(STUDENTS_COLLECTION)
+	result := collection.FindOne(ctx, login)
+	if result.Err() != nil {return false}
+	return true
+}
