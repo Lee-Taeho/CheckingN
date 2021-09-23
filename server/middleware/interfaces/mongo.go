@@ -10,4 +10,5 @@ type MongoInterface interface {
 	Connect() (*mongo.Client, error)
 	Stop() error
 	CreateNewStudent(student middleware.Student) error
+	FindStudent(login middleware.LoginRequest) bool
 }

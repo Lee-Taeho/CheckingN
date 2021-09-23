@@ -34,12 +34,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   loginForm.addEventListener("submit", (e) => {
-    e.preventDefault();
+    //e.preventDefault();
 
     // Perform AJAX/Fetch login
 
-    setFormMessage(loginForm, "error", "Incorrect username or password!");
+    //setFormMessage(loginForm, "error", "Incorrect username or password!");
   });
+
 });
 
 // how to use:
