@@ -54,7 +54,7 @@ func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
 
 	if found := h.db.FindStudent(*login); found == false {
 		log.Println("INFO [handlers/requestHandlers.go] Failed Log In")
-		http.Redirect(w, r, "/", http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
