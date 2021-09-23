@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -35,6 +36,10 @@ func (h *Handlers) SaveNewUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := h.db.CreateNewStudent(*student); err != nil {
+		if err == errors.New("email already exist") {
+			w.WriteHeader(http.StatusConflict)
+			return
+		}
 		log.Printf("ERROR [handlers/requestHandlers.go] Couldn't Save New User: %s\n", err.Error())
 		http.Error(w, "Couldn't Save New User", http.StatusInternalServerError)
 		return
@@ -45,23 +50,5 @@ func (h *Handlers) SaveNewUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
-	log.Println("INFO [handlers/requestHandlers.go] Request to Log In")
-	r.ParseForm()
-	login := &middleware.LoginRequest{
-		Email: r.PostForm.Get("Email"),
-		Password: r.PostForm.Get("Password"),
-	}
 
-	if found := h.db.FindStudent(*login); found == false {
-		log.Println("INFO [handlers/requestHandlers.go] Failed Log In")
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
-
-	log.Println("INFO [handlers/requestHandlers.go] Successful Log In")
-	http.Redirect(w, r, "/api/login_request_success", http.StatusSeeOther)
-}
-
-func (h *Handlers) LoginRequestSuccess(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "<h1>Successful Login!<h1>")
 }
