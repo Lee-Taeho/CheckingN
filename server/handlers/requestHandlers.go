@@ -45,7 +45,7 @@ func (h *Handlers) SaveNewUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
-	
+	log.Println("INFO [handlers/requestHandlers.go] Request to Log In")
 	r.ParseForm()
 	login := &middleware.LoginRequest{
 		Email: r.PostForm.Get("Email"),
