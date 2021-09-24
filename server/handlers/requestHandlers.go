@@ -11,10 +11,15 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
+const (
+	AUTO_LOGOUT_TIME    = time.Minute * 10
+	TIME_BEFORE_EXPIRED = time.Second * 30
+)
+
 var jwtKey = []byte("secret_key")
 
 type Claims struct {
-	Username string `json:"username"`
+	Email string `json:"email"`
 	jwt.StandardClaims
 }
 
@@ -62,16 +67,16 @@ func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
 		Password: r.PostForm.Get("Password"),
 	}
 
-	if found := h.db.FindStudent(*login); found == false {
+	if found := h.db.FindStudent(*login); !found {
 		log.Println("INFO [handlers/requestHandlers.go] Failed Log In")
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
-	expirationTime := time.Now().Add(time.Second * 20)
+	expirationTime := time.Now().Add(AUTO_LOGOUT_TIME)
 
 	claims := &Claims{
-		Username: login.Email,
+		Email: login.Email,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
@@ -89,7 +94,7 @@ func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
 		&http.Cookie{
 			Name:    "token",
 			Value:   tokenString,
-			Expires: expirationTime,
+			Expires: time.Now().Add(AUTO_LOGOUT_TIME),
 		})
 
 	log.Println("INFO [handlers/requestHandlers.go] Successful Log In")
@@ -97,21 +102,20 @@ func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) LoginRequestSuccess(w http.ResponseWriter, r *http.Request) {
-	if h.TokenValid(w, r) {
+	if h.tokenValid(w, r) {
 		fmt.Fprint(w, "<h1>Successful Login!<h1>")
 	}
 }
 
-func (h *Handlers) TokenValid(w http.ResponseWriter, r *http.Request) bool {
+func (h *Handlers) Refresh(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("token")
-
 	if err != nil {
 		if err == http.ErrNoCookie {
 			w.WriteHeader(http.StatusUnauthorized)
-			return false
+			return
 		}
 		w.WriteHeader(http.StatusBadRequest)
-		return false
+		return
 	}
 
 	tokenStr := cookie.Value
@@ -126,15 +130,38 @@ func (h *Handlers) TokenValid(w http.ResponseWriter, r *http.Request) bool {
 	if err != nil {
 		if err == jwt.ErrSignatureInvalid {
 			w.WriteHeader(http.StatusUnauthorized)
-			return false
+			return
 		}
 		w.WriteHeader(http.StatusBadRequest)
-		return false
+		return
 	}
-
 	if !tkn.Valid {
 		w.WriteHeader(http.StatusUnauthorized)
-		return false
+		return
 	}
-	return true
+
+	if time.Unix(claims.ExpiresAt, 0).Sub(time.Now()) > TIME_BEFORE_EXPIRED {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	expirationTime := time.Now().Add(AUTO_LOGOUT_TIME)
+
+	claims.ExpiresAt = expirationTime.Unix()
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenString, err := token.SignedString(jwtKey)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	http.SetCookie(w,
+		&http.Cookie{
+			Name:    "token",
+			Value:   tokenString,
+			Expires: expirationTime,
+		})
+
 }
