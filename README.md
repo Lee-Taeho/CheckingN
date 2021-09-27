@@ -2,5 +2,3 @@
 
 ### Dependencies
 - golang
-- mongodb
-
