@@ -6,22 +6,22 @@ import (
 	"net/http"
 	"server/middleware"
 	"server/utils"
-	"time"
 
-	"github.com/dgrijalva/jwt-go"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
 )
 
-const (
-	AUTO_LOGOUT_TIME    = time.Minute * 10
-	TIME_BEFORE_EXPIRED = time.Second * 30
+var (
+	google0authConfig = &oauth2.Config{
+		RedirectURL:  "http://localhost:8080/api/callback",
+		ClientID:     "848508325356-2vdge0pmqndaibtj2ulfel50gf8tvj9v.apps.googleusercontent.com",
+		ClientSecret: "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",
+		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
+		//Scopes:       []string{"https://www.googleapis.com/auth/calendar"},
+		Endpoint: google.Endpoint,
+	}
+	randomState = "random"
 )
-
-var jwtKey = []byte("secret_key")
-
-type Claims struct {
-	Email string `json:"email"`
-	jwt.StandardClaims
-}
 
 func (h *Handlers) ExampleJsonReponse(w http.ResponseWriter, r *http.Request) {
 	var courses []*middleware.Course
@@ -74,34 +74,49 @@ func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Println("INFO [handlers/requestHandlers.go] Log In Successful")
+	h.createToken(w, r, login.Email)
+	http.Redirect(w, r, "/api/home", http.StatusPermanentRedirect)
 
-	expirationTime := time.Now().Add(AUTO_LOGOUT_TIME)
+}
 
-	claims := &Claims{
-		Email: login.Email,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expirationTime.Unix(),
-		},
-	}
+func (h *Handlers) Google(w http.ResponseWriter, r *http.Request) {
+	var htmlIndex = `<html><body><a href="/api/google_login_request">Google Log In</a></body></html>`
+	fmt.Fprintf(w, htmlIndex)
+}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString(jwtKey)
+func (h *Handlers) GoogleLoginRequest(w http.ResponseWriter, r *http.Request) {
+	url := google0authConfig.AuthCodeURL(randomState)
+	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+}
 
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+func (h *Handlers) Callback(w http.ResponseWriter, r *http.Request) {
+	if r.FormValue("state") != randomState {
+		fmt.Println("State is invalid")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 
-	http.SetCookie(w,
-		&http.Cookie{
-			Name:    "token",
-			Value:   tokenString,
-			Expires: expirationTime,
-		})
-	h.LoginRequestSuccess(w, r)
+	token, err := google0authConfig.Exchange(oauth2.NoContext, r.FormValue("code"))
+	if err != nil {
+		fmt.Printf("Could not get token %s", err.Error())
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
+	resp, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
+	if err != nil {
+		fmt.Printf("Could not create get request %s", err.Error())
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
+	defer resp.Body.Close()
+
+	h.createToken(w, r, "test@gmail.com")
+
+	http.Redirect(w, r, "/api/home", http.StatusPermanentRedirect)
 }
 
-func (h *Handlers) LoginRequestSuccess(w http.ResponseWriter, r *http.Request) {
+func (h *Handlers) Home(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Checking")
 	if h.tokenValid(w, r) {
 		fmt.Fprint(w, "<h1>Successful Login!<h1>")
 	}
