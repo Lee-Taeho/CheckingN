@@ -8,11 +8,9 @@ import (
 )
 
 const (
-	AUTO_LOGOUT_TIME    = time.Second * 20
-	TIME_BEFORE_EXPIRED = time.Second * 30
+	AUTO_LOGOUT_TIME    = time.Minute * 20
+	TIME_BEFORE_EXPIRED = time.Minute * 30
 )
-
-var jwtKey = []byte("secret_key")
 
 type Claims struct {
 	Email string `json:"email"`
@@ -37,7 +35,7 @@ func (h *Handlers) tokenValid(w http.ResponseWriter, r *http.Request) bool {
 
 	tkn, err := jwt.ParseWithClaims(tokenStr, claims,
 		func(t *jwt.Token) (interface{}, error) {
-			return jwtKey, nil
+			return secret_key, nil
 		})
 
 	if err != nil {
@@ -67,7 +65,7 @@ func (h *Handlers) createToken(w http.ResponseWriter, r *http.Request, email str
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString(jwtKey)
+	tokenString, err := token.SignedString(secret_key)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

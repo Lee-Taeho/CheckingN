@@ -1,19 +1,22 @@
 package handlers
 
 import (
+	"context"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"server/middleware"
 	"server/utils"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 )
 
 var (
-	google0authConfig = &oauth2.Config{
-		RedirectURL:  "http://localhost:8080/api/callback",
+	googleOauthConfig = &oauth2.Config{
 		ClientID:     "848508325356-2vdge0pmqndaibtj2ulfel50gf8tvj9v.apps.googleusercontent.com",
 		ClientSecret: "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",
 		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
@@ -21,6 +24,8 @@ var (
 		Endpoint: google.Endpoint,
 	}
 	randomState = "random"
+	firstLogin  = true
+	secret_key  = []byte("secret_key")
 )
 
 func (h *Handlers) ExampleJsonReponse(w http.ResponseWriter, r *http.Request) {
@@ -74,9 +79,31 @@ func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Println("INFO [handlers/requestHandlers.go] Log In Successful")
-	h.createToken(w, r, login.Email)
-	http.Redirect(w, r, "/api/home", http.StatusPermanentRedirect)
 
+	expirationTime := time.Now().Add(AUTO_LOGOUT_TIME)
+
+	claims := &Claims{
+		Email: login.Email,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: expirationTime.Unix(),
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenString, err := token.SignedString(secret_key)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	http.SetCookie(w,
+		&http.Cookie{
+			Name:    "token",
+			Value:   tokenString,
+			Expires: expirationTime,
+		})
+	h.Home(w, r)
 }
 
 func (h *Handlers) Google(w http.ResponseWriter, r *http.Request) {
@@ -85,40 +112,71 @@ func (h *Handlers) Google(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) GoogleLoginRequest(w http.ResponseWriter, r *http.Request) {
-	url := google0authConfig.AuthCodeURL(randomState)
+	if firstLogin {
+		googleOauthConfig.RedirectURL = "http://" + h.hostIpBinding + "/api/callback"
+		firstLogin = false
+	}
+	url := googleOauthConfig.AuthCodeURL(randomState)
 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 }
 
-func (h *Handlers) Callback(w http.ResponseWriter, r *http.Request) {
+func (h *Handlers) GoogleLoginCallback(w http.ResponseWriter, r *http.Request) {
 	if r.FormValue("state") != randomState {
 		fmt.Println("State is invalid")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 
-	token, err := google0authConfig.Exchange(oauth2.NoContext, r.FormValue("code"))
+	// token, err := googleOauthConfig.Exchange(oauth2.NoContext, r.FormValue("code"))
+	// if err != nil {
+	// 	log.Printf("INFO [handlers/requestHandlers.go] Could not get token %s", err.Error())
+	// 	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+	// 	return
+	// }
+
+	// resp, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
+	// defer resp.Body.Close()
+	// if err != nil {
+	// 	log.Printf("INFO [handlers/requestHandlers.go] Could not create get request %s", err.Error())
+	// 	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+	// 	return
+	// }
+	// if resp.StatusCode != http.StatusOK {
+	// 	w.WriteHeader(resp.StatusCode)
+	// }
+	// fmt.Println(resp)
+
+	// h.createToken(w, r, token.AccessToken)
+
+	// h.Home(w, r)
+	token, err := googleOauthConfig.Exchange(context.Background(), r.FormValue("code"))
 	if err != nil {
-		fmt.Printf("Could not get token %s", err.Error())
+		log.Printf("INFO [handlers/requestHandlers.go] Could not get token %s", err.Error())
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 	resp, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
 	if err != nil {
-		fmt.Printf("Could not create get request %s", err.Error())
+		log.Printf("INFO [handlers/requestHandlers.go] Could not create get request %s", err.Error())
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 	defer resp.Body.Close()
+	contents, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Printf("ERROR [handlers/requestHandlers.go] %s\n", err.Error())
+		return
+	}
+	contents = contents
 
-	h.createToken(w, r, "test@gmail.com")
-
-	http.Redirect(w, r, "/api/home", http.StatusPermanentRedirect)
+	h.Home(w, r)
 }
 
 func (h *Handlers) Home(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Checking")
 	if h.tokenValid(w, r) {
 		fmt.Fprint(w, "<h1>Successful Login!<h1>")
+	} else {
+		fmt.Println("hello")
 	}
 }
 
