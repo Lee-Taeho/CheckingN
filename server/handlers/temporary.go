@@ -28,6 +28,8 @@ func (h *Handlers) ExampleJsonReponse(w http.ResponseWriter, r *http.Request) {
 func (h *Handlers) Home(w http.ResponseWriter, r *http.Request) {
 	if h.tokenValid(w, r) {
 		fmt.Fprint(w, "<h1>Successful Login!<h1>")
+	} else {
+		fmt.Println("token error")
 	}
 }
 

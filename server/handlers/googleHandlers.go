@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 	"net/http"
-	"server/utils"
 )
 
 func (h *Handlers) GoogleLoginRequest(w http.ResponseWriter, r *http.Request) {
@@ -32,7 +31,9 @@ func (h *Handlers) GoogleLoginCallback(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	contents := utils.JsonifyHttpResponse(*resp)
-	w.Write([]byte(contents))
-	// h.Home(w, r)
+	user := h.googleRespDecoder(*resp)
+	h.db.CreateNewGoogleStudent(user)
+
+	h.createTokenAndSetCookie(w, user.Email)
+	h.Home(w, r)
 }

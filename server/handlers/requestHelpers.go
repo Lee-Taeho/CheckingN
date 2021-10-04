@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"server/middleware"
@@ -17,8 +19,8 @@ type Claims struct {
 
 func (h *Handlers) tokenValid(w http.ResponseWriter, r *http.Request) bool {
 	cookie, err := r.Cookie("token")
-
 	if err != nil {
+		fmt.Println("debug1")
 		if err == http.ErrNoCookie {
 			w.WriteHeader(http.StatusUnauthorized)
 			return false
@@ -34,8 +36,8 @@ func (h *Handlers) tokenValid(w http.ResponseWriter, r *http.Request) bool {
 		func(t *jwt.Token) (interface{}, error) {
 			return []byte(sECRET_KEY), nil
 		})
-
 	if err != nil {
+		fmt.Println("debug2")
 		if err == jwt.ErrSignatureInvalid {
 			w.WriteHeader(http.StatusUnauthorized)
 			return false
@@ -45,6 +47,7 @@ func (h *Handlers) tokenValid(w http.ResponseWriter, r *http.Request) bool {
 	}
 
 	if !tkn.Valid {
+		fmt.Println("debug3")
 		w.WriteHeader(http.StatusUnauthorized)
 		return false
 	}
@@ -78,8 +81,11 @@ func (h *Handlers) createTokenAndSetCookie(w http.ResponseWriter, email string) 
 		})
 }
 
-func (h *Handlers) googleRespDecoder(resp http.Response) middleware.Student {
-	contents := utils.JsonifyHttpResponse(resp)
-	contents = contents
-	return *new(middleware.Student)
+func (h *Handlers) googleRespDecoder(resp http.Response) middleware.GoogleUser {
+	contents := []byte(utils.JsonifyHttpResponse(resp))
+
+	var user middleware.GoogleUser
+	json.Unmarshal(contents, &user)
+
+	return user
 }
