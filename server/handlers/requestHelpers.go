@@ -1,15 +1,13 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
+	"server/middleware"
+	"server/utils"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-)
-
-const (
-	AUTO_LOGOUT_TIME    = time.Minute * 20
-	TIME_BEFORE_EXPIRED = time.Minute * 30
 )
 
 type Claims struct {
@@ -28,14 +26,13 @@ func (h *Handlers) tokenValid(w http.ResponseWriter, r *http.Request) bool {
 		w.WriteHeader(http.StatusBadRequest)
 		return false
 	}
-
 	tokenStr := cookie.Value
 
 	claims := &Claims{}
 
 	tkn, err := jwt.ParseWithClaims(tokenStr, claims,
 		func(t *jwt.Token) (interface{}, error) {
-			return secret_key, nil
+			return []byte(sECRET_KEY), nil
 		})
 
 	if err != nil {
@@ -54,7 +51,7 @@ func (h *Handlers) tokenValid(w http.ResponseWriter, r *http.Request) bool {
 	return true
 }
 
-func (h *Handlers) createToken(w http.ResponseWriter, r *http.Request, email string) {
+func (h *Handlers) createTokenAndSetCookie(w http.ResponseWriter, email string) {
 	expirationTime := time.Now().Add(AUTO_LOGOUT_TIME)
 
 	claims := &Claims{
@@ -65,9 +62,10 @@ func (h *Handlers) createToken(w http.ResponseWriter, r *http.Request, email str
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString(secret_key)
+	tokenString, err := token.SignedString([]byte(sECRET_KEY))
 
 	if err != nil {
+		log.Printf("%s Error signing token: %s\n", LOGGER_ERROR_HELPERS, err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -78,4 +76,10 @@ func (h *Handlers) createToken(w http.ResponseWriter, r *http.Request, email str
 			Value:   tokenString,
 			Expires: expirationTime,
 		})
+}
+
+func (h *Handlers) googleRespDecoder(resp http.Response) middleware.Student {
+	contents := utils.JsonifyHttpResponse(resp)
+	contents = contents
+	return *new(middleware.Student)
 }
