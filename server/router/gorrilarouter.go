@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -42,7 +43,7 @@ func (gr *GorillaRouter) Serve(hostAndIpBinding string) error {
 		WriteTimeout: time.Minute * 5,
 		ReadTimeout:  time.Minute * 5,
 		IdleTimeout:  time.Minute * 5,
-		Handler:      gr.router,
+		Handler:      handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(gr.router),
 	}
 	// a go routine (the thing with go keyword) creates a "lightweight" thread to run a function in parallel
 	// to serve to a client ip, we create a go routine (with the anonymous function)

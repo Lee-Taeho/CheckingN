@@ -92,17 +92,18 @@ func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.SetCookie(w,
+	h.LoginRequestSuccess(w, r, tokenString)
+}
+
+func (h *Handlers) LoginRequestSuccess(w http.ResponseWriter, r *http.Request, tokenString string) {
+	r.AddCookie(
 		&http.Cookie{
 			Name:    "token",
 			Value:   tokenString,
-			Expires: expirationTime,
+			Expires: time.Now().Add(AUTO_LOGOUT_TIME),
 		})
-	h.LoginRequestSuccess(w, r)
-}
-
-func (h *Handlers) LoginRequestSuccess(w http.ResponseWriter, r *http.Request) {
 	if h.tokenValid(w, r) {
+		// w.Header().Set("Access-Control-Allow-Credentials", "true")
 		fmt.Fprint(w, "<h1>Successful Login!<h1>")
 	}
 }

@@ -8,7 +8,6 @@ import (
 
 func (h *Handlers) tokenValid(w http.ResponseWriter, r *http.Request) bool {
 	cookie, err := r.Cookie("token")
-
 	if err != nil {
 		if err == http.ErrNoCookie {
 			w.WriteHeader(http.StatusUnauthorized)
@@ -17,7 +16,6 @@ func (h *Handlers) tokenValid(w http.ResponseWriter, r *http.Request) bool {
 		w.WriteHeader(http.StatusBadRequest)
 		return false
 	}
-
 	tokenStr := cookie.Value
 
 	claims := &Claims{}
@@ -26,7 +24,6 @@ func (h *Handlers) tokenValid(w http.ResponseWriter, r *http.Request) bool {
 		func(t *jwt.Token) (interface{}, error) {
 			return jwtKey, nil
 		})
-
 	if err != nil {
 		if err == jwt.ErrSignatureInvalid {
 			w.WriteHeader(http.StatusUnauthorized)
