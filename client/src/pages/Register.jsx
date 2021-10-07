@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 
 const Register = () => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [first_name, setFirstName] = useState('');
+    const [last_name, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
@@ -13,12 +13,12 @@ const Register = () => {
 
 
         //*****ASK FOR REGISTER API */
-        await fetch('http://localhost:8000/api/save_new_user', {
+        await fetch('http://localhost:8080/api/save_new_user', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                firstName,
-                lastName,
+                first_name,
+                last_name,
                 email,
                 password
             })

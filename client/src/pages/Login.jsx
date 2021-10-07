@@ -9,10 +9,10 @@ const Login = () => {
     const submit = async (e) => {
         e.preventDefault();
 
-        await fetch('http://localhost:8000/api/login_request', {
+        await fetch('http://localhost:8080/api/login_request', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            credentials: 'include',
+            //credentials: 'include',
             body: JSON.stringify({
                 email,
                 password
