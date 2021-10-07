@@ -13,7 +13,7 @@ const Register = () => {
 
 
         //*****ASK FOR REGISTER API */
-        await fetch('http://localhost:8000/api/save_new_user', {
+        await fetch('http://localhost:8080/api/save_new_user', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -51,6 +51,8 @@ const Register = () => {
                 onChange={e => setPassword(e.target.value)}    
             />
             <button className="w-100 btn btn-lg btn-primary" type="submit">Create</button>
+
+            <label>Already have an account? <a href="/login">Login</a></label>
         </form>
 
     );

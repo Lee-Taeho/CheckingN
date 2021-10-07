@@ -9,10 +9,10 @@ const Login = () => {
     const submit = async (e) => {
         e.preventDefault();
 
-        await fetch('http://localhost:8000/api/login_request', {
+        await fetch('http://localhost:8080/api/login_request', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            credentials: 'include',
+          //  credentials: 'include',
             body: JSON.stringify({
                 email,
                 password
@@ -42,6 +42,7 @@ const Login = () => {
                 onChange={e => setPassword(e.target.value)}
             />
             <button className="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+            <label>Don't have an account? <a href="/register">Register</a></label>
         </form>
         
     );
