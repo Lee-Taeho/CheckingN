@@ -1,6 +1,7 @@
 package database
 
 import (
+	"log"
 	"context"
 	"errors"
 	"server/middleware"
@@ -21,6 +22,7 @@ func (m *MongoDB) FindStudent(login middleware.LoginRequest) bool {
 	collection := m.mongo.Database(USER_DATABASE).Collection(STUDENTS_COLLECTION)
 	result := collection.FindOne(ctx, login)
 	if result.Err() != nil {
+		log.Println(result.Err())
 		return false
 	}
 	return true

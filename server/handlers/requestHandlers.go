@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -41,15 +42,15 @@ func (h *Handlers) ExampleJsonReponse(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handlers) SaveNewUser(w http.ResponseWriter, r *http.Request) {
 	log.Println("INFO [handlers/requestHandlers.go] Request to Save New User")
-	r.ParseForm()
-	student := &middleware.Student{
-		FirstName: r.PostForm.Get("first_name"),
-		LastName:  r.PostForm.Get("last_name"),
-		Email:     r.PostForm.Get("email"),
-		Password:  r.PostForm.Get("password"),
+	var student middleware.Student
+
+	if err := json.NewDecoder(r.Body).Decode(&student); err != nil {
+		log.Printf("ERROR [handlers/requestHandlers.go] Couldn't get data: %s\n", err.Error())
+		http.Error(w, "Couldn't get data", http.StatusInternalServerError)
+		return
 	}
 
-	if err := h.db.CreateNewStudent(*student); err != nil {
+	if err := h.db.CreateNewStudent(student); err != nil {
 		log.Printf("ERROR [handlers/requestHandlers.go] Couldn't Save New User: %s\n", err.Error())
 		http.Error(w, "Couldn't Save New User", http.StatusInternalServerError)
 		return
@@ -61,13 +62,15 @@ func (h *Handlers) SaveNewUser(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
 	log.Println("INFO [handlers/requestHandlers.go] Request to Log In")
-	r.ParseForm()
-	login := &middleware.LoginRequest{
-		Email:    r.PostForm.Get("Email"),
-		Password: r.PostForm.Get("Password"),
+	var login middleware.LoginRequest
+
+	if err := json.NewDecoder(r.Body).Decode(&login); err != nil {
+		log.Printf("ERROR [handlers/requestHandlers.go] Couldn't get data: %s\n", err.Error())
+		http.Error(w, "Couldn't get data", http.StatusInternalServerError)
+		return
 	}
 
-	if found := h.db.FindStudent(*login); !found {
+	if found := h.db.FindStudent(login); !found {
 		log.Println("INFO [handlers/requestHandlers.go] Failed Log In")
 		w.WriteHeader(http.StatusUnauthorized)
 		return

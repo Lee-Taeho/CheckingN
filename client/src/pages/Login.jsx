@@ -12,7 +12,11 @@ const Login = () => {
         await fetch('http://localhost:8080/api/login_request', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
+<<<<<<< HEAD
           //  credentials: 'include',
+=======
+            //credentials: 'include',
+>>>>>>> fbcba355da181b51f740e32ad9bf21ca4873993b
             body: JSON.stringify({
                 email,
                 password
