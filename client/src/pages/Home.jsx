@@ -1,9 +1,9 @@
-import React from 'react';
+import React  from 'react';
 
-const Home = () => {
+const Home = (props) => {
     return (
         <div>
-            Home
+            {props.first_name ? 'Hi ' + props.first_name : 'You are not logged in'}
         </div>
         
     );

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 
-const Login = () => {
+const Login = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
@@ -9,24 +9,22 @@ const Login = () => {
     const submit = async (e) => {
         e.preventDefault();
 
-        await fetch('http://localhost:8080/api/login_request', {
+        const response = await fetch('http://localhost:8080/api/login_request', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-<<<<<<< HEAD
-          //  credentials: 'include',
-=======
             //credentials: 'include',
->>>>>>> fbcba355da181b51f740e32ad9bf21ca4873993b
             body: JSON.stringify({
                 email,
                 password
             })
         });
 
-        // const content = await response.json();
+        const content = await response.json();
 
         setRedirect(true);
-        // props.setName(content.name);
+
+        props.setName(content.name);
+
     }
 
     if(redirect)
