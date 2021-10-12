@@ -50,7 +50,7 @@ func (h *Handlers) tokenValid(w http.ResponseWriter, r *http.Request) bool {
 	return true
 }
 
-func (h *Handlers) createTokenAndSetCookie(w http.ResponseWriter, email string) {
+func (h *Handlers) createTokenAndSetCookie(w http.ResponseWriter, r *http.Request, email string) {
 	expirationTime := time.Now().Add(AUTO_LOGOUT_TIME)
 
 	claims := &Claims{
@@ -69,12 +69,11 @@ func (h *Handlers) createTokenAndSetCookie(w http.ResponseWriter, email string) 
 		return
 	}
 
-	http.SetCookie(w,
-		&http.Cookie{
-			Name:    "token",
-			Value:   tokenString,
-			Expires: expirationTime,
-		})
+	r.AddCookie(&http.Cookie{
+		Name:    "token",
+		Value:   tokenString,
+		Expires: expirationTime,
+	})
 }
 
 func (h *Handlers) googleRespDecoder(resp http.Response) middleware.GoogleUser {

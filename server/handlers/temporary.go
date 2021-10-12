@@ -33,7 +33,6 @@ func (h *Handlers) Home(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "<h1>Successful Login!<h1>")
 	} else {
 		log.Println(LOGGER_ERROR_TEMPORARY + " Login Token Invalid")
-		w.WriteHeader(http.StatusUnauthorized)
 	}
 }
 

@@ -42,7 +42,7 @@ func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
 
 	log.Println(LOGGER_INFO_LOGIN + " Log In Successful")
 
-	h.createTokenAndSetCookie(w, login.Email)
+	h.createTokenAndSetCookie(w, r, login.Email)
 	h.Home(w, r)
 }
 
