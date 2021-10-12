@@ -1,46 +1,13 @@
 package handlers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"server/middleware"
-	"server/utils"
-	"time"
-
-	"github.com/dgrijalva/jwt-go"
 )
-
-const (
-	AUTO_LOGOUT_TIME    = time.Minute * 10
-	TIME_BEFORE_EXPIRED = time.Second * 30
-)
-
-var jwtKey = []byte("secret_key")
-
-type Claims struct {
-	Email string `json:"email"`
-	jwt.StandardClaims
-}
-
-func (h *Handlers) ExampleJsonReponse(w http.ResponseWriter, r *http.Request) {
-	var courses []*middleware.Course
-
-	course := new(middleware.Course)
-	course.Name = "CS160"
-	course.Department = "computer science"
-	courses = append(courses, course)
-
-	course2 := new(middleware.Course)
-	course2.Name = "PHIL134"
-	course2.Department = "philosophy"
-	courses = append(courses, course2)
-
-	fmt.Fprint(w, utils.Jsonify(courses))
-}
 
 func (h *Handlers) SaveNewUser(w http.ResponseWriter, r *http.Request) {
-	log.Println("INFO [handlers/requestHandlers.go] Request to Save New User")
+	log.Println(LOGGER_INFO_LOGIN + " Request to Save New User")
 	r.ParseForm()
 	student := &middleware.Student{
 		FirstName: r.PostForm.Get("first_name"),
@@ -50,17 +17,17 @@ func (h *Handlers) SaveNewUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := h.db.CreateNewStudent(*student); err != nil {
-		log.Printf("ERROR [handlers/requestHandlers.go] Couldn't Save New User: %s\n", err.Error())
+		log.Printf("%s Couldn't Save New User: %s\n", LOGGER_ERROR_LOGIN, err.Error())
 		http.Error(w, "Couldn't Save New User", http.StatusInternalServerError)
 		return
 	}
-	log.Println("INFO [handlers/requestHandlers.go] Successfully Saved New User")
+	log.Println(LOGGER_INFO_LOGIN + " Successfully Saved New User")
 	// fmt.Fprint(w, "Thanks For signing up for CheckingN!")
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
-	log.Println("INFO [handlers/requestHandlers.go] Request to Log In")
+	log.Println(LOGGER_INFO_LOGIN + " Request to Log In")
 	r.ParseForm()
 	login := &middleware.LoginRequest{
 		Email:    r.PostForm.Get("Email"),
@@ -68,43 +35,15 @@ func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if found := h.db.FindStudent(*login); !found {
-		log.Println("INFO [handlers/requestHandlers.go] Failed Log In")
+		log.Println(LOGGER_INFO_LOGIN + " Failed Log In")
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
-	log.Println("INFO [handlers/requestHandlers.go] Log In Successful")
+	log.Println(LOGGER_INFO_LOGIN + " Log In Successful")
 
-	expirationTime := time.Now().Add(AUTO_LOGOUT_TIME)
-
-	claims := &Claims{
-		Email: login.Email,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expirationTime.Unix(),
-		},
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString(jwtKey)
-
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	http.SetCookie(w,
-		&http.Cookie{
-			Name:    "token",
-			Value:   tokenString,
-			Expires: expirationTime,
-		})
-	h.LoginRequestSuccess(w, r)
-}
-
-func (h *Handlers) LoginRequestSuccess(w http.ResponseWriter, r *http.Request) {
-	if h.tokenValid(w, r) {
-		fmt.Fprint(w, "<h1>Successful Login!<h1>")
-	}
+	h.createTokenAndSetCookie(w, r, login.Email)
+	h.Home(w, r)
 }
 
 // func (h *Handlers) Refresh(w http.ResponseWriter, r *http.Request) {
