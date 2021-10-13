@@ -1,0 +1,7 @@
+client/build/**
+client/node_modules/**
+.DS_Store
+server/run.sh
+server/go.mod
+server/go.sum
+server/server
