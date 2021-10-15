@@ -1,8 +1,7 @@
 package middleware
 
-// bson tag will tell golang to extract that specific field from mongodb into the variable
-// json tag will be the way it is called from front end
 type Tutor struct {
+	Uuid            int        `bson:"uuid" json:"uuid"`
 	Name            string     `bson:"name" json:"name"`
 	Students        []*Student `bson:"students" json:"students"`
 	FluentLanguages []string   `bson:"fluent_languages" json:"fluent_languages"`
@@ -10,6 +9,7 @@ type Tutor struct {
 }
 
 type Student struct {
+	Uuid      int    `bson:"uuid" json:"uuid"`
 	FirstName string `bson:"first_name" json:"first_name"`
 	LastName  string `bson:"last_name" json:"last_name"`
 	Email     string `bson:"email" json:"email"`
@@ -35,3 +35,11 @@ type Course struct {
 	Name       string `bson:"name" json:"name"`
 	Department string `bson:"department" json:"department"`
 }
+
+type Cookie struct {
+	Name      string `json:"name"`
+	Value     string `json:"value"`
+	ExpiresAt int64  `json:"expires_at"`
+}
+
+// "first_name": "Mcclovin", "last_name":"", "email":"jonahhill@gmail.com", "password":"dartmouth"

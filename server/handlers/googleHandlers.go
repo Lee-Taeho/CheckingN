@@ -34,6 +34,6 @@ func (h *Handlers) GoogleLoginCallback(w http.ResponseWriter, r *http.Request) {
 	user := h.googleRespDecoder(*resp)
 	h.db.CreateNewGoogleStudent(user)
 
-	h.createTokenAndSetCookie(w, r, user.Email)
+	// h.createTokenAndSetCookie(w, r, user.Email)
 	h.Home(w, r)
 }

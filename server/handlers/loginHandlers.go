@@ -1,49 +1,60 @@
 package handlers
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"server/middleware"
+	"server/utils"
+	"time"
 )
 
 func (h *Handlers) SaveNewUser(w http.ResponseWriter, r *http.Request) {
 	log.Println(LOGGER_INFO_LOGIN + " Request to Save New User")
-	r.ParseForm()
-	student := &middleware.Student{
-		FirstName: r.PostForm.Get("first_name"),
-		LastName:  r.PostForm.Get("last_name"),
-		Email:     r.PostForm.Get("email"),
-		Password:  r.PostForm.Get("password"),
+
+	student := &middleware.Student{}
+	if err := json.NewDecoder(r.Body).Decode(student); err != nil {
+		log.Printf("ERROR [handlers/requestHandlers.go] Couldn't get data: %s\n", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
+	uuid := h.db.GetUUID()
+	student.Uuid = uuid
 
 	if err := h.db.CreateNewStudent(*student); err != nil {
 		log.Printf("%s Couldn't Save New User: %s\n", LOGGER_ERROR_LOGIN, err.Error())
-		http.Error(w, "Couldn't Save New User", http.StatusInternalServerError)
-		return
+		w.WriteHeader(http.StatusSeeOther)
 	}
+
 	log.Println(LOGGER_INFO_LOGIN + " Successfully Saved New User")
-	// fmt.Fprint(w, "Thanks For signing up for CheckingN!")
-	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
 	log.Println(LOGGER_INFO_LOGIN + " Request to Log In")
-	r.ParseForm()
-	login := &middleware.LoginRequest{
-		Email:    r.PostForm.Get("Email"),
-		Password: r.PostForm.Get("Password"),
+
+	login := &middleware.LoginRequest{}
+	if err := json.NewDecoder(r.Body).Decode(login); err != nil {
+		log.Printf("ERROR [handlers/requestHandlers.go] Couldn't get data: %s\n", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
-	if found := h.db.FindStudent(*login); !found {
+	student := h.db.FindStudent(*login)
+	if student == nil {
 		log.Println(LOGGER_INFO_LOGIN + " Failed Log In")
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
-	log.Println(LOGGER_INFO_LOGIN + " Log In Successful")
+	cookie := &middleware.Cookie{
+		Name:      "Bearer",
+		Value:     Encrypt(aes_key, fmt.Sprint(student.Uuid)),
+		ExpiresAt: time.Now().Add(AUTO_LOGOUT_TIME).Unix(),
+	}
+	w.Write([]byte(utils.Jsonify(cookie)))
 
-	h.createTokenAndSetCookie(w, r, login.Email)
-	h.Home(w, r)
+	log.Println(LOGGER_INFO_LOGIN + " Log In Successful")
 }
 
 // func (h *Handlers) Refresh(w http.ResponseWriter, r *http.Request) {
