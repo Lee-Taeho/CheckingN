@@ -19,11 +19,11 @@ const Login = (props) => {
             })
         });
 
-        const content = await response.json();
+      //  const content = await response.json();
 
         setRedirect(true);
 
-        props.setName(content.name);
+      //  props.setName(content.name);
 
     }
 

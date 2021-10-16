@@ -11,8 +11,6 @@ const Register = () => {
     const submit = async (e) => {
         e.preventDefault();
 
-
-        //*****ASK FOR REGISTER API */
         await fetch('http://localhost:8080/api/save_new_user', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},

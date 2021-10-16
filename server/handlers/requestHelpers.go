@@ -1,18 +1,19 @@
 package handlers
 
 import (
+	"crypto/aes"
+	"crypto/cipher"
+	"encoding/base64"
 	"encoding/json"
-	"log"
 	"net/http"
 	"server/middleware"
 	"server/utils"
-	"time"
 
 	"github.com/dgrijalva/jwt-go"
 )
 
 type Claims struct {
-	Email string `json:"email"`
+	Uuid string `json:"uuid"`
 	jwt.StandardClaims
 }
 
@@ -32,7 +33,7 @@ func (h *Handlers) tokenValid(w http.ResponseWriter, r *http.Request) bool {
 
 	tkn, err := jwt.ParseWithClaims(tokenStr, claims,
 		func(t *jwt.Token) (interface{}, error) {
-			return []byte(sECRET_KEY), nil
+			return aes_key, nil
 		})
 	if err != nil {
 		if err == jwt.ErrSignatureInvalid {
@@ -50,30 +51,40 @@ func (h *Handlers) tokenValid(w http.ResponseWriter, r *http.Request) bool {
 	return true
 }
 
-func (h *Handlers) createTokenAndSetCookie(w http.ResponseWriter, r *http.Request, email string) {
-	expirationTime := time.Now().Add(AUTO_LOGOUT_TIME)
-
-	claims := &Claims{
-		Email: email,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expirationTime.Unix(),
-		},
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString([]byte(sECRET_KEY))
-
+func Encrypt(key []byte, text string) string {
+	block, err := aes.NewCipher(key)
 	if err != nil {
-		log.Printf("%s Error signing token: %s\n", LOGGER_ERROR_HELPERS, err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
-		return
+		panic(err)
 	}
+	plaintext := []byte(text)
+	cfb := cipher.NewCFBEncrypter(block, aes_key)
+	ciphertext := make([]byte, len(plaintext))
+	cfb.XORKeyStream(ciphertext, plaintext)
+	return encodeBase64(ciphertext)
+}
 
-	r.AddCookie(&http.Cookie{
-		Name:    "token",
-		Value:   tokenString,
-		Expires: expirationTime,
-	})
+func Decrypt(key []byte, text string) string {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		panic(err)
+	}
+	ciphertext := decodeBase64(text)
+	cfb := cipher.NewCFBEncrypter(block, aes_key)
+	plaintext := make([]byte, len(ciphertext))
+	cfb.XORKeyStream(plaintext, ciphertext)
+	return string(plaintext)
+}
+
+func encodeBase64(b []byte) string {
+	return base64.StdEncoding.EncodeToString(b)
+}
+
+func decodeBase64(s string) []byte {
+	data, err := base64.StdEncoding.DecodeString(s)
+	if err != nil {
+		panic(err)
+	}
+	return data
 }
 
 func (h *Handlers) googleRespDecoder(resp http.Response) middleware.GoogleUser {
