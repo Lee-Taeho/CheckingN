@@ -5,9 +5,12 @@ import (
 	"crypto/cipher"
 	"encoding/base64"
 	"encoding/json"
+	"log"
 	"net/http"
 	"server/middleware"
 	"server/utils"
+	"strconv"
+	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 )
@@ -17,44 +20,28 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func (h *Handlers) tokenValid(w http.ResponseWriter, r *http.Request) bool {
-	cookie, err := r.Cookie("token")
-	if err != nil {
-		if err == http.ErrNoCookie {
-			w.WriteHeader(http.StatusUnauthorized)
-			return false
-		}
-		w.WriteHeader(http.StatusBadRequest)
-		return false
-	}
-	tokenStr := cookie.Value
-
-	claims := &Claims{}
-
-	tkn, err := jwt.ParseWithClaims(tokenStr, claims,
-		func(t *jwt.Token) (interface{}, error) {
-			return aes_key, nil
-		})
-	if err != nil {
-		if err == jwt.ErrSignatureInvalid {
-			w.WriteHeader(http.StatusUnauthorized)
-			return false
-		}
-		w.WriteHeader(http.StatusBadRequest)
-		return false
+func (h *Handlers) authorized(r *http.Request) int {
+	bearer := r.Header.Get("Authorization")
+	if len(bearer) == 0 {
+		return 0
 	}
 
-	if !tkn.Valid {
-		w.WriteHeader(http.StatusUnauthorized)
-		return false
+	split := strings.Fields(bearer)
+	uuidStr := decrypt(aes_key, split[1])
+	uuid, _ := strconv.Atoi(uuidStr)
+	if student := h.db.FindStudentUUID(uuid); student != nil {
+		log.Printf(LOGGER_INFO_HELPERS+" Student info by uuid\n%+v", student)
+		return uuid
+	} else {
+		return 0
 	}
-	return true
 }
 
-func Encrypt(key []byte, text string) string {
+func encrypt(key []byte, text string) string {
 	block, err := aes.NewCipher(key)
 	if err != nil {
-		panic(err)
+		log.Println(LOGGER_ERROR_HELPERS, err.Error())
+		return ""
 	}
 	plaintext := []byte(text)
 	cfb := cipher.NewCFBEncrypter(block, aes_key)
@@ -63,10 +50,11 @@ func Encrypt(key []byte, text string) string {
 	return encodeBase64(ciphertext)
 }
 
-func Decrypt(key []byte, text string) string {
+func decrypt(key []byte, text string) string {
 	block, err := aes.NewCipher(key)
 	if err != nil {
-		panic(err)
+		log.Println(LOGGER_ERROR_HELPERS, err.Error())
+		return ""
 	}
 	ciphertext := decodeBase64(text)
 	cfb := cipher.NewCFBEncrypter(block, aes_key)
@@ -82,7 +70,8 @@ func encodeBase64(b []byte) string {
 func decodeBase64(s string) []byte {
 	data, err := base64.StdEncoding.DecodeString(s)
 	if err != nil {
-		panic(err)
+		log.Println(LOGGER_ERROR_HELPERS, err.Error())
+		return nil
 	}
 	return data
 }

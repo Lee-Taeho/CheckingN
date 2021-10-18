@@ -13,4 +13,5 @@ type MongoInterface interface {
 	CreateNewGoogleStudent(student middleware.GoogleUser)
 	FindStudent(login middleware.LoginRequest) *middleware.Student
 	GetUUID() int
+	FindStudentUUID(uuid int) *middleware.Student
 }
