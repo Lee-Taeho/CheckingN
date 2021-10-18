@@ -28,7 +28,7 @@ func (h *Handlers) ExampleJsonReponse(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handlers) Home(w http.ResponseWriter, r *http.Request) {
 	log.Println(LOGGER_INFO_TEMPORARY + " Redirecting to Home Page")
-	if h.tokenValid(w, r) {
+	if h.authorized(r) != 0 {
 		log.Println(LOGGER_INFO_TEMPORARY + " Login Token Valid")
 		fmt.Fprint(w, "<h1>Successful Login!<h1>")
 	} else {

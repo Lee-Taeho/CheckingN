@@ -2,6 +2,8 @@ package database
 
 import (
 	"context"
+	"fmt"
+	"server/middleware"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -25,4 +27,18 @@ func (m *MongoDB) GetUUID() int {
 	}
 
 	return uuid.Uuid
+}
+
+func (m *MongoDB) FindStudentUUID(uuid int) *middleware.Student {
+	ctx := context.TODO()
+	collection := m.mongo.Database(USER_DATABASE).Collection(STUDENTS_COLLECTION)
+	filter := bson.M{"uuid": uuid}
+
+	student := &middleware.Student{}
+	err := collection.FindOne(ctx, filter).Decode(student)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil
+	}
+	return student
 }

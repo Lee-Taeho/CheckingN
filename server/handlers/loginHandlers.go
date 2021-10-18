@@ -6,8 +6,6 @@ import (
 	"log"
 	"net/http"
 	"server/middleware"
-	"server/utils"
-	"time"
 )
 
 func (h *Handlers) SaveNewUser(w http.ResponseWriter, r *http.Request) {
@@ -47,14 +45,19 @@ func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cookie := &middleware.Cookie{
-		Name:      "Bearer",
-		Value:     Encrypt(aes_key, fmt.Sprint(student.Uuid)),
-		ExpiresAt: time.Now().Add(AUTO_LOGOUT_TIME).Unix(),
-	}
-	w.Write([]byte(utils.Jsonify(cookie)))
-
+	r.Header.Add("Authorization", "Bearer "+encrypt(aes_key, fmt.Sprint(student.Uuid)))
 	log.Println(LOGGER_INFO_LOGIN + " Log In Successful")
+}
+
+func (h *Handlers) Authorized(w http.ResponseWriter, r *http.Request) {
+	boolin := h.authorized(r)
+	if boolin != 0 {
+		log.Println(LOGGER_INFO_LOGIN, "Student Authorized")
+		w.WriteHeader(http.StatusOK)
+	} else {
+		log.Println(LOGGER_INFO_LOGIN, "Student Unauthorized")
+		w.WriteHeader(http.StatusUnauthorized)
+	}
 }
 
 // func (h *Handlers) Refresh(w http.ResponseWriter, r *http.Request) {
