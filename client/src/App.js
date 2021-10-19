@@ -5,26 +5,26 @@ import {BrowserRouter, Route} from "react-router-dom";
 import Home from './pages/Home';
 import Register from './pages/Register';
 import React, {useEffect, useState} from 'react';
-
+import GoogleLogin from 'react-google-login';
 
 function App() {
   const [first_name, setFirstName] = useState('');
     
-  useEffect(() => {
-      (
-          // which api is user api to get user data 
-          async () => {
-              const response = await fetch('http://localhost:8080/api/****', {
-                  headers: {'Content-Type': 'application/json'},
-                  //credentials: 'include',
-              })
+  // useEffect(() => {
+  //     (
+  //         // which api is user api to get user data 
+  //         async () => {
+  //             const response = await fetch('http://localhost:8080/api/****', {
+  //                 headers: {'Content-Type': 'application/json'},
+  //                 //credentials: 'include',
+  //             })
 
-              const content = await response.json();
+  //             const content = await response.json();
 
-              setFirstName(content.first_name);
-          }
-      )();
-  });
+  //             setFirstName(content.first_name);
+  //         }
+  //     )();
+  // });
 
   return ( 
     <div className="App">

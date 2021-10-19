@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
+import GoogleLogin from 'react-google-login';
 
 const Login = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
-    
+
     const submit = async (e) => {
         e.preventDefault();
 
-        const response = await fetch('http://localhost:8080/api/login_request', {
+        var request = {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             //credentials: 'include',
@@ -17,13 +18,30 @@ const Login = (props) => {
                 email,
                 password
             })
-        });
+        }
 
-      //  const content = await response.json();
+        // send email and password to login_request
+        const response = await fetch('http://localhost:8080/api/login_request', request)
+        // login_request returns a token info
+        const data = await response.json()
+        var key = data.key;
+        var value = data.value;
+        
+        // use token info returned by login_request to set the header for api/authorized
+        var authReq = {
+             method: 'GET',
+             headers: {'Authorization': String(value)}
+        }
+
+        const authResponse = await fetch('http://localhost:8080/api/authorized', authReq);
+
+        const content = await authResponse.json();
+
+        console.log(content);
 
         setRedirect(true);
 
-      //  props.setName(content.name);
+        props.setFirstName(content.first_name);
 
     }
 
@@ -31,6 +49,12 @@ const Login = (props) => {
     {
         return <Redirect to="/"/>
     }
+    
+    // ***Google login
+    // responseGoogle=(response) =>{
+    //     console.log(response);
+    //     console.log(response.profileObj);
+    // }
 
     return (
         <form onSubmit={submit}>
@@ -45,6 +69,17 @@ const Login = (props) => {
             />
             <button className="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
             <label>Don't have an account? <a href="/register">Register</a></label>
+            
+            {/* <div>
+                <GoogleLogin
+                    // ask Ayush for clientId
+                    clientId=""
+                    buttonText="Sign in with Google"
+                    onSuccess={this.responseGoogle}
+                    onFailure={this.responseGoogle}
+                    cookiePolicy={single_host_origin}
+                />
+            </div> */}
         </form>
         
     );
