@@ -40,6 +40,7 @@ func (m *MongoDB) FindStudentUUID(uuid int) *middleware.Student {
 		fmt.Println(err.Error())
 		return nil
 	}
+	student.Uuid = 0
 	student.Password = ""
 
 	return student

@@ -9,7 +9,7 @@ type Tutor struct {
 }
 
 type Student struct {
-	Uuid      int    `bson:"uuid" json:"uuid"`
+	Uuid      int    `bson:"uuid" json:"uuid,omitempty"`
 	FirstName string `bson:"first_name" json:"first_name"`
 	LastName  string `bson:"last_name" json:"last_name"`
 	Email     string `bson:"email" json:"email"`
