@@ -20,10 +20,10 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func (h *Handlers) authorized(r *http.Request) int {
+func (h *Handlers) authorized(r *http.Request) *middleware.Student {
 	bearer := r.Header.Get("Authorization")
 	if len(bearer) == 0 {
-		return 0
+		return nil
 	}
 
 	split := strings.Fields(bearer)
@@ -31,9 +31,9 @@ func (h *Handlers) authorized(r *http.Request) int {
 	uuid, _ := strconv.Atoi(uuidStr)
 	if student := h.db.FindStudentUUID(uuid); student != nil {
 		log.Printf(LOGGER_INFO_HELPERS+" Student info by uuid\n%+v", student)
-		return uuid
+		return student
 	} else {
-		return 0
+		return nil
 	}
 }
 

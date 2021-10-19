@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"server/middleware"
+	"server/utils"
 )
 
 func (h *Handlers) SaveNewUser(w http.ResponseWriter, r *http.Request) {
@@ -45,15 +46,21 @@ func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	r.Header.Add("Authorization", "Bearer "+encrypt(aes_key, fmt.Sprint(student.Uuid)))
+	header := &middleware.Header{
+		Key:   "Authorization",
+		Value: "Bearer " + encrypt(aes_key, fmt.Sprint(student.Uuid)),
+	}
+
+	w.Write([]byte(utils.Jsonify(header)))
+	// r.Header.Add("Authorization", "Bearer "+encrypt(aes_key, fmt.Sprint(student.Uuid)))
 	log.Println(LOGGER_INFO_LOGIN + " Log In Successful")
 }
 
 func (h *Handlers) Authorized(w http.ResponseWriter, r *http.Request) {
-	boolin := h.authorized(r)
-	if boolin != 0 {
+	student := h.authorized(r)
+	if student != nil {
 		log.Println(LOGGER_INFO_LOGIN, "Student Authorized")
-		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(utils.Jsonify(student)))
 	} else {
 		log.Println(LOGGER_INFO_LOGIN, "Student Unauthorized")
 		w.WriteHeader(http.StatusUnauthorized)
