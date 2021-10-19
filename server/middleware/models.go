@@ -13,7 +13,7 @@ type Student struct {
 	FirstName string `bson:"first_name" json:"first_name"`
 	LastName  string `bson:"last_name" json:"last_name"`
 	Email     string `bson:"email" json:"email"`
-	Password  string `bson:"password" json:"password"`
+	Password  string `bson:"password" json:"password,omitempty"`
 }
 
 type GoogleUser struct {
