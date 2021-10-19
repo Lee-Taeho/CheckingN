@@ -36,10 +36,9 @@ type Course struct {
 	Department string `bson:"department" json:"department"`
 }
 
-type Cookie struct {
-	Name      string `json:"name"`
-	Value     string `json:"value"`
-	ExpiresAt int64  `json:"expires_at"`
+type Header struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
 }
 
 // "first_name": "Mcclovin", "last_name":"", "email":"jonahhill@gmail.com", "password":"dartmouth"
