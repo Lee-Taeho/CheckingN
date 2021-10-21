@@ -1,7 +1,8 @@
 package middleware
 
 import (
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	//"go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
 )
 // bson tag will tell golang to extract that specific field from mongodb into the variable
 // json tag will be the way it is called from front end
@@ -47,6 +48,6 @@ type Appointment struct {
 	StudentID		string 		`bson:"student_id" json:"student_id"`
 	CourseID		string 		`bson:"course_id" json:"course_id"`
 	MeetingLocation string 		`bson:"meeting_location" json:"meeting_location"`
-	StartTime		primitive.DateTime 	`bson:"start_time" json:"start_time"`
-	EndTime			primitive.DateTime 	`bson:"end_time" json:"end_time"`
+	StartTime		time.Time 	`bson:"start_time" json:"start_time"`
+	EndTime			time.Time 	`bson:"end_time" json:"end_time"`
 }

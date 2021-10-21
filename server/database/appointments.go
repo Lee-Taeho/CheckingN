@@ -36,16 +36,16 @@ func (m *MongoDB) AddAppointment (appointment middleware.Appointment) error {
 	result.Decode(&tutor)
 	//check if no conflict with tutor's availability
 	availability := tutor.Availability
-	wkday := WEEKDAY_MAP[appointment.StartTime.Time().Weekday().String()]
-	idx := sort.SearchInts(availability[wkday], appointment.StartTime.Time().Hour())
-	if len(availability[wkday]) <= idx || availability[wkday][idx] != appointment.StartTime.Time().Hour() {
+	wkday := WEEKDAY_MAP[appointment.StartTime.Weekday().String()]
+	idx := sort.SearchInts(availability[wkday], appointment.StartTime.Hour())
+	if len(availability[wkday]) <= idx || availability[wkday][idx] != appointment.StartTime.Hour() {
 		return errors.New("The tutor is not available for this time slot")
 	}
 	//go through each appointment and check if timeslot booked
 	appointments := tutor.Appointments
 	for i := 0; i < len(appointments); i++ {
 		if app, err := m.GetAppointment(appointments[i]); err == nil {
-			if app.StartTime == appointment.StartTime {
+			if app.StartTime.Equal(appointment.StartTime) {
 				return errors.New("The requested timeslot is already booked")
 			}
 		}
