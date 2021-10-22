@@ -17,10 +17,11 @@ type Tutor struct {
 }
 
 type Student struct {
-	FirstName string `bson:"first_name" json:"first_name"`
-	LastName  string `bson:"last_name" json:"last_name"`
-	Email     string `bson:"email" json:"email"`
-	Password  string `bson:"password" json:"password"`
+	FirstName 		string 		`bson:"first_name" json:"first_name"`
+	LastName  		string 		`bson:"last_name" json:"last_name"`
+	Email     		string 		`bson:"email" json:"email"`
+	Password  		string 		`bson:"password" json:"password"`
+	Appointments	[]string 	`bson:"appointments" json:"appointments"`
 }
 
 type GoogleUser struct {
@@ -46,7 +47,7 @@ type Course struct {
 type Appointment struct {
 	TutorID			string 		`bson:"tutor_id" json:"tutor_id"`
 	StudentID		string 		`bson:"student_id" json:"student_id"`
-	CourseID		string 		`bson:"course_id" json:"course_id"`
+	CourseCode		string 		`bson:"course_code" json:"course_code"`
 	MeetingLocation string 		`bson:"meeting_location" json:"meeting_location"`
 	StartTime		time.Time 	`bson:"start_time" json:"start_time"`
 	EndTime			time.Time 	`bson:"end_time" json:"end_time"`

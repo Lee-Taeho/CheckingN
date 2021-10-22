@@ -12,7 +12,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-
 var WEEKDAY_MAP = map[string]int{
 	"Monday": 0,
 	"Tuesday": 1,
@@ -23,10 +22,14 @@ var WEEKDAY_MAP = map[string]int{
 var loc, _ = time.LoadLocation("America/Los_Angeles")
 
 func (m *MongoDB) AddAppointment (appointment middleware.Appointment) error {
+	//TODO: add course check
 	ctx := context.TODO()
 	app_collection := m.mongo.Database(SJSU_DATABASE).Collection(APPOINTMENTS_COLLECTION)
 	tutor_collection := m.mongo.Database(SJSU_DATABASE).Collection(TUTORS_COLLECTION)
 	tutorObjID, err := primitive.ObjectIDFromHex(appointment.TutorID)
+	if err != nil {
+		return errors.New("Invalid value for tutor ID")
+	}
 	filter := bson.M{"_id": bson.M{"$eq": tutorObjID}}
 	result := tutor_collection.FindOne(ctx, filter) 
 	if result.Err() != nil {
@@ -34,6 +37,16 @@ func (m *MongoDB) AddAppointment (appointment middleware.Appointment) error {
 	}
 	var tutor middleware.Tutor
 	result.Decode(&tutor)
+	//check course
+	courses := tutor.Courses
+	for i := 0; i < len(courses); i++ {
+		if courses[i] == appointment.CourseCode {
+			break
+		}
+		if i == len(courses) - 1 && courses[i] != appointment.CourseCode {
+			return errors.New("Requested tutor is not qualified for this course")
+		}
+	}
 	//check if no conflict with tutor's availability
 	availability := tutor.Availability
 	wkday := WEEKDAY_MAP[appointment.StartTime.Weekday().String()]
@@ -63,9 +76,11 @@ func (m *MongoDB) AddAppointment (appointment middleware.Appointment) error {
 	if _, err := tutor_collection.UpdateOne(ctx, filter, update); err != nil {
 		return errors.New("Could not update tutor")
 	}
-	log.Println(err)
-	//need to also add app to student object
+	//add app to student object
 	studentObjID, err := primitive.ObjectIDFromHex(appointment.StudentID)
+	if err != nil {
+		return errors.New("Invalid value for student ID")
+	}
 	filter = bson.M{"_id": bson.M{"$eq": studentObjID}}
 	student_collection := m.mongo.Database(SJSU_DATABASE).Collection(STUDENTS_COLLECTION)
 	update = bson.M{"$addToSet": bson.M{"appointments": app_id}}
@@ -106,17 +121,25 @@ func (m *MongoDB) DeleteAppointment (id string) error {
 	}
 	var appointment middleware.Appointment
 	result.Decode(&appointment)
+	log.Println(appointment)
 	tutorObjID, err := primitive.ObjectIDFromHex(appointment.TutorID)
-	studentObjID, err := primitive.ObjectIDFromHex(appointment.StudentID)
-	if err = m.DeleteAppointmentFromTutor(objID, tutorObjID); err != nil {
-		if err = m.DeleteAppointmentFromStudent(objID, studentObjID); err != nil {
-			return nil
-		}
+	if err != nil {
+		log.Println(err)
 	}
-	return errors.New("Could not update student and/or tutor")
+	studentObjID, err := primitive.ObjectIDFromHex(appointment.StudentID)
+	if err != nil {
+		log.Println(err)
+	}
+	if err = m.DeleteAppointmentFromTutor(id, tutorObjID); err != nil {
+		return errors.New("Could not delete appointment for tutor")
+	}
+	if err = m.DeleteAppointmentFromStudent(id, studentObjID); err != nil {
+		return errors.New("Could not delete appointment for student")
+	}
+	return nil
 }
 
-func (m *MongoDB) DeleteAppointmentFromTutor (app_id primitive.ObjectID, tutor_id primitive.ObjectID) error {
+func (m *MongoDB) DeleteAppointmentFromTutor (app_id string, tutor_id primitive.ObjectID) error {
 	ctx := context.TODO()
 	collection := m.mongo.Database(SJSU_DATABASE).Collection(TUTORS_COLLECTION)
 	filter := bson.M{"_id": bson.M{"$eq": tutor_id}}
@@ -127,7 +150,7 @@ func (m *MongoDB) DeleteAppointmentFromTutor (app_id primitive.ObjectID, tutor_i
 	return nil
 }
 
-func (m *MongoDB) DeleteAppointmentFromStudent (app_id primitive.ObjectID, student_id primitive.ObjectID) error {
+func (m *MongoDB) DeleteAppointmentFromStudent (app_id string, student_id primitive.ObjectID) error {
 	ctx := context.TODO()
 	collection := m.mongo.Database(SJSU_DATABASE).Collection(STUDENTS_COLLECTION)
 	filter := bson.M{"_id": bson.M{"$eq": student_id}}
@@ -138,12 +161,12 @@ func (m *MongoDB) DeleteAppointmentFromStudent (app_id primitive.ObjectID, stude
 	return nil
 }
 
-func (m *MongoDB) GetAppointmentsForTutor (tutor_id string) ([]*middleware.Appointment, error) {
+func (m *MongoDB) GetAppointmentsForTutor (tutor_id string) ([]middleware.Appointment, error) {
 	ctx := context.TODO()
 	collection := m.mongo.Database(SJSU_DATABASE).Collection(TUTORS_COLLECTION)
 	tutorObjID, err := primitive.ObjectIDFromHex(tutor_id)
 	if err != nil {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("Invalid value for tutor ID")
 	}
 	filter := bson.M{"_id": bson.M{"$eq": tutorObjID}}
 	result := collection.FindOne(ctx, filter) 
@@ -153,10 +176,34 @@ func (m *MongoDB) GetAppointmentsForTutor (tutor_id string) ([]*middleware.Appoi
 	var tutor middleware.Tutor
 	result.Decode(&tutor)
 	appointments := tutor.Appointments
-	var results []*middleware.Appointment
+	var results []middleware.Appointment
 	for i := 0; i < len(appointments); i++ {
 		if app, err := m.GetAppointment(appointments[i]); err == nil {
-			results = append(results, app)
+			results = append(results, *app)
+		}
+	}
+	return results, nil
+}
+
+func (m *MongoDB) GetAppointmentsForStudent (student_id string) ([]middleware.Appointment, error) {
+	ctx := context.TODO()
+	collection := m.mongo.Database(SJSU_DATABASE).Collection(STUDENTS_COLLECTION)
+	studentObjID, err := primitive.ObjectIDFromHex(student_id)
+	if err != nil {
+		return nil, errors.New("Invalid value for student ID")
+	}
+	filter := bson.M{"_id": bson.M{"$eq": studentObjID}}
+	result := collection.FindOne(ctx, filter) 
+	if result.Err() != nil {
+		return nil, errors.New("The student does not exist")
+	}
+	var student middleware.Student
+	result.Decode(&student)
+	appointments := student.Appointments
+	var results []middleware.Appointment
+	for i := 0; i < len(appointments); i++ {
+		if app, err := m.GetAppointment(appointments[i]); err == nil {
+			results = append(results, *app)
 		}
 	}
 	return results, nil
