@@ -2,8 +2,11 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
+	"server/middleware"
+	"server/utils"
 )
 
 func (h *Handlers) GoogleLoginRequest(w http.ResponseWriter, r *http.Request) {
@@ -31,9 +34,25 @@ func (h *Handlers) GoogleLoginCallback(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	user := h.googleRespDecoder(*resp)
-	h.db.CreateNewGoogleStudent(user)
+	googStudent := h.googleRespDecoder(*resp)
+	uuid := h.db.GetUUID()
+	if uuid == 0 {
+		log.Println(LOGGER_ERROR_GOOGLE + " error creating uuid")
+		return
+	}
 
-	// h.createTokenAndSetCookie(w, r, user.Email)
-	h.Home(w, r)
+	user := &middleware.Student{
+		Uuid:      uuid,
+		FirstName: googStudent.FirstName,
+		LastName:  googStudent.LastName,
+		Email:     googStudent.Email,
+	}
+	h.db.CreateNewStudent(*user)
+
+	header := &middleware.Header{
+		Key:   "Authorization",
+		Value: "Bearer " + encrypt(aes_key, fmt.Sprint(uuid)),
+	}
+	w.Write([]byte(utils.Jsonify(header)))
+	log.Println(LOGGER_INFO_LOGIN + " Log In Successful")
 }
