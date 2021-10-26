@@ -62,4 +62,11 @@ func NewHandlers(gr interfaces.Router, db interfaces.MongoInterface, ip string) 
 	gr.AddRoute("/api/google_login_request", http.MethodGet, handlers.GoogleLoginRequest)
 	gr.AddRoute("/api/google_callback", http.MethodGet, handlers.GoogleLoginCallback)
 	gr.AddRoute("/api/appointment", http.MethodGet, handlers.CreateAppointment)
+	gr.AddRoute("/api/appoinment_create", http.MethodPost, handlers.CreateAppointment)
+	gr.AddRoute("/api/appoinment_delete/{id}", http.MethodDelete, handlers.CancelAppointment)
+	gr.AddRoute("/api/appoinment_edit/{id}", http.MethodPut, handlers.EditAppointment)
+	gr.AddRoute("/api/appoinment_view/{id}", http.MethodGet, handlers.ViewAppointment)
+	gr.AddRoute("/api/appoinment_view_all_tutor/{id}", http.MethodGet, handlers.ViewAllTutorAppointment)
+	gr.AddRoute("/api/appoinment_view_all_student/{id}", http.MethodGet, handlers.ViewAllStudentAppointment)
+
 }
