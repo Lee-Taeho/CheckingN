@@ -31,7 +31,7 @@ const Register = () => {
 
     return (
         <form onSubmit={submit}>
-            <h1 className="h3 mb-3 fw-normal">Create Your Account</h1>
+            <h1 className="h3 mb-3 fw-normal" style={{textAlign: "center"}}>Create Your Account</h1>
             <label>First Name</label>
             <input type="text" name="first_name" className="form-control" placeholder="First Name" required
                 onChange={e => setFirstName(e.target.value)}
