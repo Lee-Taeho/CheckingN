@@ -10,10 +10,11 @@ func (h *Handlers) SaveNewUser(w http.ResponseWriter, r *http.Request) {
 	log.Println(LOGGER_INFO_LOGIN + " Request to Save New User")
 	r.ParseForm()
 	student := &middleware.Student{
-		FirstName: r.PostForm.Get("first_name"),
-		LastName:  r.PostForm.Get("last_name"),
-		Email:     r.PostForm.Get("email"),
-		Password:  r.PostForm.Get("password"),
+		FirstName: 		r.PostForm.Get("first_name"),
+		LastName:  		r.PostForm.Get("last_name"),
+		Email:     		r.PostForm.Get("email"),
+		Password:  		r.PostForm.Get("password"),
+		Appointments:	make([]string, 0),
 	}
 
 	if err := h.db.CreateNewStudent(*student); err != nil {
