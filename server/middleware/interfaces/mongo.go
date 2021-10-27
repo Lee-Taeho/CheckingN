@@ -21,4 +21,5 @@ type MongoInterface interface {
 	DeleteAppointmentFromStudent(app_id string, student_id primitive.ObjectID) error
 	GetAppointmentsForTutor(tutor_id string) ([]middleware.Appointment, error)
 	GetAppointmentsForStudent(student_id string) ([]middleware.Appointment, error)
+	UpdateAppointment(app_id string, newAppointment middleware.Appointment) error
 }
