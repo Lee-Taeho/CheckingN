@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import GoogleLogin from 'react-google-login';
 
-
-
 const Login = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -60,33 +58,85 @@ const Login = (props) => {
 
     }
 
+//     if(isGoogleLogin) {
+//       //  console.log("click");
+//         const googleSubmit = async (e) => {
+//         var googleLoginRequest = {
+//             method: 'GET',
+//             headers: {'Content-Type': 'application/json'},
+//        }
+
+//        const googleResponse = await fetch('http://localhost:8080/api/google_login_request', googleLoginRequest)
+//        .catch(err => {
+//         throw new Error(err)
+//       });
+
+//        // login_request returns a token info
+//        const googleData = await googleResponse.json()
+//        console.log(googleData);
+//        var gKey = googleData.key;
+//        var gValue = googleData.value;
+       
+//        // use token info returned by login_request to set the header for api/authorized
+//        var gAuthReq = {
+//             method: 'GET',
+//             headers: {'Authorization': String(gValue)}
+//        }
+
+//        const gAuthResponse = fetch('http://localhost:8080/api/authorized', gAuthReq);
+
+//        const gContent = gAuthResponse.json();
+
+//        console.log(gContent);
+
+//        setRedirect(true);
+
+//        props.setFirstName(gContent.first_name);
+//     }
+// }
+
+    const handleGoogleLogin = async (e) => {
+        var googleLoginRequest = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+    const googleResponse = await fetch('https://cors-anywhere.herokuapp.com/http://localhost:8080/api/google_login_request', googleLoginRequest)
+        // .catch(err => {
+        //     throw new Error(err)
+        //     });
+
+        // login_request returns a token info
+        const googleData = await googleResponse.json()
+        console.log(googleData);
+        var gKey = googleData.key;
+        var gValue = googleData.value;
+        
+        // use token info returned by login_request to set the header for api/authorized
+        var gAuthReq = {
+                method: 'GET',
+                headers: {'Authorization': String(gValue)}
+        }
+
+        const gAuthResponse = fetch('http://localhost:8080/api/authorized', gAuthReq);
+
+        const gContent = gAuthResponse.json();
+
+        console.log(gContent);
+
+        setRedirect(true);
+
+        props.setFirstName(gContent.first_name);
+    }
+
     if(redirect)
     {
         return <Redirect to="/"/>
     }
     
-    // const handleGoogleLogin = () => {
-    //    // return <Redirect to="/register"/>
-    //     //console.log("click")
-    //      return <Redirect to="/api/google_login_request"/>
-    //     // var googleLoginRequest = {
-    //     //     method: 'GET',
-    //     //     headers: {'Content-Type': 'application/json'},
-    //     // }
-
-    //     // const googleResponse = await fetch('http://localhost:8080/api/google_login_request', googleLoginRequest)
-    // }    
-
     
-
-    if(isGoogleLogin) {
-        var googleLoginRequest = {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json'},
-       }
-
-       const authResponse = fetch('http://localhost:8080/api/google_login_request', googleLoginRequest);
-    }
 
     return (
         <form onSubmit={submit}>
@@ -108,9 +158,10 @@ const Login = (props) => {
                 <label>or</label>
             </div>
         
-            <button type="button" class="google-login-btn" onClick={() => setIsGoogleLogin(true)}>
+            <button type="button" className="google-login-btn" onClick={handleGoogleLogin}>
+                {/* onClick={() => setIsGoogleLogin(true)}> */}
                 <svg width="40" height="40">
-                    <g id="Google-Button" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <g id="Google-Button" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                         <rect x="0" y="0" width="40" height="40" rx="2" style={{fill: "rgb(255, 255, 255)"}}></rect>
                         <g id="logo_googleg_48dp" transform="translate(10.5, 10.5) scale(1.1)">
                             <path d="M17.64,9.20454545 C17.64,8.56636364 17.5827273,7.95272727  17.4763636,7.36363636 L9,7.36363636 L9,10.845 L13.8436364,10.845 C13.635,11.97 13.0009091,12.9231818 12.0477273,13.5613636 L12.0477273,15.8195455 L14.9563636,15.8195455 C16.6581818,14.2527273 17.64,11.9454545 17.64,9.20454545 L17.64,9.20454545 Z" id="Shape" fill="#4285F4"></path>
@@ -121,8 +172,8 @@ const Login = (props) => {
                         </g>
                     </g>
                 </svg>
-                <div class="google-btn-text-container">
-                    <div class="google-btn-text">Log in with Google</div>
+                <div className="google-btn-text-container">
+                    <div className="google-btn-text">Log in with Google</div>
                 </div>
             </button>
 
