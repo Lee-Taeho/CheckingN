@@ -8,7 +8,7 @@ const Home = (props) => {
         homeText=(<div>You are not logged in</div>)
     }
     else{
-        homeText=(<div>{user}</div>)
+        homeText=(<div>Hi {user} !</div>)
     }
 
     return (

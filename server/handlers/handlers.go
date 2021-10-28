@@ -15,7 +15,7 @@ const (
 
 	rANDOM_STATE = "random"
 
-	gOOGLE_CLIENT_ID      = "533962375262-dvbofsom1ocmc8mjb6aq4alfd7rdisi0.apps.googleusercontent.com"
+	gOOGLE_CLIENT_ID      = "533962375262-sn2l2op591vabl5i85f6vf7sptad47tt.apps.googleusercontent.com"
 	gOOGLE_CLIENT_SECRET  = "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"
 	GOOGLE_EMAIL_SCOPE    = "https://www.googleapis.com/auth/userinfo.email"
 	GOOGLE_PROFILE_SCOPE  = "https://www.googleapis.com/auth/userinfo.profile"
