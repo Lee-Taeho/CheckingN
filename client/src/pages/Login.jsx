@@ -7,6 +7,9 @@ const Login = (props) => {
     const [password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
     const [isGoogleLogin, setIsGoogleLogin] = useState(false);
+    const [successGoogle, setSuccessGoogle] = useState(false);
+
+    //const [isGoogleLogin, setIsGoogleLogin] = useState(false);
 
 	//const gOOGLE_CLIENT_ID = "533962375262-dvbofsom1ocmc8mjb6aq4alfd7rdisi0.apps.googleusercontent.com"
 
@@ -39,7 +42,9 @@ const Login = (props) => {
         const data = await response.json()
         var key = data.key;
         var value = data.value;
-        
+        // console.log(key)
+        // console.log(value)
+
         // use token info returned by login_request to set the header for api/authorized
         var authReq = {
              method: 'GET',
@@ -54,61 +59,28 @@ const Login = (props) => {
 
         setRedirect(true);
 
+        // store user info through refreshes
+        localStorage.setItem('profile', content.first_name);
         props.setFirstName(content.first_name);
-
     }
 
-//     if(isGoogleLogin) {
-//       //  console.log("click");
-//         const googleSubmit = async (e) => {
-//         var googleLoginRequest = {
-//             method: 'GET',
-//             headers: {'Content-Type': 'application/json'},
-//        }
-
-//        const googleResponse = await fetch('http://localhost:8080/api/google_login_request', googleLoginRequest)
-//        .catch(err => {
-//         throw new Error(err)
-//       });
-
-//        // login_request returns a token info
-//        const googleData = await googleResponse.json()
-//        console.log(googleData);
-//        var gKey = googleData.key;
-//        var gValue = googleData.value;
-       
-//        // use token info returned by login_request to set the header for api/authorized
-//        var gAuthReq = {
-//             method: 'GET',
-//             headers: {'Authorization': String(gValue)}
-//        }
-
-//        const gAuthResponse = fetch('http://localhost:8080/api/authorized', gAuthReq);
-
-//        const gContent = gAuthResponse.json();
-
-//        console.log(gContent);
-
-//        setRedirect(true);
-
-//        props.setFirstName(gContent.first_name);
-//     }
-// }
-
     const handleGoogleLogin = async (e) => {
+        setIsGoogleLogin(true);
+
+     //   console.log(window.location.href);
         var googleLoginRequest = {
             method: 'GET',
             headers: {
+             //   'X-Requested-With': 'XMLHttpRequest',
                 'Content-Type': 'application/json'
             }
         }
 
-    const googleResponse = await fetch('https://cors-anywhere.herokuapp.com/http://localhost:8080/api/google_login_request', googleLoginRequest)
-        // .catch(err => {
-        //     throw new Error(err)
-        //     });
+        const googleResponse = await fetch('http://localhost:8080/api/google_callback', googleLoginRequest)
+            // .catch(err => {
+            //     throw new Error(err)
+            // });
 
-        // login_request returns a token info
         const googleData = await googleResponse.json()
         console.log(googleData);
         var gKey = googleData.key;
@@ -126,17 +98,27 @@ const Login = (props) => {
 
         console.log(gContent);
 
-        setRedirect(true);
+         setRedirect(true);
 
         props.setFirstName(gContent.first_name);
+        window.location.replace('http://localhost:3000') 
     }
+    
+    if(isGoogleLogin){
+        setSuccessGoogle(true);
+        window.location.replace('http://localhost:8080/api/google_login_request') 
+    }
+    
+    if(successGoogle){
+        //   console.log(window.location.href);
+        
+    }
+
 
     if(redirect)
     {
         return <Redirect to="/"/>
     }
-    
-    
 
     return (
         <form onSubmit={submit}>
@@ -158,7 +140,7 @@ const Login = (props) => {
                 <label>or</label>
             </div>
         
-            <button type="button" className="google-login-btn" onClick={handleGoogleLogin}>
+            <button type="button" className="google-login-btn" onClick={handleGoogleLogin} >
                 {/* onClick={() => setIsGoogleLogin(true)}> */}
                 <svg width="40" height="40">
                     <g id="Google-Button" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
@@ -176,7 +158,7 @@ const Login = (props) => {
                     <div className="google-btn-text">Log in with Google</div>
                 </div>
             </button>
-
+            <a href="http://localhost:8080/api/google_login_request" onClick={handleGoogleLogin}>click</a>
         </form>
         
     );

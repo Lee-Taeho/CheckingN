@@ -54,6 +54,7 @@ func (h *Handlers) GoogleLoginCallback(w http.ResponseWriter, r *http.Request) {
 		Value: "Bearer " + encrypt(aes_key, fmt.Sprint(uuid)),
 	}
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	w.Write([]byte(utils.Jsonify(header)))
 	log.Println(LOGGER_INFO_LOGIN + " Log In Successful")
 }

@@ -1,10 +1,18 @@
-import React  from 'react';
+import React, {useState, useEffect} from 'react';
 
 const Home = (props) => {
+    const [user, setUser] =  useState(localStorage.getItem('profile'));
+
+    let homeText;
+    if(user ==='' || user == null) {
+        homeText=(<div>You are not logged in</div>)
+    }
+    else{
+        homeText=(<div>{user}</div>)
+    }
+
     return (
-        <div>
-            {props.first_name ? 'Hi ' + props.first_name : 'You are not logged in'}
-        </div>
+        <div> {homeText}</div>
         
     );
 };
