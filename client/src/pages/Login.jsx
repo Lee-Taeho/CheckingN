@@ -6,14 +6,12 @@ const Login = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
-    const [isGoogleLogin, setIsGoogleLogin] = useState(false);
-    const [successGoogle, setSuccessGoogle] = useState(false);
 
-	const gOOGLE_CLIENT_ID = "533962375262-sn2l2op591vabl5i85f6vf7sptad47tt.apps.googleusercontent.com";
+    // Google api
+	const GOOGLE_CLIENT_ID = "533962375262-sn2l2op591vabl5i85f6vf7sptad47tt.apps.googleusercontent.com";
     const GOOGLE_EMAIL_SCOPE    = "https://www.googleapis.com/auth/userinfo.email";
     const GOOGLE_PROFILE_SCOPE  = "https://www.googleapis.com/auth/userinfo.profile";
     const GOOGLE_CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar";
-    const SCOPES = [GOOGLE_EMAIL_SCOPE, GOOGLE_PROFILE_SCOPE, GOOGLE_CALENDAR_SCOPE];
 
     // Successfully login with Google
     const onGoogleLoginSuccess = async (response) => {
@@ -22,9 +20,30 @@ const Login = (props) => {
         
         const result = response?.profileObj;
         
+        // redirect to home after user login with google
         setRedirect(true);
+
+        // store user email and profileObj in local storage
         localStorage.setItem('profile', response.profileObj.email);
+        localStorage.setItem('header', response.profileObj);    
         props.setFirstName(response.profileObj.email);
+
+        // fetch user info to server side to store into database
+        var googleLoginRequest = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: response.profileObj.googleId,
+                email: response.profileObj.email,
+                first_name: response.profileObj.givenName,
+                last_name: response.profileObj.familyName,
+                picture_link: response.profileObj.imageUrl
+            })
+        }
+
+        const googleResponse = await fetch('http://localhost:8080/api/google_login_request', googleLoginRequest);
     }
 
     // Fail to login with Google
@@ -33,6 +52,7 @@ const Login = (props) => {
         console.log('Google Login Failed:', response.profileObj);
     }
 
+    // Regular login
     const submit = async (e) => {
         e.preventDefault();
 
@@ -52,8 +72,6 @@ const Login = (props) => {
         const data = await response.json()
         var key = data.key;
         var value = data.value;
-        // console.log(key)
-        // console.log(value)
 
         // use token info returned by login_request to set the header for api/authorized
         var authReq = {
@@ -67,6 +85,7 @@ const Login = (props) => {
 
         console.log(content);
 
+        // redirect to home after user login
         setRedirect(true);
 
         // store user info through refreshes
@@ -74,55 +93,45 @@ const Login = (props) => {
         props.setFirstName(content.email);
     }
 
-    const handleGoogleLogin = async (e) => {
-        setIsGoogleLogin(true);
+    // const handleGoogleLogin = async (e) => {
 
-        var googleLoginRequest = {
-            method: 'GET',
-            headers: {
-             //   'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/json'
-            }
-        }
+    //     var googleLoginRequest = {
+    //         method: 'GET',
+    //         headers: {
+    //          //   'X-Requested-With': 'XMLHttpRequest',
+    //             'Content-Type': 'application/json'
+    //         }
+    //     }
 
-        const googleResponse = await fetch('http://localhost:8080/api/google_callback', googleLoginRequest)
-            // .catch(err => {
-            //     throw new Error(err)
-            // });
+    //     const googleResponse = await fetch('http://localhost:8080/api/google_callback', googleLoginRequest)
+    //         // .catch(err => {
+    //         //     throw new Error(err)
+    //         // });
 
-        const googleData = await googleResponse.json()
-        console.log(googleData);
-        var gKey = googleData.key;
-        var gValue = googleData.value;
+    //     const googleData = await googleResponse.json()
+    //     console.log(googleData);
+    //     var gKey = googleData.key;
+    //     var gValue = googleData.value;
         
-        // use token info returned by login_request to set the header for api/authorized
-        var gAuthReq = {
-                method: 'GET',
-                headers: {'Authorization': String(gValue)}
-        }
+    //     // use token info returned by login_request to set the header for api/authorized
+    //     var gAuthReq = {
+    //             method: 'GET',
+    //             headers: {'Authorization': String(gValue)}
+    //     }
 
-        const gAuthResponse = fetch('http://localhost:8080/api/authorized', gAuthReq);
+    //     const gAuthResponse = fetch('http://localhost:8080/api/authorized', gAuthReq);
 
-        const gContent = gAuthResponse.json();
+    //     const gContent = gAuthResponse.json();
 
-        console.log(gContent);
-
-         setRedirect(true);
-
-        props.setFirstName(gContent.first_name);
-    }
-    
-    // if(isGoogleLogin){
-    //     setSuccessGoogle(true);
-    //     window.location.replace('http://localhost:8080/api/google_login_request') 
-    // }
-    
-    // if(successGoogle){
-    //     //   console.log(window.location.href);
+    //     console.log(gContent);
         
+    //     setRedirect(true);
+
+    //     props.setFirstName(gContent.first_name);
     // }
 
 
+    // redirect to home
     if(redirect)
     {
         return <Redirect to="/"/>
@@ -150,13 +159,13 @@ const Login = (props) => {
         
             <div>
                 <GoogleLogin
-                    clientId={gOOGLE_CLIENT_ID}
+                    clientId={GOOGLE_CLIENT_ID}
                     buttonText="Log in with Google"
                     onSuccess={onGoogleLoginSuccess}
                     onFailure={onGoogleLoginFailure}
                     cookiePolicy={'single_host_origin'}
                     //isSignedIn={true}
-                    //scope={GOOGLE_CALENDAR_SCOPE}
+                    scope={GOOGLE_EMAIL_SCOPE, GOOGLE_PROFILE_SCOPE, GOOGLE_CALENDAR_SCOPE}
                 />
             </div>
         </form>
