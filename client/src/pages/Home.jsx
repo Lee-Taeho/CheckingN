@@ -32,8 +32,7 @@ const Home = (props) => {
     }
 
     return (
-        <div> {homeText}</div>
-        
+        <div> {homeText}</div> 
     );
 
     function optionButtons
