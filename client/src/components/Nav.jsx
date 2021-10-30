@@ -40,6 +40,18 @@ const Nav = (props) => {
       menu = (
         <ul className="navbar-nav me-auto mb-2 mb-md-0">
               <li className="nav-item">
+                <Link to="/" className="nav-link active">Home</Link>
+              {/* Work in progress */}
+              </li>
+              <li className="nav-item">
+                <Link to="/" className="nav-link active">Appointments</Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/" className="nav-link active">Tutoring</Link>
+              </li>
+              {/* Work in progress */}
+                
+              <li className="nav-item">
                 <Link to="/" className="nav-link active">{user}</Link>
               </li>
               <li className="nav-item">
