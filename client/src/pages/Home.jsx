@@ -24,7 +24,7 @@ const Home = (props) => {
                                 path = "/tutoring"
                             />
                             <CardItem
-                                img = "assets/message-circle.svg"
+                                img = "assets/check.svg"
                                 title = "Make Appointments & Tutoring Options"
                                 path = "/tutoring"
                             />
@@ -44,3 +44,5 @@ const Home = (props) => {
 };
 
 export default Home;
+
+
