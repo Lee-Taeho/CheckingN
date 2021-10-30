@@ -29,8 +29,6 @@ func (h *Handlers) CreateAppointment(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handlers) EditAppointment(w http.ResponseWriter, r *http.Request) {
 	appointmentId := mux.Vars(r)["id"]
-
-	// Create/Edit a new appointment
 	var appointment middleware.Appointment
 	if err := json.NewDecoder(r.Body).Decode(&appointment); err != nil {
 		log.Println("ERROR [handlers/appointmentHandlers.go] Couldn't get data: %s\n", err.Error())
@@ -38,18 +36,12 @@ func (h *Handlers) EditAppointment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.db.AddAppointment(appointment); err != nil {
-		log.Printf("Couldn't Create Appointment: %s\n", err.Error())
+	if err := h.db.UpdateAppointment(appointmentId, appointment); err != nil {
+		log.Printf("Couldn't Edit Appointment: %s\n", err.Error())
 		w.WriteHeader(http.StatusConflict)
 		return
 	}
 
-	// If new appointment was successfully created, then delete the old one, else keep the old one
-	if err := h.db.DeleteAppointment(appointmentId); err != nil {
-		log.Printf("Couldn't Delete Appointment: %s\n", err.Error())
-		w.WriteHeader(http.StatusConflict)
-		return
-	}
 	log.Println("Successfully edit appointment")
 
 }
