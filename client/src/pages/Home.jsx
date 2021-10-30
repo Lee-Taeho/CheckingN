@@ -12,16 +12,16 @@ const Home = (props) => {
         <div>
             <div>Hi {user} !</div>
             <h1>Choose Options</h1>
-            <ul>
-                <li>
-                    <button>
+            <ul className="Home-options">
+                <li className="Home-options-elements">
+                    <button className="Home-options-elements-button">
                         <input type="image" src="../images/Calendar.png" alt="Calendar" width="200" height="200" onClick={()=>{console.log("Clicked!")}} />
                     </button>
                 </li>
             </ul>
-            <ul>
-                <li>
-                    <button>
+            <ul className="Home-options">
+                <li className="Home-options-elements">
+                    <button className="Home-options-elements-button">
                         <input type="image" src="./images/Check.png" alt="Check" width="200" height="200" onClick={()=>{console.log("Clicked!")}} />
                     </button>
                 </li>
@@ -35,6 +35,8 @@ const Home = (props) => {
         <div> {homeText}</div>
         
     );
+
+    function optionButtons
 };
 
 export default Home;
