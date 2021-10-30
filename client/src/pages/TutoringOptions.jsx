@@ -3,7 +3,7 @@ import Cards from '../components/Cards';
 import ChooseDepartment from './ChooseDepartment';
 import './Background.css'
 
-function TutoringOptions() {
+const TutoringOptions = () => {
     return (
         <div className='tutor_container'>
             <Cards/>

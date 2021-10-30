@@ -6,6 +6,8 @@ import Home from './pages/Home';
 import Register from './pages/Register';
 import React, {useEffect, useState} from 'react';
 import GoogleLogin from 'react-google-login';
+import TutoringOptions from './pages/TutoringOptions';
+import ChooseDepartment from './pages/ChooseDepartment';
 
 function App() {
   const [first_name, setFirstName] = useState('');
@@ -35,6 +37,8 @@ function App() {
             <Route path="/" exact component={() => <Home first_name={first_name}/>}/>
             <Route path="/login" component={() => <Login setFirstName={setFirstName}/>}/>
             <Route path="/register" component={Register}/>
+            <Route path="/tutoring" exact component={TutoringOptions}/>
+            <Route path="/tutoring/departments" exact component={ChooseDepartment}/>
         </main>
       </BrowserRouter>
     </div>

@@ -1,67 +1,72 @@
 body {
-    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
 }
 
-
 .cards_container {
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    max-width: 100%;
-    width: 90%;
-    margin: 0 auto;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  max-width: 100%;
+  width: 90%;
+  margin: 0 auto;
 }
 
 .cards_item {
-    display: flex;
-    flex: 1;
+  display: flex;
+  flex: 1;
+}
+
+.card_title {
+  white-space: normal;
 }
 
 .card_image {
-    margin-left: auto;
-    margin-right: auto;
-    height: 240px;
-    width: 250px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 240px;
+  width: 250px;
 }
 
 .card {
-    overflow: hidden;
-    margin: 0 10px;
-    padding: 18px;
-    width: 18rem;
-    display: inline-block;
-    background: rgba(255, 255, 255, 0.945);
-    overflow:hidden;
-    border-radius: 20px;
-    justify-content: space-between;
-    cursor: pointer;
-    transition: all .2s ease;
+  overflow: hidden;
+  margin: 0 10px;
+  padding: 18px;
+  width: 18rem;
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.945);
+  overflow: hidden;
+  border-radius: 20px;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
 }
 
 .card:hover {
-    color: white;
-    background-color: #6C8AAF;
+  color: white;
+  background-color: #6c8aaf;
 }
 
 h5 {
-    text-align: center;
-    display: inline-block;
-    white-space: nowrap;
-    margin-left: 20px;
-    margin-top: 10px;
-    color: black;
-    text-decoration: none;
+  text-align: center;
+  display: inline-block;
+  white-space: nowrap;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 10px;
+  color: black;
+  text-decoration: none;
 }
 
 h5:hover {
-    color: white;
+  color: white;
 }
 
 h1 {
-    text-align: center;
-    display: inline-block;
-    white-space: nowrap;
-    margin-bottom: 50px;
+  text-align: center;
+  display: inline-block;
+  white-space: nowrap;
+  margin-bottom: 50px;
 }

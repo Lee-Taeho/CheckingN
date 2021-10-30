@@ -5,7 +5,7 @@ const CardItem = props => {
     return (
          <div className="card">
           <Link className='cards_item_link' to={props.path}>
-               <img src={props.img} class="card_image"/>
+               <img src={props.img} className="card_image" alt={props.title}/>
               <h5 className="card_title">{props.title}</h5>
           </Link>
          </div>

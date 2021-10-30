@@ -65,7 +65,9 @@ const Nav = (props) => {
     return (
         <nav className="navbar navbar-expand-md navbar-dark bg-dark mb-4">
         <div className="container-fluid">
-          <Link to="/" className="navbar-brand">Home</Link>
+          <Link to="/" className="navbar-brand">
+            <img src="assets/checkingn-logo-white.svg" alt="CheckingN" width="200" height="50" />
+          </Link>
           
           <div>
             {menu}
