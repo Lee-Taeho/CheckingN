@@ -15,14 +15,14 @@ const Home = (props) => {
             <ul className="Home-options">
                 <li className="Home-options-elements">
                     <button className="Home-options-elements-button">
-                        <input type="image" src="../images/Calendar.png" alt="Calendar" width="200" height="200" onClick={()=>{console.log("Clicked!")}} />
+                        <input type="image" src="../resources/images/Calendar.png" alt="Calendar" width="200" height="200" onClick={()=>{console.log("Clicked!")}} />
                     </button>
                 </li>
             </ul>
             <ul className="Home-options">
                 <li className="Home-options-elements">
                     <button className="Home-options-elements-button">
-                        <input type="image" src="./images/Check.png" alt="Check" width="200" height="200" onClick={()=>{console.log("Clicked!")}} />
+                        <input type="image" src="../resources/images/Check.png" alt="Check" width="200" height="200" onClick={()=>{console.log("Clicked!")}} />
                     </button>
                 </li>
             </ul>
@@ -36,7 +36,6 @@ const Home = (props) => {
         
     );
 
-    function optionButtons
 };
 
 export default Home;

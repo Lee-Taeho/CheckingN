@@ -15,7 +15,6 @@ const Login = (props) => {
 
     // Successfully login with Google
     const onGoogleLoginSuccess = async (response) => {
-        console.log(response);
         console.log('Google Login Success:', response.profileObj);
         
         const result = response?.profileObj;
@@ -37,13 +36,21 @@ const Login = (props) => {
             body: JSON.stringify({
                 id: response.profileObj.googleId,
                 email: response.profileObj.email,
-                first_name: response.profileObj.givenName,
-                last_name: response.profileObj.familyName,
-                picture_link: response.profileObj.imageUrl
+                verified_email: null,
+                given_name: response.profileObj.givenName,
+                family_name: response.profileObj.familyName,
+                picture: response.profileObj.imageUrl,
+                locale: null
             })
         }
 
         const googleResponse = await fetch('http://localhost:8080/api/google_login_request', googleLoginRequest);
+        
+        const gData = await googleResponse.json()
+        var gKey = gData.key;
+        var gValue = gData.value;
+        console.log(gKey);
+        console.log(gData);
     }
 
     // Fail to login with Google
@@ -92,44 +99,6 @@ const Login = (props) => {
         localStorage.setItem('profile', content.email);
         props.setFirstName(content.email);
     }
-
-    // const handleGoogleLogin = async (e) => {
-
-    //     var googleLoginRequest = {
-    //         method: 'GET',
-    //         headers: {
-    //          //   'X-Requested-With': 'XMLHttpRequest',
-    //             'Content-Type': 'application/json'
-    //         }
-    //     }
-
-    //     const googleResponse = await fetch('http://localhost:8080/api/google_callback', googleLoginRequest)
-    //         // .catch(err => {
-    //         //     throw new Error(err)
-    //         // });
-
-    //     const googleData = await googleResponse.json()
-    //     console.log(googleData);
-    //     var gKey = googleData.key;
-    //     var gValue = googleData.value;
-        
-    //     // use token info returned by login_request to set the header for api/authorized
-    //     var gAuthReq = {
-    //             method: 'GET',
-    //             headers: {'Authorization': String(gValue)}
-    //     }
-
-    //     const gAuthResponse = fetch('http://localhost:8080/api/authorized', gAuthReq);
-
-    //     const gContent = gAuthResponse.json();
-
-    //     console.log(gContent);
-        
-    //     setRedirect(true);
-
-    //     props.setFirstName(gContent.first_name);
-    // }
-
 
     // redirect to home
     if(redirect)
