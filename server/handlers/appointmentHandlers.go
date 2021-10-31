@@ -14,18 +14,21 @@ func (h *Handlers) CreateAppointment(w http.ResponseWriter, r *http.Request) {
 	var appointment middleware.Appointment
 	if err := json.NewDecoder(r.Body).Decode(&appointment); err != nil {
 		log.Println("ERROR [handlers/appointmentHandlers.go] Couldn't get data: %s\n", err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	if err := h.db.AddAppointment(appointment); err != nil {
 		log.Printf("Couldn't Create Appointment: %s\n", err.Error())
-		w.WriteHeader(http.StatusConflict)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	log.Println("Successfully booked new appointment")
+	w.WriteHeader(http.StatusCreated)
 }
+
+/*
+Will be work on during next sprint
 
 func (h *Handlers) EditAppointment(w http.ResponseWriter, r *http.Request) {
 	appointmentId := mux.Vars(r)["id"]
@@ -44,18 +47,18 @@ func (h *Handlers) EditAppointment(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Successfully edit appointment")
 
-}
+}*/
 
 func (h *Handlers) CancelAppointment(w http.ResponseWriter, r *http.Request) {
 	appointmentId := mux.Vars(r)["id"]
 
 	if err := h.db.DeleteAppointment(appointmentId); err != nil {
-		log.Printf("Couldn't Create Appointment: %s\n", err.Error())
-		w.WriteHeader(http.StatusConflict)
+		log.Printf("Couldn't Delete Appointment Appointment: %s\n", err.Error())
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	log.Println("Successfully cancel appointment")
+	w.WriteHeader(http.StatusOK)
 }
 
 func (h *Handlers) ViewAppointment(w http.ResponseWriter, r *http.Request) {
@@ -63,8 +66,8 @@ func (h *Handlers) ViewAppointment(w http.ResponseWriter, r *http.Request) {
 
 	appointment, err := h.db.GetAppointment(appointmentId)
 	if err != nil {
-		log.Printf("Couldn't Create Appointment: %s\n", err.Error())
-		w.WriteHeader(http.StatusConflict)
+		log.Printf("Couldn't View Appointment: %s\n", err.Error())
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
@@ -74,15 +77,16 @@ func (h *Handlers) ViewAppointment(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, appointment.MeetingLocation)
 	fmt.Fprintln(w, appointment.StartTime.String())
 	fmt.Fprintln(w, appointment.EndTime.String())
+	w.WriteHeader(http.StatusOK)
 }
 
 func (h *Handlers) ViewAllTutorAppointment(w http.ResponseWriter, r *http.Request) {
-	appointmentId := mux.Vars(r)["id"]
+	tutorId := mux.Vars(r)["id"]
 
-	appointments, err := h.db.GetAppointmentsForTutor(appointmentId)
+	appointments, err := h.db.GetAppointmentsForTutor(tutorId)
 	if err != nil {
 		log.Printf("Couldn't Get Appointment: %s\n", err.Error())
-		w.WriteHeader(http.StatusConflict)
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
@@ -94,15 +98,16 @@ func (h *Handlers) ViewAllTutorAppointment(w http.ResponseWriter, r *http.Reques
 		fmt.Fprintln(w, appointment.StartTime.String())
 		fmt.Fprintln(w, appointment.EndTime.String())
 	}
+	w.WriteHeader(http.StatusOK)
 }
 
 func (h *Handlers) ViewAllStudentAppointment(w http.ResponseWriter, r *http.Request) {
-	appointmentId := mux.Vars(r)["id"]
+	studentId := mux.Vars(r)["id"]
 
-	appointments, err := h.db.GetAppointmentsForStudent(appointmentId)
+	appointments, err := h.db.GetAppointmentsForStudent(studentId)
 	if err != nil {
 		log.Printf("Couldn't Get Appointment: %s\n", err.Error())
-		w.WriteHeader(http.StatusConflict)
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
@@ -114,6 +119,7 @@ func (h *Handlers) ViewAllStudentAppointment(w http.ResponseWriter, r *http.Requ
 		fmt.Fprintln(w, appointment.StartTime.String())
 		fmt.Fprintln(w, appointment.EndTime.String())
 	}
+	w.WriteHeader(http.StatusOK)
 }
 
 /*Test case
@@ -129,12 +135,12 @@ For Make Appointment, Post Method
 }
 
 For Delete Appointment, Delete Method
-http://localhost:8080/api/appoinment_delete/{id}
+http://localhost:8080/api/appointment/{id}
 replace {id} with Appointment _id
 
 
 For Edit Appointment, Put Method
-http://localhost:8080/api/appoinment_edit/{id}
+http://localhost:8080/api/appointment/{id}
 replace {id} with Appointment _id
 
 {
@@ -147,11 +153,11 @@ replace {id} with Appointment _id
 }
 
 For View Appointment, Get Method
-http://localhost:8080/api/appoinment_view/{id}
+http://localhost:8080/api/appointment/{id}
 replace {id} with Appointment _id
 
 For View All Appointment, Get Method
-http://localhost:8080/api/appoinment_view_all_tutor/{id}
-http://localhost:8080/api/appoinment_view_all_student/{id}
+http://localhost:8080/api/appointment/tutor{id}
+http://localhost:8080/api/appointment/student/{id}
 replace {id} with Student or Tutor _id
 */
