@@ -14,10 +14,9 @@ const (
 	TIME_BEFORE_EXPIRED = time.Minute * 30
 
 	rANDOM_STATE = "random"
-	sECRET_KEY   = "secret_key"
 
-	gOOGLE_CLIENT_ID      = "533962375262-dvbofsom1ocmc8mjb6aq4alfd7rdisi0.apps.googleusercontent.com"
-	gOOGLE_CLIENT_SECRET  = "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"
+	gOOGLE_CLIENT_ID      = "533962375262-sn2l2op591vabl5i85f6vf7sptad47tt.apps.googleusercontent.com"
+	gOOGLE_CLIENT_SECRET  = "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"
 	GOOGLE_EMAIL_SCOPE    = "https://www.googleapis.com/auth/userinfo.email"
 	GOOGLE_PROFILE_SCOPE  = "https://www.googleapis.com/auth/userinfo.profile"
 	GOOGLE_CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar"
@@ -42,6 +41,8 @@ var (
 		Scopes:       []string{GOOGLE_EMAIL_SCOPE, GOOGLE_PROFILE_SCOPE, GOOGLE_CALENDAR_SCOPE},
 		Endpoint:     google.Endpoint,
 	}
+	aes_iv  = []byte{35, 46, 57, 24, 85, 35, 24, 74, 87, 35, 88, 98, 66, 32, 14, 05}
+	aes_key = []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}
 )
 
 type Handlers struct {
@@ -59,7 +60,8 @@ func NewHandlers(gr interfaces.Router, db interfaces.MongoInterface, ip string) 
 	gr.AddRoute("/api/login_request", http.MethodPost, handlers.LoginRequest)
 	gr.AddRoute("/api/home", http.MethodPost, handlers.Home)
 	gr.AddRoute("/api/google", http.MethodGet, handlers.Google)
-	gr.AddRoute("/api/google_login_request", http.MethodGet, handlers.GoogleLoginRequest)
+	gr.AddRoute("/api/google_login_request", http.MethodPost, handlers.GoogleLoginInfoSaver)
 	gr.AddRoute("/api/google_callback", http.MethodGet, handlers.GoogleLoginCallback)
+	gr.AddRoute("/api/authorized", http.MethodGet, handlers.Authorized)
 	gr.AddRoute("/api/appointment", http.MethodGet, handlers.CreateAppointment)
 }

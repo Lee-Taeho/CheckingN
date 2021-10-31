@@ -4,24 +4,27 @@ import (
 	//"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
 )
+
 // bson tag will tell golang to extract that specific field from mongodb into the variable
 // json tag will be the way it is called from front end
 type Tutor struct {
-	FirstName       string     `bson:"first_name" json:"first_name"`
-	LastName        string     `bson:"last_name" json:"last_name"`
-	Students        []string   `bson:"students" json:"students"`
-	FluentLanguages []string   `bson:"fluent_languages" json:"fluent_languages"`
-	Courses         []string   `bson:"courses" json:"courses"`
-	Availability	[][]int    `bson:"availability" json:"availability"`
-	Appointments    []string   `bson:"appointments" json:"appointments"`
+	Uuid            int      `bson:"uuid" json:"uuid,omitempty"`
+	FirstName       string   `bson:"first_name" json:"first_name"`
+	LastName        string   `bson:"last_name" json:"last_name"`
+	Students        []string `bson:"students" json:"students"`
+	FluentLanguages []string `bson:"fluent_languages" json:"fluent_languages"`
+	Courses         []string `bson:"courses" json:"courses"`
+	Availability    [][]int  `bson:"availability" json:"availability"`
+	Appointments    []string `bson:"appointments" json:"appointments"`
 }
 
 type Student struct {
-	FirstName 		string 		`bson:"first_name" json:"first_name"`
-	LastName  		string 		`bson:"last_name" json:"last_name"`
-	Email     		string 		`bson:"email" json:"email"`
-	Password  		string 		`bson:"password" json:"password"`
-	Appointments	[]string 	`bson:"appointments" json:"appointments"`
+	Uuid         int      `bson:"uuid" json:"uuid,omitempty"`
+	FirstName    string   `bson:"first_name" json:"first_name"`
+	LastName     string   `bson:"last_name" json:"last_name"`
+	Email        string   `bson:"email" json:"email"`
+	Password     string   `bson:"password" json:"password"`
+	Appointments []string `bson:"appointments" json:"appointments"`
 }
 
 type GoogleUser struct {
@@ -44,11 +47,17 @@ type Course struct {
 	Department string `bson:"department" json:"department"`
 }
 
+type Header struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+
+// "first_name": "Mcclovin", "last_name":"", "email":"jonahhill@gmail.com", "password":"dartmouth"
 type Appointment struct {
-	TutorID			string 		`bson:"tutor_id" json:"tutor_id"`
-	StudentID		string 		`bson:"student_id" json:"student_id"`
-	CourseCode		string 		`bson:"course_code" json:"course_code"`
-	MeetingLocation string 		`bson:"meeting_location" json:"meeting_location"`
-	StartTime		time.Time 	`bson:"start_time" json:"start_time"`
-	EndTime			time.Time 	`bson:"end_time" json:"end_time"`
+	TutorID         string    `bson:"tutor_id" json:"tutor_id"`
+	StudentID       string    `bson:"student_id" json:"student_id"`
+	CourseCode      string    `bson:"course_code" json:"course_code"`
+	MeetingLocation string    `bson:"meeting_location" json:"meeting_location"`
+	StartTime       time.Time `bson:"start_time" json:"start_time"`
+	EndTime         time.Time `bson:"end_time" json:"end_time"`
 }

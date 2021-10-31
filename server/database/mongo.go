@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"log"
+	"sync"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -15,7 +16,8 @@ const (
 	STUDENTS_COLLECTION        = "students"
 	TUTORS_COLLECTION          = "tutors"
 	GOOGLE_STUDENTS_COLLECTION = "google_students"
-	SJSU_DATABASE			   = "san_jose_state_university"
+	UUID_COLLECTION            = "uuid"
+	SJSU_DATABASE              = "san_jose_state_university"
 	APPOINTMENTS_COLLECTION    = "appointments"
 )
 
@@ -28,8 +30,9 @@ type MongoDBLogin struct {
 // in golang, to implement in interface just use all the methods defined by it (no need for implements keyword like in Java)
 // someone told me the idea of this is "If it swims like a duck, it's a duck" (if Mongo looks like MongoInterface, it is a MongoInterface)
 type MongoDB struct {
-	login *MongoDBLogin
-	mongo *mongo.Client
+	login    *MongoDBLogin
+	mongo    *mongo.Client
+	uuidLock sync.Mutex
 }
 
 func NewMongoDB(mongoInfo *MongoDBLogin) *MongoDB {
