@@ -17,10 +17,12 @@ const Cards = props => {
                         <CardItem
                             img = "assets/message-circle.svg"
                             title = "Drop-in Tutoring"
+                            path = "/tutoring"
                         />
                         <CardItem
                             img = "assets/mail.svg"
                             title = "Asynchronous Tutoring"
+                            path = "/tutoring"
                         />
                     </ul>
                     </div>

@@ -10,9 +10,7 @@ const Home = (props) => {
     }
     else{
         homeText=(
-        <div>
-            <div>Hi {user} !</div>
-            
+        <div>         
             <div className='cards'>
             <h1>Choose an option</h1>
                 <div className='cards_container'>
@@ -20,12 +18,12 @@ const Home = (props) => {
                     <ul className='cards_item'>
                             <CardItem
                                 img = "assets/calendar.svg"
-                                title = "View Appointments & Messages"
+                                title = "View Appointments"
                                 path = "/tutoring"
                             />
                             <CardItem
                                 img = "assets/check.svg"
-                                title = "Make Appointments & Tutoring Options"
+                                title = "Tutoring Options"
                                 path = "/tutoring"
                             />
                     </ul>

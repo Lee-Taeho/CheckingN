@@ -47,7 +47,7 @@ const Nav = (props) => {
                 <Link to="/" className="nav-link active">Appointments</Link>
               </li>
               <li className="nav-item">
-                <Link to="/" className="nav-link active">Tutoring</Link>
+                <Link to="/tutoring" className="nav-link active">Tutoring</Link>
               </li>
               {/* Work in progress */}
                 
