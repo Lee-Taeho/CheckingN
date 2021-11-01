@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import CardItem from '../components/CardItem';
 
 const Home = (props) => {
     const [user, setUser] =  useState(localStorage.getItem('profile'));
@@ -9,34 +10,37 @@ const Home = (props) => {
     }
     else{
         homeText=(
-        <div>
-            <div>Hi {user} !</div>
-            <h1>Choose Options</h1>
-            <ul className="Home-options">
-                <li className="Home-options-elements">
-                    <button className="Home-options-elements-button">
-                        <input type="image" src="../../../Calendar.png" alt="Calendar" width="200" height="200" onClick={()=>{console.log("Clicked!")}} />
-                    </button>
-                </li>
-            </ul>
-
-            <ul className="Home-options">
-                <li className="Home-options-elements">
-                    <button className="Home-options-elements-button">
-                        <input type="image" src="../../../Check.png" alt="Calendar" width="200" height="200" onClick={()=>{console.log("Clicked!")}} />
-                    </button>
-                </li>
-            </ul>
+        <div>         
+            <div className='cards'>
+            <h1>Choose an option</h1>
+                <div className='cards_container'>
+                    <div className='cards_wrapper'>
+                    <ul className='cards_item'>
+                            <CardItem
+                                img = "assets/calendar.svg"
+                                title = "View Appointments"
+                                path = "/tutoring"
+                            />
+                            <CardItem
+                                img = "assets/check.svg"
+                                title = "Tutoring Options"
+                                path = "/tutoring"
+                            />
+                    </ul>
+                </div>
+            </div>
+        </div>
         </div>
         
         )
     }
 
     return (
-        <div> {homeText}</div>
-        
+        <div> {homeText}</div> 
     );
 
 };
 
 export default Home;
+
+

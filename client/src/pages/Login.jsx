@@ -109,6 +109,7 @@ const Login = (props) => {
     return (
         <form onSubmit={submit}>
             <h1 className="h3 mb-3 fw-normal" style={{textAlign: "center"}}>Sign in</h1>
+            <br/>
             <label>Email</label> 
             <input type="email" name="Email" className="form-control" placeholder="Email" required
                 onChange={e => setEmail(e.target.value)}
