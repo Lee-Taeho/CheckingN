@@ -27,8 +27,6 @@ func (h *Handlers) CreateAppointment(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
-/*
-Will be work on during next sprint
 
 func (h *Handlers) EditAppointment(w http.ResponseWriter, r *http.Request) {
 	appointmentId := mux.Vars(r)["id"]
@@ -47,7 +45,7 @@ func (h *Handlers) EditAppointment(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Successfully edit appointment")
 
-}*/
+}
 
 func (h *Handlers) CancelAppointment(w http.ResponseWriter, r *http.Request) {
 	appointmentId := mux.Vars(r)["id"]
@@ -139,7 +137,7 @@ http://localhost:8080/api/appointment/{id}
 replace {id} with Appointment _id
 
 
-For Edit Appointment, Put Method
+For Edit Appointment, Patch Method
 http://localhost:8080/api/appointment/{id}
 replace {id} with Appointment _id
 
