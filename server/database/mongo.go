@@ -17,6 +17,8 @@ const (
 	TUTORS_COLLECTION          = "tutors"
 	GOOGLE_STUDENTS_COLLECTION = "google_students"
 	UUID_COLLECTION            = "uuid"
+	SJSU_DATABASE              = "san_jose_state_university"
+	APPOINTMENTS_COLLECTION    = "appointments"
 )
 
 type MongoDBLogin struct {
