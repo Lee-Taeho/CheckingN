@@ -24,4 +24,7 @@ type MongoInterface interface {
 	GetAppointmentsForTutor(tutor_id string) ([]middleware.Appointment, error)
 	GetAppointmentsForStudent(student_id string) ([]middleware.Appointment, error)
 	UpdateAppointment(app_id string, newAppointment middleware.Appointment) error
+	GetDepartments() []middleware.Department
+	GetCoursesByDepartment(department_name string) []middleware.Course
+	GetCoursesGroupedByDepartments() map[string][]middleware.Course
 }

@@ -45,6 +45,11 @@ type LoginRequest struct {
 type Course struct {
 	Name       string `bson:"name" json:"name"`
 	Department string `bson:"department" json:"department"`
+	ClassCode  string `bson:"class_code" json:"class_code"`
+}
+
+type Department struct {
+	Name	string   `bson:"name" json:"name"`
 }
 
 type Header struct {
