@@ -9,16 +9,7 @@ import (
 
 func (m *MongoDB) CreateNewStudent(student middleware.Student) {
 	ctx := context.TODO()
-	collection := m.mongo.Database(USER_DATABASE).Collection(STUDENTS_COLLECTION)
-	result := collection.FindOne(ctx, bson.M{"email": student.Email})
-	if result.Err() != nil {
-		collection.InsertOne(ctx, student)
-	}
-}
-
-func (m *MongoDB) CreateNewGoogleStudent(student middleware.GoogleUser) {
-	ctx := context.TODO()
-	collection := m.mongo.Database(USER_DATABASE).Collection(GOOGLE_STUDENTS_COLLECTION)
+	collection := m.mongo.Database(SJSU_DATABASE).Collection(STUDENTS_COLLECTION)
 	result := collection.FindOne(ctx, bson.M{"email": student.Email})
 	if result.Err() != nil {
 		collection.InsertOne(ctx, student)
@@ -26,7 +17,7 @@ func (m *MongoDB) CreateNewGoogleStudent(student middleware.GoogleUser) {
 }
 
 func (m *MongoDB) FindStudent(login middleware.LoginRequest) *middleware.Student {
-	collection := m.mongo.Database(USER_DATABASE).Collection(STUDENTS_COLLECTION)
+	collection := m.mongo.Database(SJSU_DATABASE).Collection(STUDENTS_COLLECTION)
 	ctx := context.TODO()
 	student := &middleware.Student{}
 	err := collection.FindOne(ctx, login).Decode(student)
