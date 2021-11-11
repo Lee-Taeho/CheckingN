@@ -49,7 +49,7 @@ type Course struct {
 }
 
 type Department struct {
-	Name	string   `bson:"name" json:"name"`
+	Name string `bson:"name" json:"name"`
 }
 
 type Header struct {
@@ -65,4 +65,6 @@ type Appointment struct {
 	MeetingLocation string    `bson:"meeting_location" json:"meeting_location"`
 	StartTime       time.Time `bson:"start_time" json:"start_time"`
 	EndTime         time.Time `bson:"end_time" json:"end_time"`
+	JoinLink        string    `bson:"join_link" json:"join_link"`
+	StartLink       string    `bson:"start_link" json:"start_link"`
 }

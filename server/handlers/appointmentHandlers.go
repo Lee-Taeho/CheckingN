@@ -27,7 +27,6 @@ func (h *Handlers) CreateAppointment(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
-
 func (h *Handlers) EditAppointment(w http.ResponseWriter, r *http.Request) {
 	appointmentId := mux.Vars(r)["id"]
 	var appointment middleware.Appointment
@@ -128,8 +127,8 @@ For Make Appointment, Post Method
 "student_id": "6171c45e712f8abc5340a8e8",
 "course_code": "CS146",
 "meeting_location": "Zoom",
-"start_time": "2021-10-25T09:00:00+00:00",
-"end_time": "2021-10-25T10:00:00+00:00"
+"start_time": "2021-10-25T09:00:00Z",
+"end_time": "2021-10-25T10:00:00Z"
 }
 
 For Delete Appointment, Delete Method
