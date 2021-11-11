@@ -66,8 +66,9 @@ func NewHandlers(gr interfaces.Router, db interfaces.MongoInterface, ip string) 
 	gr.AddRoute("/api/appointment", http.MethodPost, handlers.CreateAppointment)
 	gr.AddRoute("/api/appointment/{id}", http.MethodDelete, handlers.CancelAppointment)
 	gr.AddRoute("/api/appointment/{id}", http.MethodGet, handlers.ViewAppointment)
-	gr.AddRoute("/api/appointment/tutor/{id}", http.MethodGet, handlers.ViewAllTutorAppointment)
 	gr.AddRoute("/api/appointment/student/{id}", http.MethodGet, handlers.ViewAllStudentAppointment)
-	//gr.AddRoute("/api/appointment/{id}", http.MethodPatch, handlers.EditAppointment)
 	gr.AddRoute("/api/courses_by_departments", http.MethodGet, handlers.GetCoursesGroupedByDepartments)
+
+	//gr.AddRoute("/api/appointment/tutor/{id}", http.MethodGet, handlers.ViewAllTutorAppointment)
+	//gr.AddRoute("/api/appointment/{id}", http.MethodPatch, handlers.EditAppointment)
 }
