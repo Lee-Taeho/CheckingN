@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './Background.css';
-import { useParams, Link, useHistory } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 
 const AppointmentConfirmation = () => {
     const { course } = useParams();
@@ -9,22 +9,29 @@ const AppointmentConfirmation = () => {
     const { tutor } = useParams();
     const { location } = useParams();
 
+    // current student user
+    const user =  localStorage.getItem('profile');
+
     const handleConfirm = async (e) => {
-        console.log('confirm')
+         console.log('confirm')
         // e.preventDefault();
 
         // var request = {
         //     method: 'POST',
         //     headers: {'Content-Type': 'application/json'},
         //     body: JSON.stringify({
-        //         student: ,
+        //         student: user,
         //         tutor: ,
-        //         course: ,
-        //         date: ,
-        //         time: ,
-        //         location: ,
+        //         course: course,
+        //         start-time: ,
+        //         end-time: ,
+        //         location: location
         //     })
-        // }
+        //}
+
+        // // send appointment info to backend to create appointment in db
+        // const response = await fetch('http://localhost:8080//api/appointment', request)   
+        
     }
 
     // uri: /tutoring/departments/:course/:date/:time/:tutor/:location/confirmation
@@ -33,6 +40,7 @@ const AppointmentConfirmation = () => {
         <div className='confirmation-container'>
             <h4 className="title">New Appointment</h4>
             <div>
+                <p>{user}</p>
                 <p><b>Tutor:</b> {tutor}</p>
                 <p><b>Course:</b> {course}</p>
                 <p><b>Date:</b> {date}</p>
