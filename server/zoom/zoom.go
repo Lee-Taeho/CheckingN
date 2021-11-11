@@ -99,6 +99,11 @@ func jwtToken(key string, secret string) (string, error) {
 }
 
 func createMeetingOption(appointment middleware.Appointment) *MeetingOptions {
+	startTime := appointment.StartTime
+
+	timeToString := fmt.Sprintf("%d-%02d-%02dT%02d:%02d:%02d",
+		startTime.Year(), startTime.Month(), startTime.Day(),
+		startTime.Hour(), startTime.Minute(), startTime.Second())
 
 	defaultMeetingSetting := &MeetingSetting{
 		HostVideo:        false,
@@ -122,8 +127,8 @@ func createMeetingOption(appointment middleware.Appointment) *MeetingOptions {
 		Topic:       appointment.CourseCode,
 		Type:        2,
 		PreSchedule: true,
-		//StartTime:   appointment.StartTime.UTC.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'"),
-		Duration: 120,
+		StartTime:   timeToString,
+		Duration:    120,
 		//Email:    ignore for now, need Zoom license to appoint user
 		//TimeZone: "Pacific/Midway",
 		//Password: "TestPw@12",
