@@ -11,7 +11,6 @@ type MongoInterface interface {
 	Connect() (*mongo.Client, error)
 	Stop() error
 	CreateNewStudent(student middleware.Student)
-	CreateNewGoogleStudent(student middleware.GoogleUser)
 	FindStudent(login middleware.LoginRequest) *middleware.Student
 	GetUUID() int
 	FindStudentUUID(uuid int) *middleware.Student
