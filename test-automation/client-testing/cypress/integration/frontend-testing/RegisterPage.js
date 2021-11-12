@@ -66,17 +66,6 @@ context('Register', () => {
       .should('include', "a part followed by '@'")
     })
 
-    it('Check valid email address- missing a part followed by @', () => {
-      cy.get('[name=first_name]').type('Nhien') 
-      cy.get('[name=last_name]').type('Lam') 
-
-      // missing a part followed by ‘@’
-      cy.get('[name=email]').type('@email')
-      cy.get('[type="submit"]').click() 
-      cy.get('[name=email]').invoke('prop', 'validationMessage')
-      .should('include', "a part followed by '@'")
-    })
-
     it('Register feature works - successfully create an account', () => {
       cy.get('[name=first_name]').type('Nhien') 
       cy.get('[name=last_name]').type('Lam') 
@@ -88,14 +77,15 @@ context('Register', () => {
     })
 
 
-    //*** This is not supposed to pass but Cypress still let it pass */
-    // it('An account with this email address already existed', () => {
-    //   cy.get('[name=first_name]').type('Nhien') 
-    //   cy.get('[name=last_name]').type('Lam') 
-    //   cy.get('[name=email]').type('nhienlam@sjsu.edu')
-    //   cy.get('[name=password]').type('newpassword')
-    //   cy.get('[type="submit"]').click() 
-    //   // should stay at Register
-    //   cy.url().should('include', '/register')
-    // })
+    it('No redirect because an account with this email address already existed', () => {
+      cy.get('[name=first_name]').type('Nhien') 
+      cy.get('[name=last_name]').type('Lam') 
+      cy.get('[name=email]').type('nhienlam@sjsu.edu')
+      cy.get('[name=password]').type('newpassword')
+      cy.get('[type="submit"]').click() 
+      
+      // should stay at Register
+      cy.url().should('include', '/register')
+      cy.contains('Create your account').should('exist')
+    })
 })
