@@ -28,17 +28,17 @@ func (m *MongoDB) GetTutorsByCourseAndDate(course_code string, date time.Time) [
 			index := -1
 			app, _ := m.GetAppointment(appointment)
 			if (app.StartTime.Year() == date.Year() &&
-				app.StartTime.Month() == date.Month() &&
-				app.StartTime.Day() == date.Day()) {
-					for i, hour := range available[idx] {
-						if (hour == app.StartTime.Hour()) {
-							index = i
-							break
-						}
+			    app.StartTime.Month() == date.Month() &&
+			    app.StartTime.Day() == date.Day()) {
+				for i, hour := range available[idx] {
+					if (hour == app.StartTime.Hour()) {
+						index = i
+						break
 					}
-					if (index != -1) {
-						available[idx] = append(available[idx][:index], available[idx][index+1:]...)
-					}
+				}
+				if (index != -1) {
+					available[idx] = append(available[idx][:index], available[idx][index+1:]...)
+				}
 			}
 		}
 		tutor.Availability = available
