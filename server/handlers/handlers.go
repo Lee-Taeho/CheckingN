@@ -70,4 +70,5 @@ func NewHandlers(gr interfaces.Router, db interfaces.MongoInterface, ip string) 
 	gr.AddRoute("/api/appointment/student/{id}", http.MethodGet, handlers.ViewAllStudentAppointment)
 	//gr.AddRoute("/api/appointment/{id}", http.MethodPatch, handlers.EditAppointment)
 	gr.AddRoute("/api/courses_by_departments", http.MethodGet, handlers.GetCoursesGroupedByDepartments)
+	gr.AddRoute("/api/{course_code}/tutors/{year}/{month}/{day}", http.MethodGet, handlers.GetTutorsByCourseAndDate)
 }

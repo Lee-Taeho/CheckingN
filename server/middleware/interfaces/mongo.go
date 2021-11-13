@@ -2,7 +2,7 @@ package interfaces
 
 import (
 	"server/middleware"
-
+	"time"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -26,4 +26,5 @@ type MongoInterface interface {
 	GetDepartments() []middleware.Department
 	GetCoursesByDepartment(department_name string) []middleware.Course
 	GetCoursesGroupedByDepartments() map[string][]middleware.Course
+	GetTutorsByCourseAndDate(course_code string, date time.Time) []middleware.Tutor
 }
