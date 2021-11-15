@@ -11,27 +11,41 @@ const AppointmentConfirmation = () => {
 
     // current student user
     const user =  localStorage.getItem('profile');
+    
+    let startTime = date.toString()+ 'T' + time.toString() + 'Z';
+    
+    // compute End time
+    var tempEndTime = new Date('2021-10-25 ' + time);
+    console.log("temp " + tempEndTime);
+    tempEndTime.setHours(tempEndTime.getHours()+1);
+    console.log(tempEndTime)
+    
+    let endTime = date.toString()+ 'T' + tempEndTime.getHours().toString() + ':'
+    + tempEndTime.getMinutes().toString() + ':'
+    + ("0" + tempEndTime.getSeconds()).slice(-2) + 'Z';
+
+    console.log("start " + startTime);
+    console.log("end   " + endTime);
 
     const handleConfirm = async (e) => {
-         console.log('confirm')
-        // e.preventDefault();
+        console.log('confirm')
+        e.preventDefault();
 
-        // var request = {
-        //     method: 'POST',
-        //     headers: {'Content-Type': 'application/json'},
-        //     body: JSON.stringify({
-        //         student: user,
-        //         tutor: ,
-        //         course: course,
-        //         start-time: ,
-        //         end-time: ,
-        //         location: location
-        //     })
-        //}
+        var request = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                tutor_email: tutor,
+                student_email: user,
+                course_code: course,
+                meeting_location: location,
+                start_time: startTime,
+                end_time: endTime 
+            })
+        }
 
-        // // send appointment info to backend to create appointment in db
-        // const response = await fetch('http://localhost:8080//api/appointment', request)   
-        
+        // send appointment info to backend to create appointment in db
+        const response = await fetch('http://localhost:8080//api/appointment', request)   
     }
 
     // uri: /tutoring/departments/:course/:date/:time/:tutor/:location/confirmation
@@ -40,7 +54,7 @@ const AppointmentConfirmation = () => {
         <div className='confirmation-container'>
             <h4 className="title">New Appointment</h4>
             <div>
-                <p>{user}</p>
+                <p><b>Your email:</b> {user}</p>
                 <p><b>Tutor:</b> {tutor}</p>
                 <p><b>Course:</b> {course}</p>
                 <p><b>Date:</b> {date}</p>
