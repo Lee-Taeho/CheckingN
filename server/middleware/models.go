@@ -16,6 +16,7 @@ type Tutor struct {
 	Courses         []string `bson:"courses" json:"courses"`
 	Availability    [][]int  `bson:"availability" json:"availability"`
 	Appointments    []string `bson:"appointments" json:"appointments"`
+	Email			string	 `bson:"email" json:"email"`
 }
 
 type Student struct {

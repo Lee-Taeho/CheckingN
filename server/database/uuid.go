@@ -18,7 +18,7 @@ func (m *MongoDB) GetUUID() int {
 	defer m.uuidLock.Unlock()
 
 	ctx := context.TODO()
-	collection := m.mongo.Database(USER_DATABASE).Collection(UUID_COLLECTION)
+	collection := m.mongo.Database(SJSU_DATABASE).Collection(UUID_COLLECTION)
 
 	uuid := &Uuid{}
 	err := collection.FindOneAndUpdate(ctx, bson.M{}, bson.D{{"$inc", bson.D{{"uuid", 1}}}}, options.FindOneAndUpdate().SetUpsert(true)).Decode(uuid)
@@ -31,7 +31,7 @@ func (m *MongoDB) GetUUID() int {
 
 func (m *MongoDB) FindStudentUUID(uuid int) *middleware.Student {
 	ctx := context.TODO()
-	collection := m.mongo.Database(USER_DATABASE).Collection(STUDENTS_COLLECTION)
+	collection := m.mongo.Database(SJSU_DATABASE).Collection(STUDENTS_COLLECTION)
 	filter := bson.M{"uuid": uuid}
 
 	student := &middleware.Student{}
