@@ -20,6 +20,7 @@ func (h *Handlers) SaveNewUser(w http.ResponseWriter, r *http.Request) {
 	}
 	uuid := h.db.GetUUID()
 	student.Uuid = uuid
+	student.Password = encrypt(aes_password_db_key, student.Password)
 
 	h.db.CreateNewStudent(*student)
 	log.Println(LOGGER_INFO_LOGIN + " Successfully Saved New User")
@@ -34,6 +35,7 @@ func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	login.Password = encrypt(aes_password_db_key, login.Password)
 
 	student := h.db.FindStudent(*login)
 	if student == nil {
@@ -41,7 +43,6 @@ func (h *Handlers) LoginRequest(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
-
 	header := &middleware.Header{
 		Key:   "Authorization",
 		Value: "Bearer " + encrypt(aes_key, fmt.Sprint(student.Uuid)),
