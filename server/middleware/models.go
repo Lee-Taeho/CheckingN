@@ -9,6 +9,7 @@ import (
 // json tag will be the way it is called from front end
 type Tutor struct {
 	Uuid            int      `bson:"uuid" json:"uuid,omitempty"`
+	Email           string   `bson:"email" json:"email"`
 	FirstName       string   `bson:"first_name" json:"first_name"`
 	LastName        string   `bson:"last_name" json:"last_name"`
 	Students        []string `bson:"students" json:"students"`
@@ -50,7 +51,7 @@ type Course struct {
 }
 
 type Department struct {
-	Name	string   `bson:"name" json:"name"`
+	Name string `bson:"name" json:"name"`
 }
 
 type Header struct {
@@ -60,10 +61,12 @@ type Header struct {
 
 // "first_name": "Mcclovin", "last_name":"", "email":"jonahhill@gmail.com", "password":"dartmouth"
 type Appointment struct {
-	TutorID         string    `bson:"tutor_id" json:"tutor_id"`
-	StudentID       string    `bson:"student_id" json:"student_id"`
+	TutorEmail      string    `bson:"tutor_email" json:"tutor_email"`
+	StudentEmail    string    `bson:"student_email" json:"student_email"`
 	CourseCode      string    `bson:"course_code" json:"course_code"`
 	MeetingLocation string    `bson:"meeting_location" json:"meeting_location"`
 	StartTime       time.Time `bson:"start_time" json:"start_time"`
 	EndTime         time.Time `bson:"end_time" json:"end_time"`
+	JoinLink        string    `bson:"join_link" json:"join_link"`
+	StartLink       string    `bson:"start_link" json:"start_link"`
 }
