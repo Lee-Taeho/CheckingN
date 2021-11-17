@@ -44,7 +44,7 @@ const DepartmentList = (props) =>  {
                         return (
                         <Link to={`/tutoring/departments/${course["class_code"]}`}>
                         <button
-                            className="button"
+                            className="button2"
                             >
                                 {course["class_code"]} {course["name"]}
                         </button></Link>)
