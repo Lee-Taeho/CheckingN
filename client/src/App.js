@@ -9,6 +9,7 @@ import GoogleLogin from 'react-google-login';
 import TutoringOptions from './pages/TutoringOptions';
 import ChooseDepartment from './pages/ChooseDepartment';
 import ChooseTutor from './pages/ChooseTutor';
+import ConfirmTutor from './pages/ConfirmTutor';
 
 function App() {
   const [first_name, setFirstName] = useState('');
@@ -41,6 +42,7 @@ function App() {
             <Route path="/tutoring" exact component={TutoringOptions}/>
             <Route path="/tutoring/departments" exact component={ChooseDepartment}/>
             <Route path="/tutoring/departments/:course" component={ChooseTutor}/>
+            <Route path="/tutoring/departments/:course/:firstname/:lastname/:fulldate/:time/:email/:location" component={ConfirmTutor}/>
         </main>
       </BrowserRouter>
     </div>

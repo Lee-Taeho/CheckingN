@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import './TimeSlot.css';
 
 const TimeSlot = (props) => 
@@ -8,6 +9,8 @@ const TimeSlot = (props) =>
     var date = (props.day)
     var year = (props.year)
     var dayOfWeek = (props.dayOfWeek) - 1
+    var fulldate = `${year}-${month}-${date}`
+    var location = (props.location)
 
     const[clicked, setClicked] = useState([])
     const[tutors, setTutors] = useState([])
@@ -43,7 +46,6 @@ const TimeSlot = (props) =>
         .then(response => response.json())
         .then((result) => {
             setTutors(result)
-            // this.setState({tutors: result})
             })
         .catch(e => {
             console.log(e)
@@ -53,54 +55,42 @@ const TimeSlot = (props) =>
 
     // if(error) {
     //     return (
-    //         <h1>No tutors available.</h1>
+    //         <h1>No tutors available this day.</h1>
     //     )
     // }
 
-    // const bookApp = (index) => {
-    //     slotsarr.map((key) => {
-    //         if(slotsarr[key] != index) {
-    //             return(
-    //             <button className="bookedBtn" disabled>
-    //                 {slotsarr[key]}
-    //             </button>
-    //             )
-    //         }
-    //         else {
-    //             return (
-    //                 <button className="availableBtn">
-    //                     {key}
-    //                 </button>
-    //             )
-    //         }
-    //     })
-    // }
-
+    const handlePress = (state, idx) => {
+        
+    }
 
     return (
         <div className="slots">
+        <h5 className="availableHours">Available hours for: </h5>
         {
-        tutors.map((index) => {
+        tutors.map((tutor) => {
             return (
                 <div>
+                    {/* display tutor name */}
                     <h5 className="tutorName">
-                        {index["first_name"]} 
-                    </h5>
-                    <h5 className="tutorLastName">
-                        {index["last_name"]}
+                        {tutor["first_name"]} {''} {tutor["last_name"]}
                     </h5>
                     {
-                        index.availability.map((key, index2) => {
+                        // parse through availability to determine day of week
+                        tutor.availability.map((key, index2) => {
                             if(dayOfWeek == index2){
                             return (
                                 <div>
                                     {
-                                    key.map((index3) => {
-                                        if({index3} != slotsarr[index3]){
+                                    // find available time slots
+                                    key.map((time) => {
+                                        if({time} != slotsarr[time]){
                                             return (
-                                                <div>
-                                                <h5 className="availableHours">Available hours: </h5>
-                                                <button className="availableBtn">{index3}</button>
+                                                // display available time slot
+                                                <div className="availableBtnContainer">
+                                                <Link to={`/tutoring/departments/${course_code}/${tutor["first_name"]}/${tutor["last_name"]}/${fulldate}/${time}/${tutor["email"]}/${location}`}>
+                                                <button className="availableBtn" >
+                                                    {time}
+                                                    </button></Link>
                                                 </div>
                                             )
                                         }
@@ -117,7 +107,7 @@ const TimeSlot = (props) =>
         })}
         <div>
         {
-            // create buttons based on whether timeslot is booked
+            // create buttons based on whether timeslot is booked => currently not working
 
             //  slotsarr.map((key) => {
             //      return(
@@ -125,25 +115,30 @@ const TimeSlot = (props) =>
             //             if({key2} == slotsarr[key]) {
             //                 return(
             //                 <button className="bookedBtn" disabled>
-            //                     {key}
+            //                     {slots[key]}
             //                 </button>
             //                 )
             //             }
             //             else {
             //                 return(
             //                     <button className="availableBtn">
-            //                         {key}
+            //                         {slots[key]}
             //                     </button>
             //                 )
             //             }
             //         })
             //      )})
         }
+
+        {/* create appointment button */}
+
         </div>
-             <div>
+             {/* <div>
                 <button className="buttonApp">Create Appointment</button>
-            </div>
-        </div>) 
+            </div> */}
+        </div>
+        
+        ) 
 };
 
 export default TimeSlot;
