@@ -10,7 +10,7 @@ import (
 type MongoInterface interface {
 	Connect() (*mongo.Client, error)
 	Stop() error
-	CreateNewStudent(student middleware.Student)
+	CreateNewStudent(student middleware.Student) error
 	FindStudent(login middleware.LoginRequest) *middleware.Student
 	GetUUID() int
 	FindStudentUUID(uuid int) *middleware.Student

@@ -22,7 +22,11 @@ func (h *Handlers) SaveNewUser(w http.ResponseWriter, r *http.Request) {
 	student.Uuid = uuid
 	student.Password = encrypt(aes_password_db_key, student.Password)
 
-	h.db.CreateNewStudent(*student)
+	if err := h.db.CreateNewStudent(*student); err != nil {
+		w.WriteHeader(http.StatusConflict)
+		return
+	}
+	w.WriteHeader(http.StatusCreated)
 	log.Println(LOGGER_INFO_LOGIN + " Successfully Saved New User")
 }
 
