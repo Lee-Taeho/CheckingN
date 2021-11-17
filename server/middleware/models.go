@@ -12,11 +12,11 @@ type Tutor struct {
 	Email           string   `bson:"email" json:"email"`
 	FirstName       string   `bson:"first_name" json:"first_name"`
 	LastName        string   `bson:"last_name" json:"last_name"`
-	Students        []string `bson:"students" json:"students"`
-	FluentLanguages []string `bson:"fluent_languages" json:"fluent_languages"`
+	Students        []string `bson:"students" json:"students,omitempty"`
+	FluentLanguages []string `bson:"fluent_languages" json:"fluent_languages,omitempty"`
 	Courses         []string `bson:"courses" json:"courses"`
 	Availability    [][]int  `bson:"availability" json:"availability"`
-	Appointments    []string `bson:"appointments" json:"appointments"`
+	Appointments    []string `bson:"appointments" json:"appointments,omitempty"`
 }
 
 type Student struct {
@@ -25,7 +25,7 @@ type Student struct {
 	LastName     string   `bson:"last_name" json:"last_name"`
 	Email        string   `bson:"email" json:"email"`
 	Password     string   `bson:"password" json:"password"`
-	Appointments []string `bson:"appointments" json:"appointments"`
+	Appointments []string `bson:"appointments" json:"appointments,omitempty"`
 }
 
 type GoogleUser struct {
@@ -66,6 +66,6 @@ type Appointment struct {
 	MeetingLocation string    `bson:"meeting_location" json:"meeting_location"`
 	StartTime       time.Time `bson:"start_time" json:"start_time"`
 	EndTime         time.Time `bson:"end_time" json:"end_time"`
-	JoinLink        string    `bson:"join_link" json:"join_link"`
-	StartLink       string    `bson:"start_link" json:"start_link"`
+	JoinLink        string    `bson:"join_link" json:"join_link,omitempty"`
+	StartLink       string    `bson:"start_link" json:"start_link,omitempty"`
 }
