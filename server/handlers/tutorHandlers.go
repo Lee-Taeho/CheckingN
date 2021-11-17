@@ -1,12 +1,12 @@
 package handlers
 
 import (
+	"encoding/json"
 	"net/http"
-   	"encoding/json"
-	"github.com/gorilla/mux"
-	"time"
 	"strconv"
-	"log"
+	"time"
+
+	"github.com/gorilla/mux"
 )
 
 func (h *Handlers) GetTutorsByCourseAndDate(w http.ResponseWriter, r *http.Request) {
@@ -17,13 +17,13 @@ func (h *Handlers) GetTutorsByCourseAndDate(w http.ResponseWriter, r *http.Reque
 	day, _ := strconv.Atoi(params["day"])
 	date_check := time.Now()
 	date := time.Date(year, time.Month(month), day, 23, 59, 59, 0, loc)
-	if (date.Before(date_check)) {
+	if date.Before(date_check) {
 		w.WriteHeader(http.StatusConflict)
 		return
 	}
 
 	tutors := h.db.GetTutorsByCourseAndDate(code, date)
 
-  	w.WriteHeader(http.StatusOK)
-   	json.NewEncoder(w).Encode(tutors)
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(tutors)
 }
