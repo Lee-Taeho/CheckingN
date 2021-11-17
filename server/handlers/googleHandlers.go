@@ -8,7 +8,90 @@ import (
 	"net/http"
 	"server/middleware"
 	"server/utils"
+	"time"
+
+	"golang.org/x/oauth2"
+	"google.golang.org/api/calendar/v3"
+	"google.golang.org/api/option"
 )
+
+func (h *Handlers) GoogleCalendarEventPost(w http.ResponseWriter, r *http.Request) {
+	info := &middleware.GoogleCalendarEventInfo{}
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(info); err != nil {
+		log.Printf("ERROR [handlers/googleHandlers.go] Couldn't get data: %s\n", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	tok := &oauth2.Token{
+		AccessToken: info.AccessToken,
+		TokenType:   info.TokenType,
+		Expiry:      info.Expiry,
+	}
+
+	client := googleOauthConfig.Client(context.TODO(), tok)
+	ctx := context.TODO()
+	srv, err := calendar.NewService(ctx, option.WithHTTPClient(client))
+	if err != nil {
+		log.Printf("ERROR [handlers/googleHandlers.go] Couldn't get data: %s\n", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	event := &calendar.Event{
+		Id:          info.ID,
+		Summary:     "Tutoring Appointment",
+		Location:    info.MeetingLocation,
+		Description: info.JoinLink,
+		Start: &calendar.EventDateTime{
+			DateTime: info.StartTime.Format(time.RFC3339),
+		},
+		End: &calendar.EventDateTime{
+			DateTime: info.EndTime.Format(time.RFC3339),
+		},
+		Attendees: []*calendar.EventAttendee{
+			&calendar.EventAttendee{Email: info.TutorEmail},
+			&calendar.EventAttendee{Email: info.StudentEmail},
+		},
+	}
+
+	calendarId := "primary"
+	if _, err = srv.Events.Insert(calendarId, event).Do(); err != nil {
+		log.Printf("ERROR [handlers/googleHandlers.go] Couldn't create event: %s\n", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+}
+
+func (h *Handlers) GoogleCalendarEventDelete(w http.ResponseWriter, r *http.Request) {
+	info := &middleware.GoogleCalendarEventInfo{}
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(info); err != nil {
+		log.Printf("ERROR [handlers/requestHandlers.go] Couldn't get data: %s\n", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	tok := &oauth2.Token{
+		AccessToken: info.AccessToken,
+		TokenType:   info.TokenType,
+		Expiry:      info.Expiry,
+	}
+
+	client := googleOauthConfig.Client(context.TODO(), tok)
+	ctx := context.TODO()
+	srv, err := calendar.NewService(ctx, option.WithHTTPClient(client))
+	if err != nil {
+		log.Printf("ERROR [handlers/googleHandlers.go] Couldn't get data: %s\n", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if err := srv.Events.Delete("primary", info.ID).Do(); err != nil {
+		log.Printf("ERROR [handlers/googleHandlers.go] Couldn't delete event: %s\n", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+}
 
 func (h *Handlers) GoogleLoginInfoSaver(w http.ResponseWriter, r *http.Request) {
 	googStudent := &middleware.GoogleUser{}

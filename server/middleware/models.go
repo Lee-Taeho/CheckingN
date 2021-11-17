@@ -1,8 +1,9 @@
 package middleware
 
 import (
-	//"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
+
+	"golang.org/x/oauth2"
 )
 
 // bson tag will tell golang to extract that specific field from mongodb into the variable
@@ -58,7 +59,6 @@ type Header struct {
 	Value string `json:"value"`
 }
 
-// "first_name": "Mcclovin", "last_name":"", "email":"jonahhill@gmail.com", "password":"dartmouth"
 type Appointment struct {
 	TutorEmail      string    `bson:"tutor_email" json:"tutor_email"`
 	StudentEmail    string    `bson:"student_email" json:"student_email"`
@@ -68,4 +68,10 @@ type Appointment struct {
 	EndTime         time.Time `bson:"end_time" json:"end_time"`
 	JoinLink        string    `bson:"join_link" json:"join_link"`
 	StartLink       string    `bson:"start_link" json:"start_link"`
+}
+
+type GoogleCalendarEventInfo struct {
+	Appointment
+	oauth2.Token
+	ID string `json:"appointment_id"`
 }

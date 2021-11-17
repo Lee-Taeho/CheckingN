@@ -36,6 +36,6 @@ func (h *Handlers) Home(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) Google(w http.ResponseWriter, r *http.Request) {
-	var htmlIndex = `<html><body><a href="/api/google_login_request">Google Log In</a></body></html>`
+	var htmlIndex = `<html><body><a href="/api/google_login_request_backend">Google Log In</a></body></html>`
 	fmt.Fprintf(w, htmlIndex)
 }
