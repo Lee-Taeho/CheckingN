@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/mux"
 	"time"
 	"strconv"
+	"log"
 )
 
 func (h *Handlers) GetTutorsByCourseAndDate(w http.ResponseWriter, r *http.Request) {
@@ -14,7 +15,12 @@ func (h *Handlers) GetTutorsByCourseAndDate(w http.ResponseWriter, r *http.Reque
 	year, _ := strconv.Atoi(params["year"])
 	month, _ := strconv.Atoi(params["month"])
 	day, _ := strconv.Atoi(params["day"])
-	date := time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
+	date_check := time.Now()
+	date := time.Date(year, time.Month(month), day, 23, 59, 59, 0, loc)
+	if (date.Before(date_check)) {
+		w.WriteHeader(http.StatusConflict)
+		return
+	}
 
 	tutors := h.db.GetTutorsByCourseAndDate(code, date)
 

@@ -23,8 +23,9 @@ var WEEKDAY_MAP = map[string]int{
 }
 var loc, _ = time.LoadLocation("America/Los_Angeles")
 
-func (m *MongoDB) AddAppointment(appointment middleware.Appointment) error {
-	//TODO: add course check
+
+func (m *MongoDB) AddAppointment (appointment middleware.Appointment) error {
+
 	ctx := context.TODO()
 	app_collection := m.mongo.Database(SJSU_DATABASE).Collection(APPOINTMENTS_COLLECTION)
 	tutor_collection := m.mongo.Database(SJSU_DATABASE).Collection(TUTORS_COLLECTION)
