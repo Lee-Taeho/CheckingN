@@ -6,9 +6,11 @@ import (
 	"log"
 	"net/http"
 	"server/middleware"
-
+	"time"
 	"github.com/gorilla/mux"
 )
+
+var loc, _ = time.LoadLocation("America/Los_Angeles")
 
 func (h *Handlers) CreateAppointment(w http.ResponseWriter, r *http.Request) {
 	var appointment middleware.Appointment
@@ -17,10 +19,16 @@ func (h *Handlers) CreateAppointment(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
+	appointment.StartTime = appointment.StartTime.In(loc)
+	appointment.EndTime = appointment.EndTime.In(loc)
+	if (appointment.StartTime.Before(time.Now())) {
+		log.Println("ERROR [handlers/appointmentHandlers.go] Cannot create appointment for date that passed")
+		w.WriteHeader(http.StatusConflict)
+		return
+	}
 	if err := h.db.AddAppointment(appointment); err != nil {
 		log.Printf("Couldn't Create Appointment: %s\n", err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusConflict)
 		return
 	}
 
@@ -52,7 +60,7 @@ func (h *Handlers) CancelAppointment(w http.ResponseWriter, r *http.Request) {
 
 	if err := h.db.DeleteAppointment(appointmentId); err != nil {
 		log.Printf("Couldn't Delete Appointment Appointment: %s\n", err.Error())
-		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 
@@ -65,7 +73,7 @@ func (h *Handlers) ViewAppointment(w http.ResponseWriter, r *http.Request) {
 	appointment, err := h.db.GetAppointment(appointmentId)
 	if err != nil {
 		log.Printf("Couldn't View Appointment: %s\n", err.Error())
-		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 
