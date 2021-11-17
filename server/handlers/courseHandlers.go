@@ -3,11 +3,15 @@ package handlers
 import (
  	"net/http"
 	"encoding/json"
+	//"log"
 )
 
 func (h *Handlers) GetCoursesGroupedByDepartments(w http.ResponseWriter, r *http.Request) {
 	mapOfCourses := h.db.GetCoursesGroupedByDepartments()
-
+	if mapOfCourses == nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(mapOfCourses)
 }

@@ -10,19 +10,16 @@ import (
 type MongoInterface interface {
 	Connect() (*mongo.Client, error)
 	Stop() error
-	CreateNewStudent(student middleware.Student)
+	CreateNewStudent(student middleware.Student) error
 	FindStudent(login middleware.LoginRequest) *middleware.Student
 	GetUUID() int
 	FindStudentUUID(uuid int) *middleware.Student
-	// FindUser(login middleware.LoginRequest, collection *mongo.Collection) bool
 	AddAppointment(appointment middleware.Appointment) error
 	GetAppointment(id string) (*middleware.Appointment, error)
 	DeleteAppointment(id string) error
-	DeleteAppointmentFromTutor(app_id string, tutor_id primitive.ObjectID) error
-	DeleteAppointmentFromStudent(app_id string, student_id primitive.ObjectID) error
-	GetAppointmentsForTutor(tutor_id string) ([]middleware.Appointment, error)
-	GetAppointmentsForStudent(student_id string) ([]middleware.Appointment, error)
-	UpdateAppointment(app_id string, newAppointment middleware.Appointment) error
+	DeleteAppointmentFromTutor(app_id string, tutor_email string) error
+	DeleteAppointmentFromStudent(app_id string, student_email string) error
+	GetAppointmentsForStudent(student_id string) ([]string, error)
 	GetDepartments() []middleware.Department
 	GetCoursesByDepartment(department_name string) []middleware.Course
 	GetCoursesGroupedByDepartments() map[string][]middleware.Course
