@@ -10,7 +10,6 @@ import TutoringOptions from './pages/TutoringOptions';
 import ChooseDepartment from './pages/ChooseDepartment';
 import ChooseTutor from './pages/ChooseTutor';
 import AppointmentConfirmation from './pages/AppointmentConfirmation';
-import ConfirmTutor from './pages/ConfirmTutor';
 
 function App() {
   const [first_name, setFirstName] = useState('');
@@ -26,10 +25,8 @@ function App() {
             <Route path="/register" component={Register}/>
             <Route path="/tutoring" exact component={TutoringOptions}/>
             <Route path="/tutoring/departments" exact component={ChooseDepartment}/>
-            {/* <Route path="/tutoring/departments/:course" exact component={ChooseTutor}/>
-            <Route path="/tutoring/departments/:course/:date/:time/:tutor/:location/confirmation" exact component={AppointmentConfirmation}/> */}
-            <Route path="/tutoring/departments/:course" component={ChooseTutor}/>
-            <Route path="/tutoring/departments/:course/:firstname/:lastname/:fulldate/:time/:email/:location" component={ConfirmTutor}/>
+            <Route path="/tutoring/departments/:course" exact component={ChooseTutor}/>
+            <Route path="/tutoring/departments/:course/:firstname/:lastname/:fulldate/:time/:email/:location" exact component={AppointmentConfirmation}/>
         </main>
       </BrowserRouter>
     </div>

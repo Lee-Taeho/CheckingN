@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import React from 'react';
-import './Background.css';
-import { useParams } from 'react-router-dom'
-
-const ChooseTutor = () => {
-    const { course } = useParams()
-
-    return (
-        <div>Choose Tutor for {course} </div>
-=======
 import React, {useState} from 'react';
 import './Background.css';
 import './ChooseTutor.css';
@@ -27,7 +16,8 @@ const ChooseTutor = () => {
     var dday = d.getDate();
     var m = d.getMonth();
     var y = d.getFullYear();
-    var dow = d.getUTCDay();
+    var dow = d.getDay();
+    console.log("dow "+ dow)
 
     let availableSlots;
     if(selectedDate != null){
@@ -39,10 +29,10 @@ const ChooseTutor = () => {
                     </div>
                     <ul className="btnLocationWrap">
                     <button className ="btnLocation"
-                        onClick={() => setLocation("online")}> Online
+                        onClick={() => setLocation("Zoom")}> Online
                     </button>
                     <button className ="btnLocation"
-                        onClick={() => setLocation("in-person")}> In-Person
+                        onClick={() => setLocation("In-person")}> In-Person
                     </button>
                 </ul>         
             </div>
@@ -79,7 +69,6 @@ const ChooseTutor = () => {
             />
             <div> {availableSlots}</div>
         </div>
->>>>>>> 76102fc9a373a9cabfdad6ee815a9bac5206baf2
     );
 };
 

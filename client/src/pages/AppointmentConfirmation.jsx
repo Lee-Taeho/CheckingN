@@ -4,30 +4,35 @@ import { useParams, Link, Redirect} from 'react-router-dom'
 
 const AppointmentConfirmation = () => {
     const { course } = useParams();
-    const { date } = useParams();
+    const { fulldate } = useParams();
     const { time } = useParams();
-    const { tutor } = useParams();
+    const { email } = useParams();
+    const { firstname } = useParams();
+    const { lastname } = useParams();
     const { location } = useParams();
     const [redirect, setRedirect] = useState(false);
+    
+    var formattedTime = time +':00:00';
+    console.log(formattedTime);
 
     // current student user
     const user =  localStorage.getItem('profile');
-    
-    let startTime = date.toString()+ 'T' + time.toString() + 'Z';
+    console.log('time' + formattedTime)
+    let startTime = fulldate.toString()+ 'T' + formattedTime.toString() + 'Z';
     
     // compute End time
-    var tempEndTime = new Date('2021-10-25 ' + time);
+    var tempEndTime = new Date('2021-10-25 ' + formattedTime);
  //   console.log("temp " + tempEndTime);
     tempEndTime.setHours(tempEndTime.getHours()+1);
  //   console.log(tempEndTime)
     
-    let endTime = date.toString()+ 'T' + tempEndTime.getHours().toString() + ':'
+    let endTime = fulldate.toString()+ 'T' + tempEndTime.getHours().toString() + ':'
     + ("0" + tempEndTime.getMinutes()).slice(-2).toString() + ':'
     + ("0" + tempEndTime.getSeconds()).slice(-2) + 'Z';
 
     console.log("start " + startTime);
     console.log("end   " + endTime);
-    console.log("tutor " + tutor);
+    console.log("email " + email);
     console.log("user   " + user);
     console.log("location " + location);
 
@@ -46,7 +51,7 @@ const AppointmentConfirmation = () => {
                 // meeting_location: "Zoom",
                 // start_time: "2021-11-24T22:00:00Z",
                 // end_time: "2021-11-24T23:00:00Z" 
-                tutor_email: tutor,
+                tutor_email: email,
                 student_email: user,
                 course_code: course,
                 meeting_location: location,
@@ -76,10 +81,10 @@ const AppointmentConfirmation = () => {
             <h4 className="title">New Appointment</h4>
             <div>
                 <p><b>Your email:</b> {user}</p>
-                <p><b>Tutor:</b> {tutor}</p>
+                <p><b>Tutor:</b> {firstname} {lastname}</p>
                 <p><b>Course:</b> {course}</p>
-                <p><b>Date:</b> {date}</p>
-                <p><b>Time:</b> {time}</p>
+                <p><b>Date:</b> {fulldate}</p>
+                <p><b>Time:</b> {formattedTime}</p>
                 <p><b>Location:</b> {location}</p>
             </div>
             <div className='btn-container'>

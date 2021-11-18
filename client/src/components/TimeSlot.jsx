@@ -41,6 +41,8 @@ const TimeSlot = (props) =>
         )
     });
 
+    console.log(`http://localhost:8080/api/${course_code}/tutors/${year}/${month}/${date}`)
+
     useEffect(() => {
         fetch(`http://localhost:8080/api/${course_code}/tutors/${year}/${month}/${date}`)
         .then(response => response.json())
@@ -53,11 +55,11 @@ const TimeSlot = (props) =>
         })
     }, [])
 
-    // if(error) {
-    //     return (
-    //         <h1>No tutors available this day.</h1>
-    //     )
-    // }
+    if(error) {
+        return (
+            <h4>No tutors available this day.</h4>
+        )
+    }
 
     const handlePress = (state, idx) => {
         
@@ -89,7 +91,7 @@ const TimeSlot = (props) =>
                                                 <div className="availableBtnContainer">
                                                 <Link to={`/tutoring/departments/${course_code}/${tutor["first_name"]}/${tutor["last_name"]}/${fulldate}/${time}/${tutor["email"]}/${location}`}>
                                                 <button className="availableBtn" >
-                                                    {time}
+                                                    {time}:00
                                                     </button></Link>
                                                 </div>
                                             )
