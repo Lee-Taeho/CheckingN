@@ -12,31 +12,42 @@ const AppointmentConfirmation = () => {
     const { location } = useParams();
     const [redirect, setRedirect] = useState(false);
     
-    var formattedTime = time +':00:00';
-    console.log(formattedTime);
+    // formats the time
+    var formattedTime
+    if(time.toString().length < 2){
+        formattedTime = '0' + time +':00:00';
+    }
+    else{
+        formattedTime = time +':00:00';
+    }
 
     // current student user
     const user =  localStorage.getItem('profile');
-    console.log('time' + formattedTime)
-    let startTime = fulldate.toString()+ 'T' + formattedTime.toString() + 'Z';
+
+    // start time PST timezone format
+    var startTime = fulldate.toString()+ 'T' + formattedTime.toString()+ "-08:00";
     
     // compute End time
     var tempEndTime = new Date('2021-10-25 ' + formattedTime);
- //   console.log("temp " + tempEndTime);
     tempEndTime.setHours(tempEndTime.getHours()+1);
- //   console.log(tempEndTime)
-    
-    let endTime = fulldate.toString()+ 'T' + tempEndTime.getHours().toString() + ':'
+    var eTime = ("0" + tempEndTime.getHours()).slice(-2).toString() + ':'
     + ("0" + tempEndTime.getMinutes()).slice(-2).toString() + ':'
-    + ("0" + tempEndTime.getSeconds()).slice(-2) + 'Z';
+    + ("0" + tempEndTime.getSeconds()).slice(-2);
 
-    console.log("start " + startTime);
-    console.log("end   " + endTime);
-    console.log("email " + email);
-    console.log("user   " + user);
-    console.log("location " + location);
+    // end time PST timezone format
+    var endTime = fulldate.toString()+ 'T' + ("0" + tempEndTime.getHours()).slice(-2).toString() + ':'
+    + ("0" + tempEndTime.getMinutes()).slice(-2).toString() + ':'
+    + ("0" + tempEndTime.getSeconds()).slice(-2)
+    + "-08:00";
 
-
+    console.log("tutor_email " + email);
+    console.log("student_email   " + user);
+    console.log("course_code   " + course);
+    console.log("meeting_location " + location);
+    console.log("start_time " + startTime);
+    console.log("end_time   " + endTime);
+    
+    // fetch api to create an appointment in db when user clicks confirm
     const handleConfirm = async (e) => {
         console.log('confirm')
         e.preventDefault();
@@ -45,18 +56,12 @@ const AppointmentConfirmation = () => {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                // tutor_email: "khang.d.nguyen@sjsu.edu",
-                // student_email: "new@gmail.com",
-                // course_code: "CS146",
-                // meeting_location: "Zoom",
-                // start_time: "2021-11-24T22:00:00Z",
-                // end_time: "2021-11-24T23:00:00Z" 
                 tutor_email: email,
                 student_email: user,
                 course_code: course,
                 meeting_location: location,
                 start_time: startTime,
-                end_time: endTime 
+                end_time: endTime           
             })
         }
 
@@ -74,8 +79,6 @@ const AppointmentConfirmation = () => {
           return <Redirect to="/"/>
       }
 
-    // uri: /tutoring/departments/:course/:date/:time/:tutor/:location/confirmation
-    // eg. http://localhost:3000/tutoring/departments/CS174/2021-11-24/22:00:00/khang.d.nguyen@sjsu.edu/Zoom/confirmation
     return (
         <div className='confirmation-container'>
             <h4 className="title">New Appointment</h4>
@@ -84,7 +87,7 @@ const AppointmentConfirmation = () => {
                 <p><b>Tutor:</b> {firstname} {lastname}</p>
                 <p><b>Course:</b> {course}</p>
                 <p><b>Date:</b> {fulldate}</p>
-                <p><b>Time:</b> {formattedTime}</p>
+                <p><b>Time:</b> {formattedTime} - {eTime}</p>
                 <p><b>Location:</b> {location}</p>
             </div>
             <div className='btn-container'>

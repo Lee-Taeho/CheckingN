@@ -41,8 +41,6 @@ const TimeSlot = (props) =>
         )
     });
 
-    console.log(`http://localhost:8080/api/${course_code}/tutors/${year}/${month}/${date}`)
-
     useEffect(() => {
         fetch(`http://localhost:8080/api/${course_code}/tutors/${year}/${month}/${date}`)
         .then(response => response.json())
