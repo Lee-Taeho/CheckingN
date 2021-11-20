@@ -12,11 +12,8 @@ const TimeSlot = (props) =>
     var fulldate = `${year}-${month}-${date}`
     var location = (props.location)
 
-    const[clicked, setClicked] = useState([])
     const[tutors, setTutors] = useState([])
     const[error, setError] = useState(false)
-    const[booked, setBooked] = useState([])
-    var bookings = [];
 
     const jsonData = { "slots" : {
         "slot1": "9:00 AM",
@@ -63,6 +60,7 @@ const TimeSlot = (props) =>
         
     }
 
+    if(tutors) {
     return (
         <div className="slots">
         <h5 className="availableHours">Available hours for: </h5>
@@ -139,6 +137,10 @@ const TimeSlot = (props) =>
         </div>
         
         ) 
+        
+        } else{
+            return <h4 className = "noTutor">No tutors available this day</h4>
+        }
 };
 
 export default TimeSlot;
