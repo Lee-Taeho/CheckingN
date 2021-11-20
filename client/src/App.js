@@ -10,6 +10,7 @@ import TutoringOptions from './pages/TutoringOptions';
 import ChooseDepartment from './pages/ChooseDepartment';
 import ChooseTutor from './pages/ChooseTutor';
 import AppointmentConfirmation from './pages/AppointmentConfirmation';
+import ViewAppointment from './pages/ViewAppointment';
 
 function App() {
   const [first_name, setFirstName] = useState('');
@@ -27,6 +28,7 @@ function App() {
             <Route path="/tutoring/departments" exact component={ChooseDepartment}/>
             <Route path="/tutoring/departments/:course" exact component={ChooseTutor}/>
             <Route path="/tutoring/departments/:course/:firstname/:lastname/:fulldate/:time/:email/:location" exact component={AppointmentConfirmation}/>
+            <Route path="/tutoring/appointments" component={() => <ViewAppointment/>}/>
         </main>
       </BrowserRouter>
     </div>

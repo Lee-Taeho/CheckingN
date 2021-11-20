@@ -24,8 +24,12 @@ const Login = (props) => {
 
         // store user email and profileObj in local storage
         localStorage.setItem('profile', response.profileObj.email);
-        localStorage.setItem('header', response.profileObj);    
+        localStorage.setItem('header', response.profileObj);  
+        localStorage.setItem('fname', response.profileObj.givenName);  
+        localStorage.setItem('lname', response.profileObj.familyName);  
+        localStorage.setItem('profilePic', response.profileObj.imageUrl);
         props.setFirstName(response.profileObj.email);
+
 
         // fetch user info to server side to store into database
         var googleLoginRequest = {

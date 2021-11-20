@@ -19,7 +19,7 @@ const Home = (props) => {
                             <CardItem
                                 img = "assets/calendar.svg"
                                 title = "View Appointments"
-                                path = "/tutoring"
+                                path = "/tutoring/appointments"
                             />
                             <CardItem
                                 img = "assets/check.svg"
