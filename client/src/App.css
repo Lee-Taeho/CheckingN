@@ -61,3 +61,42 @@
   position: relative;
   text-align: center;
 }
+
+.confirmation-container {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+  background-color: #fff;
+  border-radius: 20px;
+}
+
+.confirmation-container .title {
+  font-size: 25px;
+  font-weight: 500;
+  position: relative;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.confirmation-container .title::before {
+  content: "";
+  position: absolute;
+  left: 1;
+  bottom: 0;
+  height: 3px;
+  width: 30px;
+  background: linear-gradient(270deg, #80afda, #9abbda, #81a4c5);
+}
+
+.confirmation-container .btn-primary {
+  margin: 10px;
+}
+
+.confirmation-container .btn-container {
+  text-align: center;
+}
+
+.confirmation-container .list-container {
+  text-align: center;
+}

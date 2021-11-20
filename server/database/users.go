@@ -2,8 +2,9 @@ package database
 
 import (
 	"context"
-	"server/middleware"
 	"errors"
+	"server/middleware"
+
 	"go.mongodb.org/mongo-driver/bson"
 )
 

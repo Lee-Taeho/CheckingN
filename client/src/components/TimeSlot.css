@@ -1,0 +1,111 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+      "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+      sans-serif;
+  }
+
+.slots {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    max-width: 100%;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.arr_wrapper {
+    display: flex;
+    flex: 1;
+}
+  
+.buttonSlot {
+    width: 100px;
+    height: 40px;
+    position: relative;
+    overflow: hidden;
+    margin: 20px 2px;
+    padding: 1px;
+    font-size: 18px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    transition: all .2s ease;
+    border: none;
+    display: inline-block;
+    justify-content: space-between;
+}
+
+.buttonApp {
+    width: 260px;
+    height: 50px;
+    position: relative;
+    overflow: hidden;
+    margin: 0 10px;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    transition: all .2s ease;
+    border: none;
+}
+
+.buttonApp:hover {
+    color: white;
+    background-color: #6C8AAF;
+}
+
+.buttonSlot:hover {
+    color: white;
+    background-color: #6C8AAF;
+}
+
+.tutorName {
+    display: inline;
+    text-align: left;
+    margin-top: 25px;
+    margin-left: 30px;
+}
+
+.tutorName:hover {
+    color: black;
+}
+
+.availableBtn {
+    width: 250px;
+    height: 50px;
+    position: relative;
+    overflow: hidden;
+    margin: 0 5px;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    transition: all .2s ease;
+    border: none;
+}
+
+.availableBtn:hover {
+    color: white;
+    background-color: #6C8AAF;
+}
+
+.availableBtnContainer {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    max-width: 100%;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.availableHours {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.availableHours:hover {
+    color: black;
+}
+
+.noTutor {
+    margin-top: 20px;
+}

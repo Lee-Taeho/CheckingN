@@ -8,25 +8,11 @@ import React, {useEffect, useState} from 'react';
 import GoogleLogin from 'react-google-login';
 import TutoringOptions from './pages/TutoringOptions';
 import ChooseDepartment from './pages/ChooseDepartment';
+import ChooseTutor from './pages/ChooseTutor';
+import AppointmentConfirmation from './pages/AppointmentConfirmation';
 
 function App() {
   const [first_name, setFirstName] = useState('');
-    
-  // useEffect(() => {
-  //     (
-  //         // which api is user api to get user data 
-  //         async () => {
-  //             const response = await fetch('http://localhost:8080/api/****', {
-  //                 headers: {'Content-Type': 'application/json'},
-  //                 //credentials: 'include',
-  //             })
-
-  //             const content = await response.json();
-
-  //             setFirstName(content.first_name);
-  //         }
-  //     )();
-  // });
 
   return ( 
     <div className="App">
@@ -39,6 +25,8 @@ function App() {
             <Route path="/register" component={Register}/>
             <Route path="/tutoring" exact component={TutoringOptions}/>
             <Route path="/tutoring/departments" exact component={ChooseDepartment}/>
+            <Route path="/tutoring/departments/:course" exact component={ChooseTutor}/>
+            <Route path="/tutoring/departments/:course/:firstname/:lastname/:fulldate/:time/:email/:location" exact component={AppointmentConfirmation}/>
         </main>
       </BrowserRouter>
     </div>
