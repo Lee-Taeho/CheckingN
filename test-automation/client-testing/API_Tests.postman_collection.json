@@ -1,0 +1,225 @@
+{
+	"info": {
+		"_postman_id": "d6ca6840-e312-4cfb-b116-6deb71c9fa0a",
+		"name": "API Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/api/login_request SUCCESSFUL",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"chel@gmail\",\n    \"password\": \"seatheblues\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/login_request",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"login_request"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/login_request FAIL: 401 UNAUTHORIZED",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"chel@gmail\",\n    \"password\": \"seatheblue\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/login_request",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"login_request"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/authorized SUCCESSFUL",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "A/UORyDO",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/authorized",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"authorized"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/authorized FAIL: 401 UNAUTHORIZED",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "A/UORyO",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/authorized",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"authorized"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/save_new_user SUCCESSFUL",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"first_name\": \"Stephen\",\n    \"last_name\": \"Curry\",\n    \"email\": \"steph@curry.com\",\n    \"password\": \"warriors\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/save_new_user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"save_new_user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/save_new_user FAIL: 409 CONFLICT",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"first_name\": \"eden\",\n    \"last_name\": \"hazard\",\n    \"email\": \"chel@gmail\",\n    \"password\": \"seatheblues\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/save_new_user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"save_new_user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/google_calendar SUCCESSFUL (when access token and expiry updated)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"appointment_id\": \"12352\",\n    \"access_token\": \"ya29.a0ARrdaM-T2YX-TBpvklVG0Ol8Ei0inhcNHNQ2tKUc10xLw-slvZtAPCA7wrCf6JqoAXAmoPZg87MOCArjrynnMyJ4h-8IKLt5rZtam_zpeT9E-MkdFKES4AAETKCjcDE0yctXlDOB2yd14V28hXWt53ZrRG9tVw\",\n\t\"token_type\": \"Bearer\",\n\t\"expiry\": \"2021-11-17T19:01:40.298246-08:00\",\n    \"tutor_email\": \"ekaterina.kazantseva@sjsu.edu\",\n    \"student_email\": \"milayush@gmail.com\",\n    \"meeting_location\": \"Zoom\",\n    \"join_link\": \"zoom.com/tutoring\",\n    \"start_time\": \"2021-11-22T18:00:00.000+00:00\",\n    \"end_time\": \"2021-11-22T19:00:00.000+00:00\"\n}\n"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/google_calendar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"google_calendar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/google_calendar SUCCESSFUL (when access token and expiry updated)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"appointment_id\": \"12352\",\n    \"access_token\": \"ya29.a0ARrdaM-T2YX-TBpvklVG0Ol8Ei0inhcNHNQ2tKUc10xLw-slvZtAPCA7wrCf6JqoAXAmoPZg87MOCArjrynnMyJ4h-8IKLt5rZtam_zpeT9E-MkdFKES4AAETKCjcDE0yctXlDOB2yd14V28hXWt53ZrRG9tVw\",\n\t\"token_type\": \"Bearer\",\n\t\"expiry\": \"2021-11-17T19:01:40.298246-08:00\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/google_calendar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"google_calendar"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
