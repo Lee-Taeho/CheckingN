@@ -52,10 +52,14 @@ const AppointmentConfirmation = () => {
         console.log('confirm')
         e.preventDefault();
 
+        console.log('google_access_token: ', localStorage.getItem('google_access_token'));
+        console.log('google_expires_at: ', localStorage.getItem('google_expires_at'));
         var request = {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
+                access_token: localStorage.getItem('google_access_token'),
+                expiry: localStorage.getItem('google_expires_at'),
                 tutor_email: email,
                 student_email: user,
                 course_code: course,

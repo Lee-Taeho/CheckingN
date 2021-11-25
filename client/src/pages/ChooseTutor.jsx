@@ -17,7 +17,6 @@ const ChooseTutor = () => {
     var m = d.getMonth();
     var y = d.getFullYear();
     var dow = d.getDay();
-    console.log("dow "+ dow)
 
     let availableSlots;
     if(selectedDate != null){

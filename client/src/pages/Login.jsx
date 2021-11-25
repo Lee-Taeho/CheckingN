@@ -30,6 +30,17 @@ const Login = (props) => {
         localStorage.setItem('profilePic', response.profileObj.imageUrl);
         props.setFirstName(response.profileObj.email);
 
+        localStorage.setItem('google_access_token', response.tokenObj.access_token);
+        
+        var expires_at_date = new Date(response.tokenObj.expires_at);
+        var formatted_expires_at = expires_at_date.toISOString().slice(0, -1) + '-08:00';
+        localStorage.setItem('google_expires_at', formatted_expires_at);
+
+        console.log('google_access_token: ', localStorage.getItem('google_access_token'));
+        console.log('google_expires_at: ', localStorage.getItem('google_expires_at'));
+        // console.log('exp: ', response.tokenObj.expires_at);
+        // console.log('before : ' + expires_at_date.toISOString());
+        props.setFirstName(response.profileObj.email);
 
         // fetch user info to server side to store into database
         var googleLoginRequest = {
