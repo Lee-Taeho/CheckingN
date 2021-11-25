@@ -40,6 +40,8 @@ const AppointmentConfirmation = () => {
     + ("0" + tempEndTime.getSeconds()).slice(-2)
     + "-08:00";
 
+    console.log('google_access_token: ', localStorage.getItem('google_access_token'));
+    console.log('google_expires_at: ', localStorage.getItem('google_expires_at'));
     console.log("tutor_email " + email);
     console.log("student_email   " + user);
     console.log("course_code   " + course);
@@ -52,8 +54,6 @@ const AppointmentConfirmation = () => {
         console.log('confirm')
         e.preventDefault();
 
-        console.log('google_access_token: ', localStorage.getItem('google_access_token'));
-        console.log('google_expires_at: ', localStorage.getItem('google_expires_at'));
         var request = {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},

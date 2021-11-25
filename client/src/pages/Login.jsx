@@ -38,10 +38,7 @@ const Login = (props) => {
 
         console.log('google_access_token: ', localStorage.getItem('google_access_token'));
         console.log('google_expires_at: ', localStorage.getItem('google_expires_at'));
-        // console.log('exp: ', response.tokenObj.expires_at);
-        // console.log('before : ' + expires_at_date.toISOString());
-        props.setFirstName(response.profileObj.email);
-
+    
         // fetch user info to server side to store into database
         var googleLoginRequest = {
             method: 'POST',
