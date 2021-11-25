@@ -22,6 +22,7 @@ const ViewAppointment = (props) => {
 
     
     return (
+        <div className="form-signin">
         <div className="Appointments">
             <div className="profile">
                 <h3>Profile</h3>
@@ -34,7 +35,7 @@ const ViewAppointment = (props) => {
             <div>
                 {appointmentList}
             </div>
-            
+        </div>
         </div>
     );
     

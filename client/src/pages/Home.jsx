@@ -6,11 +6,41 @@ const Home = (props) => {
 
     let homeText;
     if(user ==='' || user == null) {
-        homeText=(<div>You are not logged in</div>)
+        homeText=(
+            <div>
+                <section className='header'>
+                    <div className='header-text'>
+                        <h1>The best way to find a tutor</h1>
+                        <p>asdfasdfasdfa</p>
+                    </div>
+                </section>
+
+                <section className='service'> 
+                    <h1>Online Tutoring</h1>
+                    <div className="row">   
+                        <div className="col">
+                            <h3>In-person Tutoring</h3>
+                            <p>Our tutors are friendly and skilled in their subject fields.
+                                 They undergo a thorough background check</p>
+                        </div>
+                        <div className="col">
+                            <h3>Remote Learning</h3>
+                            <p>Learn from anywhere, using your desktop, tablet, or mobile phone. 
+                                Out tutoring is interactive and practical</p>
+                        </div>
+                        <div className="col">
+                            <h3>Amazing Results</h3>
+                            <p>Almost all of our students go on to achieve higher grades than
+                                 they expected after completing tutoring with us</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        )
     }
     else{
         homeText=(
-        <div>         
+        <div className="form-signin">         
             <div className='cards'>
             <h1>Choose an option</h1>
                 <div className='cards_container'>

@@ -4,6 +4,7 @@ import './Cards.css';
 
 const Cards = props => {
     return (
+        <div className="form-signin">
         <div className='cards'>
             <h1>Choose Tutoring Option</h1>
             <div className='cards_container'>
@@ -27,6 +28,7 @@ const Cards = props => {
                     </ul>
                     </div>
             </div>
+        </div>
         </div>
     );
 }

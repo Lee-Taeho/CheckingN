@@ -100,3 +100,61 @@
 .confirmation-container .list-container {
   text-align: center;
 }
+
+.header {
+  min-height: 50vh;
+  width: 100%;
+  position: relative;
+}
+
+.header-text {
+  width: 90%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.home-container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.service {
+  width: 80%;
+  margin: auto;
+  text-align: center;
+  padding-top: 100px;
+}
+
+.row {
+  margin-top: 5%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.col {
+  flex-basis: 31%;
+  background: #c3ebfe;
+  border-radius: 10px;
+  margin-bottom: 5%;
+  padding: 20px 12px;
+  box-sizing: border-box;
+}
+
+.col:hover {
+  box-shadow: 0 0 20px 0px rgba(0, 0, 0, 2);
+}
+
+.p {
+  font-size: 14px;
+  font-weight: 300;
+}
+
+@media (max-width: 700px) {
+  .row {
+    flex-direction: column;
+  }
+}

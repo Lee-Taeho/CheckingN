@@ -20,7 +20,7 @@ function App() {
       <BrowserRouter>
         <Nav first_name={first_name} setFirstName={setFirstName}/>
 
-        <main className="form-signin">
+        <main >
             <Route path="/" exact component={() => <Home first_name={first_name}/>}/>
             <Route path="/login" component={() => <Login setFirstName={setFirstName}/>}/>
             <Route path="/register" component={Register}/>
