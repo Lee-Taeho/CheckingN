@@ -33,7 +33,7 @@ func (m *MongoDB) GetTutorsByCourseAndDate(course_code string, date time.Time) [
 				app.StartTime.Month() == date.Month() &&
 				app.StartTime.Day() == date.Day() {
 				for i, hour := range available[idx] {
-					if hour == app.StartTime.Hour() {
+					if hour == app.StartTime.In(loc).Hour() {
 						index = i
 						break
 					}
