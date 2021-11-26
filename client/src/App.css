@@ -105,6 +105,7 @@
   min-height: 50vh;
   width: 100%;
   position: relative;
+  background-color: #c3ebfe;
 }
 
 .header-text {
@@ -130,12 +131,11 @@
 }
 
 .row {
-  margin-top: 5%;
   display: flex;
   justify-content: space-between;
 }
 
-.col {
+.service-col {
   flex-basis: 31%;
   background: #c3ebfe;
   border-radius: 10px;
@@ -144,12 +144,12 @@
   box-sizing: border-box;
 }
 
-.col:hover {
+.service-col:hover {
   box-shadow: 0 0 20px 0px rgba(0, 0, 0, 2);
 }
 
-.p {
-  font-size: 14px;
+.service p {
+  font-size: 20px;
   font-weight: 300;
 }
 
@@ -157,4 +157,117 @@
   .row {
     flex-direction: column;
   }
+}
+
+.college {
+  width: 80%;
+  margin: auto;
+  text-align: center;
+  padding-top: 50px;
+}
+
+.college-col {
+  flex-basis: 32%;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.college-col img {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  display: block;
+}
+
+.layer {
+  background: transparent;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: 0.5s;
+}
+
+.layer:hover {
+  background: rgba(4, 53, 249, 0.7);
+}
+
+.layer h3 {
+  width: 100%;
+  font-weight: 500;
+  color: #fff;
+  font-size: 40px;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  position: absolute;
+  opacity: 0;
+  transition: 0.5s;
+}
+
+.layer:hover h3 {
+  bottom: 49%;
+  opacity: 1;
+}
+
+.reviews {
+  width: 80%;
+  margin: auto;
+  text-align: center;
+  padding-top: 50px;
+}
+
+.reviews-col {
+  flex-basis: 44%;
+  border-radius: 10px;
+  margin-bottom: 5%;
+  text-align: left;
+  background: #c3ebfe;
+  padding: 25px;
+  cursor: pointer;
+  display: flex;
+}
+
+.reviews-col img {
+  height: 40px;
+  margin-left: 5px;
+  margin-right: 30px;
+  border-radius: 50%;
+}
+
+.reviews-col p {
+  padding: 0;
+  font-size: 20px;
+}
+
+.reviews-col h3 {
+  margin-top: 15px;
+  text-align: left;
+}
+
+.call-to-action {
+  margin: 100px auto;
+  width: 80%;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url(banner.jpg);
+  background-position: center;
+  background-size: cover;
+  border-radius: 10px;
+  text-align: center;
+  padding: 100px 0;
+}
+
+.call-to-action h1 {
+  color: #fff;
+  margin-bottom: 40px;
+  padding: 0;
+}
+
+.call-to-action a {
+  color: #fff;
+  font-weight: 700;
+  font-size: 30px;
 }
