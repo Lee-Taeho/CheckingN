@@ -4,8 +4,10 @@ import './Background.css';
 
 const ChooseDepartment = () => {
     return (
+        <div className="form-signin">
         <div className='department_container'>
             <DepartmentList/>
+        </div>
         </div>
         
     );
