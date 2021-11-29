@@ -25,7 +25,7 @@ const ViewAppointment = (props) => {
         <div className="Appointments">
             <div className="profile">
                 <h3>Profile</h3>
-                <img src= {profilePic? profilePic : "assets/user-circle.svg"} style={{"object-fit":"cover", "border-radius":"50%"}} alt="profile" width="150" height="150" />
+                <img src= {profilePic? profilePic : "/assets/user-circle.svg"} style={{"object-fit":"cover", "border-radius":"50%"}} alt="profile" width="100" height="100" />
                 <ol>
                     <li>Name : {fname} {lname}</li>
                     <li>Email : {email}</li>

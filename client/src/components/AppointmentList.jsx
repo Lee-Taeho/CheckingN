@@ -28,26 +28,28 @@ const AppointmentList = (props) => {
             console.log("reached until fetchData")
             try{
                 const response = await fetch(url);
-                console.log(response, "is the response");
-                setappointmentIDList(response.json());
+                console.log(response.json(), "is the response");
+                // setappointmentIDList(response.json());
             }catch(error){
                 console.log("error" , error);
             }
         };
 
-        const IDList = appointmentIDList;
-        console.log(IDList , "is a list a ID");
-        Object.keys(IDList).map( (key, index) => console.log(key, index , " are the returned values from the IDList") );
+        
 
 
         // console.log(appointmentIDList);
         fetchData();
-        // appointmentIDList.map( (appointment) => {console.log(appointment, "is the appointment ID"); return {appointment}});
+
+        const IDList = appointmentIDList;
+        console.log(appointmentIDList , "is a list a ID");
+        Object.keys(appointmentIDList).map( (key, index) => console.log(key, index , " are the returned values from the IDList") );
+        appointmentIDList.map( (appointment) => {console.log(appointment, "is the appointment ID"); return {appointment}});
         const fetchAppointmentData = async () => {
             try{
                 console.log("I am in fetchAppointmentData");
                 // console.log(appointmentIDList.Array);
-                const response = await fetch(`http://localhost:8080/api/appointment/6196d97fad77a7bcb19870ea`);
+                const response = await fetch(`http://localhost:8080/api/appointment/61a4128457b68ac9c92a5d5a`);
                 console.log(response.json() , "is the appointment information");
                 
             }catch(error){
