@@ -3,6 +3,7 @@ package interfaces
 import (
 	"server/middleware"
 	"time"
+
 	//"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -14,7 +15,7 @@ type MongoInterface interface {
 	FindStudent(login middleware.LoginRequest) *middleware.Student
 	GetUUID() int
 	FindStudentUUID(uuid int) *middleware.Student
-	AddAppointment(appointment middleware.Appointment) error
+	AddAppointment(appointment middleware.Appointment) (string, error)
 	GetAppointment(id string) (*middleware.Appointment, error)
 	DeleteAppointment(id string) error
 	DeleteAppointmentFromTutor(app_id string, tutor_email string) error

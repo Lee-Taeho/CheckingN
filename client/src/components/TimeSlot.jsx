@@ -62,6 +62,7 @@ const TimeSlot = (props) =>
 
     if(tutors) {
     return (
+        
         <div className="slots">
         <h5 className="availableHours">Available hours for: </h5>
         {
@@ -103,6 +104,7 @@ const TimeSlot = (props) =>
                 </div>
             )
         })}
+     
         <div>
         {
             // create buttons based on whether timeslot is booked => currently not working

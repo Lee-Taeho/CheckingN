@@ -22,7 +22,7 @@ const ChooseTutor = () => {
     if(selectedDate != null){
         console.log(selectedDate);
         availableSlots = (
-            <div>
+            <div className="form-signin">
                     <div>
                     <label className="locationOptn">Location for tutoring session?</label>
                     </div>
@@ -40,7 +40,7 @@ const ChooseTutor = () => {
 
     if(location) {
         return (
-            <div>
+            <div className="form-signin">
             <label className ="timeSlotDate">{selectedDate.toDateString()}</label>
             <TimeSlot
                 course = {course}
@@ -50,13 +50,13 @@ const ChooseTutor = () => {
                 dayOfWeek = {dow}
                 location = {location}
                 />
-                </div>
+            </div>
         )
     }
 
 
     return (
-        <div>
+        <div className="form-signin">
             <h4 className="tutorSelectTitle">Tutor Selection for {course}</h4>
 
             <label className="dateOptn">Choose a date</label>

@@ -30,6 +30,7 @@ const Register = () => {
     }
 
     return (
+        <div className="form-signin">
         <form onSubmit={submit}>
             <h1 className="h3 mb-3 fw-normal" style={{textAlign: "center"}}>Create Your Account</h1>
             <label>First Name</label>
@@ -52,7 +53,7 @@ const Register = () => {
 
             <label>Already have an account? <a href="/login">Login</a></label>
         </form>
-
+        </div>
     );
 };
 
