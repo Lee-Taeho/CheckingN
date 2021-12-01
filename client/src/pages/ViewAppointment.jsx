@@ -45,13 +45,13 @@ class ViewAppointment extends React.Component{
 
             // console.log(fetchData(appID[0]).then(result => result), "is appointment[0]");
             console.log(fetchData(appID[0]), "is appointment[0]")
-            const List = [];
-            console.log(appID.map(id =>  fetchData(id).then((result) => List.push(result))) , "is the appointment list AAAA");
+            const list = [];
+            appID.map(id =>  fetchData(id).then((result) => {list.push(result); this.setState(() => ({ appList: list  }));}))
             // let response = await fetch(`http://localhost:8080/api/appointment/${appID[1]}`).then(result => result.json());
             // console.log(List,"is the appointment info")
-            this.setState(() => ({ appList: List  }));
+            this.setState(() => ({ appList: list  }));
             // this.setState({appList : List });
-            List.map((promise) => {promise.then((result) => console.log(result , "is the mapping"))})
+            list.map((promise) => {promise.then((result) => console.log(result , "is the mapping"))})
             console.log(this.state.appList[0], "is element 0")
             // this.setState(() => ({ appointmentList: appList }));
 
