@@ -43,21 +43,21 @@ const Home = (props) => {
                     <div className='row'>
                         <div className='college-col'>
                             <img src='../../assets/sjsu.jpeg' />
-                            <div class='layer'>
+                            <div className='layer'>
                                     <h3>SJSU</h3>
                             </div>
                         </div>
 
                         <div className='college-col'>
                             <img src='../../assets/sfsu.jpeg' />
-                            <div class='layer'>
+                            <div className='layer'>
                                     <h3>SFSU</h3>
                             </div>
                         </div>
 
                         <div className='college-col'>
                             <img src='../../assets/deanza.jpeg' />
-                            <div class='layer'>
+                            <div className='layer'>
                                     <h3>De Anza</h3>
                             </div>
                         </div>

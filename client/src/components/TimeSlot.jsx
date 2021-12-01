@@ -5,8 +5,8 @@ import './TimeSlot.css';
 const TimeSlot = (props) => 
 {
     var course_code = (props.course)
-    var month = (props.month) + 1
-    var date = (props.day)
+    var month = ('0' + ((props.month) + 1).toString()).slice(-2)
+    var date = ('0' + (props.month).toString()).slice(-2)
     var year = (props.year)
     var dayOfWeek = (props.dayOfWeek) - 1
     var fulldate = `${year}-${month}-${date}`
