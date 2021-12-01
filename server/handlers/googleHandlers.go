@@ -15,15 +15,7 @@ import (
 	"google.golang.org/api/option"
 )
 
-func (h *Handlers) GoogleCalendarEventPost(w http.ResponseWriter, r *http.Request) {
-	info := &middleware.GoogleCalendarEventInfo{}
-	decoder := json.NewDecoder(r.Body)
-	if err := decoder.Decode(info); err != nil {
-		log.Printf("ERROR [handlers/googleHandlers.go] Couldn't get data: %s\n", err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
+func (h *Handlers) GoogleCalendarEventPost(info middleware.GoogleCalendarEventInfo) error {
 	tok := &oauth2.Token{
 		AccessToken: info.AccessToken,
 		TokenType:   info.TokenType,
@@ -34,9 +26,8 @@ func (h *Handlers) GoogleCalendarEventPost(w http.ResponseWriter, r *http.Reques
 	ctx := context.TODO()
 	srv, err := calendar.NewService(ctx, option.WithHTTPClient(client))
 	if err != nil {
-		log.Printf("ERROR [handlers/googleHandlers.go] Couldn't get data: %s\n", err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
-		return
+		log.Printf("ERROR [handlers/googleHandlers.go] Token Doesn't Work: %s\n", err.Error())
+		return err
 	}
 
 	event := &calendar.Event{
@@ -58,20 +49,12 @@ func (h *Handlers) GoogleCalendarEventPost(w http.ResponseWriter, r *http.Reques
 
 	calendarId := "primary"
 	if _, err = srv.Events.Insert(calendarId, event).Do(); err != nil {
-		log.Printf("ERROR [handlers/googleHandlers.go] Couldn't create event: %s\n", err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
+		return err
 	}
+	return nil
 }
 
-func (h *Handlers) GoogleCalendarEventDelete(w http.ResponseWriter, r *http.Request) {
-	info := &middleware.GoogleCalendarEventInfo{}
-	decoder := json.NewDecoder(r.Body)
-	if err := decoder.Decode(info); err != nil {
-		log.Printf("ERROR [handlers/requestHandlers.go] Couldn't get data: %s\n", err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
+func (h *Handlers) GoogleCalendarEventDelete(info middleware.GoogleCalendarEventInfo) {
 	tok := &oauth2.Token{
 		AccessToken: info.AccessToken,
 		TokenType:   info.TokenType,
