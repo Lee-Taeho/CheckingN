@@ -15,7 +15,7 @@ var loc, _ = time.LoadLocation("America/Los_Angeles")
 func (h *Handlers) CreateAppointment(w http.ResponseWriter, r *http.Request) {
 	googAppointment := &middleware.GoogleCalendarEventInfo{}
 	if err := json.NewDecoder(r.Body).Decode(&googAppointment); err != nil {
-		log.Printf("ERROR [handlers/appointmentHandlers.go] Couldn't get data: %s\n", err.Error())
+		log.Printf("ERROR [appointmentHandlers/appointmentHandlers.go] Couldn't get data: %s\n", err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -36,7 +36,7 @@ func (h *Handlers) CreateAppointment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	app_id, err := h.db.AddAppointment(*appointment)
+	app_id, join_link, err := h.db.AddAppointment(*appointment)
 	if err != nil {
 		log.Printf("Couldn't Create Appointment: %s\n", err.Error())
 		w.WriteHeader(http.StatusConflict)
@@ -45,13 +45,10 @@ func (h *Handlers) CreateAppointment(w http.ResponseWriter, r *http.Request) {
 
 	if len(googAppointment.AccessToken) != 0 {
 		googAppointment.ID = app_id
-		googAppointment.JoinLink = appointment.JoinLink
-		googAppointment.StartLink = appointment.StartLink
+		googAppointment.JoinLink = join_link
 
-		if err := h.GoogleCalendarEventPost(*googAppointment); err != nil {
+		if err := h.GoogleCalendarEventPost(*googAppointment); err == nil {
 			w.WriteHeader(http.StatusCreated)
-		} else {
-			w.WriteHeader(http.StatusUnauthorized)
 		}
 	}
 }
@@ -59,14 +56,17 @@ func (h *Handlers) CreateAppointment(w http.ResponseWriter, r *http.Request) {
 func (h *Handlers) CancelAppointment(w http.ResponseWriter, r *http.Request) {
 	appointmentId := mux.Vars(r)["id"]
 	if err := h.db.DeleteAppointment(appointmentId); err != nil {
-		log.Printf("Couldn't Delete Appointment Appointment: %s\n", err.Error())
+		log.Printf("Couldn't Delete Appointment: %s\n", err.Error())
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 
 	googAppointment := &middleware.GoogleCalendarEventInfo{}
 	if err := json.NewDecoder(r.Body).Decode(&googAppointment); err == nil {
-		h.GoogleCalendarEventDelete(*googAppointment)
+		googAppointment.ID = appointmentId
+		if err := h.GoogleCalendarEventDelete(*googAppointment); err != nil {
+			w.WriteHeader(http.StatusUnauthorized)
+		}
 	}
 
 	w.WriteHeader(http.StatusOK)

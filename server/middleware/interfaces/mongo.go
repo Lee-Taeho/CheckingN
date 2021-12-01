@@ -15,7 +15,7 @@ type MongoInterface interface {
 	FindStudent(login middleware.LoginRequest) *middleware.Student
 	GetUUID() int
 	FindStudentUUID(uuid int) *middleware.Student
-	AddAppointment(appointment middleware.Appointment) (string, error)
+	AddAppointment(appointment middleware.Appointment) (string, string, error)
 	GetAppointment(id string) (*middleware.Appointment, error)
 	DeleteAppointment(id string) error
 	DeleteAppointmentFromTutor(app_id string, tutor_email string) error

@@ -54,7 +54,7 @@ func (h *Handlers) GoogleCalendarEventPost(info middleware.GoogleCalendarEventIn
 	return nil
 }
 
-func (h *Handlers) GoogleCalendarEventDelete(info middleware.GoogleCalendarEventInfo) {
+func (h *Handlers) GoogleCalendarEventDelete(info middleware.GoogleCalendarEventInfo) error {
 	tok := &oauth2.Token{
 		AccessToken: info.AccessToken,
 		TokenType:   info.TokenType,
@@ -66,14 +66,15 @@ func (h *Handlers) GoogleCalendarEventDelete(info middleware.GoogleCalendarEvent
 	srv, err := calendar.NewService(ctx, option.WithHTTPClient(client))
 	if err != nil {
 		log.Printf("ERROR [handlers/googleHandlers.go] Couldn't get data: %s\n", err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
-		return
+		return err
 	}
 
 	if err := srv.Events.Delete("primary", info.ID).Do(); err != nil {
 		log.Printf("ERROR [handlers/googleHandlers.go] Couldn't delete event: %s\n", err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
+		return err
 	}
+
+	return nil
 }
 
 func (h *Handlers) GoogleLoginInfoSaver(w http.ResponseWriter, r *http.Request) {
