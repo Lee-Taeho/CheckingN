@@ -55,7 +55,8 @@ func (h *Handlers) ViewAppointment(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}
-
+	appointment.StartTime = appointment.StartTime.In(loc)
+	appointment.EndTime = appointment.EndTime.In(loc)
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-type", "application/json")
 	json.NewEncoder(w).Encode(appointment)

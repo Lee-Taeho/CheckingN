@@ -111,7 +111,9 @@ class ViewAppointment extends React.Component{
                     {
                         appList.map( (appointment) => {
                             return (
-                                <AppointmentSummary course_code={appointment.course_code} start_time={appointment.start_time} end_time={appointment.end_time} tutor_email={appointment.tutor_email} meeting_location={appointment.meeting_location} />
+                                <AppointmentSummary course_code={appointment.course_code} start_time={appointment.start_time} 
+                                    end_time={appointment.end_time} tutor_email={appointment.tutor_email} 
+                                    meeting_location={appointment.meeting_location} join_link={appointment.join_link} />
                                 
                             )
                         })

@@ -1,6 +1,6 @@
 // import React, { useState ,useEffect } from 'react';
 
-function AppointmentSummary ({course_code, start_time, end_time, tutor_email, meeting_location}){
+function AppointmentSummary ({course_code, start_time, end_time, tutor_email, meeting_location, join_link}){
     return(
         <div className = "Appointments-element">
             <button className="Appointment-button"> 
@@ -9,6 +9,8 @@ function AppointmentSummary ({course_code, start_time, end_time, tutor_email, me
                     <li>Class : {course_code}</li>
                     <li>Tutor : {tutor_email}</li>
                     <li>Meeting Type: {meeting_location}</li>
+                    {join_link != "" &&
+                    <li><a href={`${join_link}`}>Join</a></li>}
                     <li>Time {start_time} ~ {end_time}</li>
                 </ul>
             </button>
