@@ -111,6 +111,7 @@ const Login = (props) => {
     }
 
     return (
+        <div className="form-signin">
         <form onSubmit={submit}>
             <h1 className="h3 mb-3 fw-normal" style={{textAlign: "center"}}>Sign in</h1>
             <br/>
@@ -143,6 +144,7 @@ const Login = (props) => {
                 />
             </div>
         </form>
+        </div>
         
     );
 };

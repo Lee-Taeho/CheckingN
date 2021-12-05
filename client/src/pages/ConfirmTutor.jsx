@@ -13,7 +13,7 @@ const ConfirmTutor = () => {
     const { location } = useParams()
 
     return (
-        <div>
+        <div className="form-signin">
             {course}
             <div>
                 {firstname} {''} {lastname}
