@@ -67,15 +67,15 @@ func CreateZoomLink(appointment middleware.Appointment) (string, string, error) 
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Println("Error on response.\n[ERROR] -", err)
+		return "", "", err
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println("Error while reading the response bytes:", err)
+		return "", "", err
 	}
-	log.Println(string([]byte(body)))
-	fmt.Println("response Status:", resp.Status)
 	io.Copy(os.Stdout, resp.Body)
 
 	zoomLink := ZoomLink{}
@@ -84,7 +84,6 @@ func CreateZoomLink(appointment middleware.Appointment) (string, string, error) 
 	joinLink := zoomLink.JoinLink
 	startLink := zoomLink.StartLink
 	return joinLink, startLink, nil
-
 }
 
 func jwtToken(key string, secret string) (string, error) {

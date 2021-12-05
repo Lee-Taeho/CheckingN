@@ -23,8 +23,7 @@ var WEEKDAY_MAP = map[string]int{
 }
 var loc, _ = time.LoadLocation("America/Los_Angeles")
 
-
-func (m *MongoDB) AddAppointment (appointment middleware.Appointment) error {
+func (m *MongoDB) AddAppointment(appointment middleware.Appointment) (string, string, error) {
 
 	ctx := context.TODO()
 	app_collection := m.mongo.Database(SJSU_DATABASE).Collection(APPOINTMENTS_COLLECTION)
@@ -32,7 +31,7 @@ func (m *MongoDB) AddAppointment (appointment middleware.Appointment) error {
 	filter := bson.M{"email": bson.M{"$eq": appointment.TutorEmail}}
 	result := tutor_collection.FindOne(ctx, filter)
 	if result.Err() != nil {
-		return errors.New("The tutor does not exist")
+		return "", "", errors.New("The tutor does not exist")
 	}
 	var tutor middleware.Tutor
 	result.Decode(&tutor)
@@ -43,12 +42,12 @@ func (m *MongoDB) AddAppointment (appointment middleware.Appointment) error {
 			break
 		}
 		if i == len(courses)-1 && courses[i] != appointment.CourseCode {
-			return errors.New("Requested tutor is not qualified for this course")
+			return "", "", errors.New("Requested tutor is not qualified for this course")
 		}
 	}
 	//check for time conflict
 	if m.timeConflict(tutor, appointment) {
-		return errors.New("Tutor is not available for requested time slot")
+		return "", "", errors.New("Tutor is not available for requested time slot")
 	}
 
 	//create join and start zoom link
@@ -64,12 +63,12 @@ func (m *MongoDB) AddAppointment (appointment middleware.Appointment) error {
 	if oid, ok := returnedApp.InsertedID.(primitive.ObjectID); ok {
 		app_id = oid.Hex()
 	} else {
-		return errors.New("Could not save appointment")
+		return "", "", errors.New("Could not save appointment")
 	}
 	//add app_id to tutor object
 	update := bson.M{"$addToSet": bson.M{"appointments": app_id}}
 	if _, err := tutor_collection.UpdateOne(ctx, filter, update); err != nil {
-		return errors.New("Could not update tutor")
+		return "", "", errors.New("Could not update tutor")
 	}
 	//add app to student object
 	filter = bson.M{"email": bson.M{"$eq": appointment.StudentEmail}}
@@ -78,9 +77,9 @@ func (m *MongoDB) AddAppointment (appointment middleware.Appointment) error {
 
 	update = bson.M{"$addToSet": bson.M{"appointments": app_id}}
 	if _, err := student_collection.UpdateOne(ctx, filter, update); err != nil {
-		return errors.New("Could not update student")
+		return "", "", errors.New("Could not update student")
 	}
-	return nil
+	return app_id, appointment.JoinLink, nil
 }
 
 func (m *MongoDB) GetAppointment(id string) (*middleware.Appointment, error) {
