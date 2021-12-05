@@ -61,6 +61,7 @@ const TimeSlot = (props) =>
     }
 
     if(tutors) {
+        console.log(tutors);
     return (
         
         <div className="slots">
@@ -87,9 +88,10 @@ const TimeSlot = (props) =>
                                                 // display available time slot
                                                 <div className="availableBtnContainer">
                                                 <Link to={`/tutoring/departments/${course_code}/${tutor["first_name"]}/${tutor["last_name"]}/${fulldate}/${time}/${tutor["email"]}/${location}`}>
-                                                <button className="availableBtn" >
-                                                    {time}:00
-                                                    </button></Link>
+                                                    <button className="availableBtn" >
+                                                        {time}:00
+                                                    </button>
+                                                </Link>
                                                 </div>
                                             )
                                         }
