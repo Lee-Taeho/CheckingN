@@ -19,13 +19,14 @@ const (
 	UUID_COLLECTION            = "uuid"
 	SJSU_DATABASE              = "san_jose_state_university"
 	APPOINTMENTS_COLLECTION    = "appointments"
-	COURSES_DATABASE		   = "courses"
-	COURSES_COLLECTION		   = "courses"
-	DEPARTMENTS_COLLECTION 	   = "departments"
+	COURSES_DATABASE           = "courses"
+	COURSES_COLLECTION         = "courses"
+	DEPARTMENTS_COLLECTION     = "departments"
 )
 
 type MongoDBLogin struct {
-	Uri string
+	Uri      string
+	CertPath string
 	// could add server cert path fields here after getting it from mongo atlas
 }
 
