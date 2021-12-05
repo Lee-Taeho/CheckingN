@@ -47,6 +47,12 @@ func NewMongoDB(mongoInfo *MongoDBLogin) *MongoDB {
 
 func (m *MongoDB) Connect() (*mongo.Client, error) {
 	log.Println("INFO [database/mongo.go] Connecting to Mongo")
+
+	if len(m.login.CertPath) > 0 {
+		m.login.Uri = m.login.Uri + m.login.CertPath
+		m.login.CertPath = ""
+	}
+
 	clientOptions := options.Client().ApplyURI(m.login.Uri)
 
 	ctx, cancel := context.WithTimeout(context.Background(), CONNECT_TIMEOUT)

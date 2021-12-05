@@ -27,6 +27,7 @@ func NewApp() *App {
 
 	login := new(database.MongoDBLogin)
 	login.Uri = os.Getenv("DB_URI")
+	login.CertPath = os.Getenv("DB_CERT_KEY")
 	app.db = database.NewMongoDB(login)
 
 	return app

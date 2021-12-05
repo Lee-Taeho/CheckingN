@@ -4,11 +4,16 @@ go 1.16
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/gobuffalo/genny v0.1.1 // indirect
+	github.com/gobuffalo/gogen v0.1.1 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
+	github.com/karrick/godirwalk v1.10.3 // indirect
+	github.com/pelletier/go-toml v1.7.0 // indirect
 	github.com/rs/cors v1.8.0 // indirect
-	go.mongodb.org/mongo-driver v1.7.2
+	github.com/sirupsen/logrus v1.4.2 // indirect
+	go.mongodb.org/mongo-driver v1.8.0
 	golang.org/x/net v0.0.0-20211116231205-47ca1ff31462 // indirect
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
 	golang.org/x/sys v0.0.0-20211116061358-0a5406a5449c // indirect
