@@ -10,8 +10,7 @@ RUN npm install --silent
 RUN npm i --save @fortawesome/fontawesome-svg-core
 RUN npm install --save @fortawesome/free-solid-svg-icons
 RUN npm install --save @fortawesome/react-fontawesome
-RUN npm i --save react-datepicker
-
+RUN npm install react-datepicker --save
 COPY . ./
 
 EXPOSE 3000

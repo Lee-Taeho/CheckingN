@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import './Background.css';
 import './ChooseTutor.css';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css'
+import 'react-datepicker/dist/react-datepicker.css';
 import { useParams } from 'react-router-dom';
 import TimeSlot from '../components/TimeSlot';
 
