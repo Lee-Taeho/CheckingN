@@ -1,6 +1,6 @@
 // import React, { useState ,useEffect } from 'react';
 
-function AppointmentSummary ({course_code, start_time, end_time, tutor_email, meeting_location, join_link}){
+function AppointmentSummary ({course_id, course_code, start_time, end_time, tutor_email, meeting_location, join_link}){
     return(
         <div className = "Appointments-element">
             <button className="Appointment-button"> 

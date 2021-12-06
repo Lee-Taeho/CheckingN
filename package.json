@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "react-datepicker": "^4.4.0",
+    "react-datepicker": "^4.5.0",
     "react-google-login": "^5.2.2"
   },
   "devDependencies": {

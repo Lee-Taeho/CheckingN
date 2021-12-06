@@ -19,13 +19,14 @@ const (
 	UUID_COLLECTION            = "uuid"
 	SJSU_DATABASE              = "san_jose_state_university"
 	APPOINTMENTS_COLLECTION    = "appointments"
-	COURSES_DATABASE		   = "courses"
-	COURSES_COLLECTION		   = "courses"
-	DEPARTMENTS_COLLECTION 	   = "departments"
+	COURSES_DATABASE           = "courses"
+	COURSES_COLLECTION         = "courses"
+	DEPARTMENTS_COLLECTION     = "departments"
 )
 
 type MongoDBLogin struct {
-	Uri string
+	Uri      string
+	CertPath string
 	// could add server cert path fields here after getting it from mongo atlas
 }
 
@@ -46,6 +47,12 @@ func NewMongoDB(mongoInfo *MongoDBLogin) *MongoDB {
 
 func (m *MongoDB) Connect() (*mongo.Client, error) {
 	log.Println("INFO [database/mongo.go] Connecting to Mongo")
+
+	if len(m.login.CertPath) > 0 {
+		m.login.Uri = m.login.Uri + m.login.CertPath
+		m.login.CertPath = ""
+	}
+
 	clientOptions := options.Client().ApplyURI(m.login.Uri)
 
 	ctx, cancel := context.WithTimeout(context.Background(), CONNECT_TIMEOUT)
