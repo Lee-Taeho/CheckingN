@@ -7,7 +7,9 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json ./
 COPY package-lock.json ./
 RUN npm install --silent
-RUN npm i --save @fortawesome/free-solid-svg-icons
+RUN npm i --save @fortawesome/fontawesome-svg-core
+RUN npm install --save @fortawesome/free-solid-svg-icons
+RUN npm install --save @fortawesome/react-fontawesome
 RUN npm i --save react-datepicker
 
 COPY . ./
