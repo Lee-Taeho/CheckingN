@@ -46,7 +46,7 @@ npm install
 In the client directory,
 ```bash
 npm i --save @fortawesome/fontawesome-svg-core
- npm install --save @fortawesome/free-solid-svg-icons
+npm install --save @fortawesome/free-solid-svg-icons
 npm install --save @fortawesome/react-fontawesome
 npm install react-datepicker --save
 ```
@@ -75,7 +75,7 @@ https://docs.docker.com/get-started/
 2. Go the the client directory and run the following:
 ```bash
 cd client 
-docker build -t server 
+docker build -t client 
 ```
 3. Create a new terminal, go to the server directory, and run the following:
 ```bash
