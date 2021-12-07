@@ -44,18 +44,18 @@ npm install
 ```
 5. Installing font awsome
 In the client directory,
-		```bash
-		npm i --save @fortawesome/fontawesome-svg-core
- 		npm install --save @fortawesome/free-solid-svg-icons
+```bash
+npm i --save @fortawesome/fontawesome-svg-core
+ npm install --save @fortawesome/free-solid-svg-icons
 npm install --save @fortawesome/react-fontawesome
 npm install react-datepicker --save
-		```
+```
 
 6. Installing react-datepicker
 ```bash
 npm install react-datepicker --save
 ```
-7. Building the backend server
+Building the backend server
 8. Go to the server directory in the terminal with:
 ```bash
 cd server
