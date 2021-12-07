@@ -30,10 +30,63 @@
 ## Getting Started
 
 ### Installation
+In IDE: 
+1. Install MongoDB and Golang
+2. Clone the Github repository with the following link:
+https://github.com/Lee-Taeho/2021-fall-cs160-chocolate-cake.git
+3. Go to the client directory in the terminal with:
+```bash
+cd client
+```
+4. Install packages and dependencies with the following:
+```bash
+npm install
+```
+5. Installing font awsome
+In the client directory,
+		```bash
+		npm i --save @fortawesome/fontawesome-svg-core
+ 		npm install --save @fortawesome/free-solid-svg-icons
+npm install --save @fortawesome/react-fontawesome
+npm install react-datepicker --save
+		```
+
+6. Installing react-datepicker
+```bash
+npm install react-datepicker --save
+```
+7. Building the backend server
+8. Go to the server directory in the terminal with:
+```bash
+cd server
+```
+9. Build packages for Golang using:
+```bash
+go build
+```
+10. Then run the following to connect to the database:
+```bash
+./run.sh
+```
+
+In Docker:
+1. Install/build Docker by following:
+https://docs.docker.com/get-started/
+2. Go the the client directory and run the following:
+```bash
+cd client 
+docker build -t server 
+```
+3. Create a new terminal, go to the server directory, and run the following:
+```bash
+cd server 
+docker build -t server 
+```
+
 
 ## Running
 
-In order to build the application, run the following:
+In order to build the application in your IDE, run the following:
 
 In the client directory
 
@@ -46,6 +99,15 @@ In the server directory
 ```bash
 ./run.sh
 ```
+To run using Docker, run the following:
+
+In terminal, run
+```bash
+docker run -p 3000:3000 client
+docker run -p 8080:8080 server
+```
+Open http://localhost:3000 to view it in the browser.
+
 
 ## Contributors
 
