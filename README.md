@@ -108,6 +108,14 @@ docker run -p 8080:8080 server
 ```
 Open http://localhost:3000 to view it in the browser.
 
+## How to use branching? 
+With Github Desktop
+1. Choose the branch you want to use
+2. Click pull origin
+3. Click the current branch and click new branch
+4. Type the name of the branch and click create branch
+
+
 
 ## Contributors
 
